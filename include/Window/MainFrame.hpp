@@ -9,7 +9,7 @@
 #ifndef __MAIN_FRAME__
 #define __MAIN_FRAME__
 
-#include <SDL.h>
+#include <SDL3/SDL.h>
 #include <GL/glew.h>
 
 #include <string>

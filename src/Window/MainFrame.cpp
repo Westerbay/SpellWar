@@ -12,13 +12,12 @@
 #include <stdexcept>
 
 MainFrame::MainFrame(const char * title, const Size & size) {
-	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+	if (!SDL_Init(SDL_INIT_VIDEO)) {
 		throw std::runtime_error(std::string("Error SDL : ") + SDL_GetError());		
 	}
 	
 	_mainFrame = SDL_CreateWindow(
 		title,
-		SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
 		size.width, size.height,
 		SDL_WINDOW_OPENGL
 	);
@@ -36,7 +35,7 @@ MainFrame::MainFrame(const char * title, const Size & size) {
 	
 	glewExperimental = GL_TRUE;
 	if (glewInit() != GLEW_OK) {
-		SDL_GL_DeleteContext(_glContext);
+		SDL_GL_DestroyContext(_glContext);
 		SDL_DestroyWindow(_mainFrame);
 		SDL_Quit();
 		throw std::runtime_error("Error init GLEW");
@@ -44,7 +43,7 @@ MainFrame::MainFrame(const char * title, const Size & size) {
 }
 
 MainFrame::~MainFrame() {
-	SDL_GL_DeleteContext(_glContext);
+	SDL_GL_DestroyContext(_glContext);
 	SDL_DestroyWindow(_mainFrame);
 	SDL_Quit();
 }
@@ -54,7 +53,7 @@ void MainFrame::run() {
 	bool running = true;
 	while (running) {
 		while (SDL_PollEvent(&event)) {
-			if (event.type == SDL_QUIT) {
+			if (event.type == SDL_EVENT_QUIT) {
 				running = false;
 			}
 		}

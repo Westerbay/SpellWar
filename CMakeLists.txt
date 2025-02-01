@@ -10,24 +10,27 @@ project(SpellWar)
 # +------------------------------------------------------------------+
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-add_definitions(-Wall -Wextra -O2)
-
-
 
 set(OpenGL_GL_PREFERENCE "GLVND")
 find_package(OpenGL REQUIRED)
 
+if (MSVC)
+    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /O2 /W4 /RTC-") 
+else()
+    add_compile_options(-O2 -Wall -Wextra)
+endif()
 
 
-set(SDL2_DIR "${CMAKE_SOURCE_DIR}/libs/SDL2")
+
+set(SDL3_DIR "${CMAKE_SOURCE_DIR}/libs/SDL3")
 set(GLEW_DIR "${CMAKE_SOURCE_DIR}/libs/glew")
+set(GLM_DIR "${CMAKE_SOURCE_DIR}/libs/glm")
 
 if(WIN32)
-    set(SDL2_LIB "${SDL2_DIR}/lib/SDL2.lib")
-    set(GLEW_LIB "${GLEW_DIR}/lib/libGLEW.lib")
-    set(SDL2MAIN_LIB "${SDL2_DIR}/lib/SDL2main.lib")
+    set(SDL3_LIB "${SDL3_DIR}/lib/SDL3.lib")
+    set(GLEW_LIB "${GLEW_DIR}/lib/glew32.lib")
 elseif(UNIX)
-    set(SDL2_LIB "${SDL2_DIR}/lib/libSDL2.a")
+    set(SDL3_LIB "${SDL3_DIR}/lib/libSDL3.a")
     set(GLEW_LIB "${GLEW_DIR}/lib/libGLEW.a")
 endif()
 
@@ -47,23 +50,19 @@ set(HEADERS
     include/Window/MainFrame.hpp
 )
 
-add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})
+add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})   
 
 target_include_directories(${PROJECT_NAME} PRIVATE 
 	include/Window 
 	include/LSystem 
-	${lib/glm} 
-	${SDL2_DIR}/include
+	${GLM_DIR}
+	${SDL3_DIR}/include
 	${GLEW_DIR}/include
 )
 
 target_link_libraries(${PROJECT_NAME} 
-	${SDL2_LIB}
+	${SDL3_LIB}
 	${GLEW_LIB}
 	OpenGL::GL
 )
-
-if(WIN32)
-    target_link_libraries(${PROJECT_NAME} ${SDL2MAIN_LIB})
-endif()
 
