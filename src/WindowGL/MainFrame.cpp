@@ -6,7 +6,7 @@
  * No warranties are provided, and any use of this code is at your own risk.
  */
  
-#include <MainFrame.hpp>
+#include <WindowGL/MainFrame.hpp>
 
 #include <iostream>
 #include <stdexcept>

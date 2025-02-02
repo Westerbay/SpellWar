@@ -6,14 +6,18 @@
  * No warranties are provided, and any use of this code is at your own risk.
  */
  
-#include <LSystem.hpp>
+#include <LSystem/LSystem.hpp>
 
-LSystem::LSystem(std::string axiom,	Rules * rules) 
-: _axiom(axiom), _rules(rules) {}
+LSystem::LSystem(std::string axiom,	Rules * rules, unsigned numberOfIteration) : 
+	_axiom(axiom), _rules(rules), _numberOfIteration(numberOfIteration) {}
 	
-std::string LSystem::generate(unsigned numberOfIteration) {
+LSystem::~LSystem() {
+	delete _rules;
+}
+
+std::string LSystem::generate() {
 	std::string word = _axiom;
-	for (unsigned i = 0; i < numberOfIteration; i ++) {
+	for (unsigned i = 0; i < _numberOfIteration; i ++) {
 		std::string stringBuilder = "";
 		for (char predecessor : word) {
 			stringBuilder += _rules -> nextSuccessor(predecessor);

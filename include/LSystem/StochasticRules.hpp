@@ -9,7 +9,7 @@
 #ifndef __STOCHASTIC_RULES__
 #define __STOCHASTIC_RULES__
  
-#include <Rules.hpp>
+#include <LSystem/Rules.hpp>
 
 #include <map>
 #include <set>

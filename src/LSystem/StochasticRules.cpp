@@ -6,7 +6,7 @@
  * No warranties are provided, and any use of this code is at your own risk.
  */
  
-#include <StochasticRules.hpp>
+#include <LSystem/StochasticRules.hpp>
 
 void StochasticRules::add(char predecessor, std::string successor, double probability) {
 	std::pair<std::string, double> pair(successor, probability);

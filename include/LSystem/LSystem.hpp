@@ -9,15 +9,17 @@
 #ifndef __LSYSTEM__
 #define __LSYSTEM__
 
-#include <Rules.hpp>
+#include <LSystem/Rules.hpp>
 
 class LSystem {
 public:
-	LSystem(std::string axiom, Rules * rules);
-	std::string generate(unsigned numberOfIteration);
+	LSystem(std::string axiom, Rules * rules, unsigned numberOfIteration);
+	~LSystem();
+	std::string generate();
 private:
 	std::string _axiom;
 	Rules * _rules;
+	unsigned _numberOfIteration;
 };
 
 #endif

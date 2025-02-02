@@ -6,70 +6,47 @@
  * No warranties are provided, and any use of this code is at your own risk.
  */
  
-#include <Interpreter.hpp>
+#include <LSystem/Interpreter.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-Interpreter::Interpreter(const Turtle & turtle, float angle, unsigned numberOfIterations) :
-	_turtle(turtle),
-	_numberOfIterations(numberOfIterations)
-{
-	_rotationMatrix[TURN_LEFT] = glm::mat3(glm::rotate(glm::mat4(1.0f), glm::radians(angle), glm::vec3(0.0f, 0.0f, 1.0f)));
-	_rotationMatrix[TURN_RIGHT] = glm::mat3(glm::rotate(glm::mat4(1.0f), glm::radians(-angle), glm::vec3(0.0f, 0.0f, 1.0f)));
-	_rotationMatrix[PITCH_DOWN] = glm::mat3(glm::rotate(glm::mat4(1.0f), glm::radians(angle), glm::vec3(0.0f, 1.0f, 0.0f)));
-	_rotationMatrix[PITCH_UP] = glm::mat3(glm::rotate(glm::mat4(1.0f), glm::radians(-angle), glm::vec3(0.0f, 1.0f, 0.0f)));
-	_rotationMatrix[ROLL_LEFT] = glm::mat3(glm::rotate(glm::mat4(1.0f), glm::radians(angle), glm::vec3(1.0f, 0.0f, 0.0f)));
-	_rotationMatrix[ROLL_RIGHT] = glm::mat3(glm::rotate(glm::mat4(1.0f), glm::radians(-angle), glm::vec3(1.0f, 0.0f, 0.0f)));
-	_rotationMatrix[TURN_AROUND] = glm::mat3(glm::rotate(glm::mat4(1.0f), glm::radians(180.0f), glm::vec3(0.0f, 0.0f, 1.0f)));
+Interpreter::Interpreter(LSystem * system, Turtle * turtle) :
+	_system(system), _turtle(turtle) {
+	_tokenToRotation[TURN_LEFT_TOKEN] = TURN_LEFT;
+	_tokenToRotation[TURN_RIGHT_TOKEN] = TURN_RIGHT;
+	_tokenToRotation[PITCH_DOWN_TOKEN] = PITCH_DOWN;
+	_tokenToRotation[PITCH_UP_TOKEN] = PITCH_UP;
+	_tokenToRotation[ROLL_LEFT_TOKEN] = ROLL_LEFT;
+	_tokenToRotation[ROLL_RIGHT_TOKEN] = ROLL_RIGHT;
+	_tokenToRotation[TURN_AROUND_TOKEN] = TURN_AROUND;
 }
 
-void Interpreter::systemToWorld(LSystem & system) {
-	std::string word = system.generate(_numberOfIterations);
+Interpreter::~Interpreter() {
+	delete _system;
+	delete _turtle;
+}
+
+void Interpreter::systemToWorld() {
+	std::string word = _system -> generate();
 	for (char token : word) {
 		switch (token) {
-			case FORWARD:
-				forward();
+			case FORWARD_TOKEN:
+				_turtle -> forward();
 				break;
-			case PUSH:
-				push();
+			case PUSH_TOKEN:
+				_turtle -> push();
 				break;
-			case POP:
-				pop();
+			case POP_TOKEN:
+				_turtle -> pop();
 				break;
-			case TURN_LEFT:
-			case TURN_RIGHT:
-			case PITCH_DOWN:
-			case PITCH_UP:
-			case ROLL_LEFT:
-			case ROLL_RIGHT:
-			case TURN_AROUND:
-				_turtle.heading = _turtle.heading * _rotationMatrix[token];
+			case TURN_LEFT_TOKEN:
+			case TURN_RIGHT_TOKEN:
+			case PITCH_DOWN_TOKEN:
+			case PITCH_UP_TOKEN:
+			case ROLL_LEFT_TOKEN:
+			case ROLL_RIGHT_TOKEN:
+			case TURN_AROUND_TOKEN:
+				_turtle -> rotate(_tokenToRotation[token]);
 				break;
 		}
 	}		
 }
-
-std::queue<Line> & Interpreter::getLines() {
-	return _lines;
-}
-
-void Interpreter::reset(const Turtle & turtle) {
-	_turtle = turtle;
-}
-
-void Interpreter::forward() {
-	Line line;
-	line.firstPoint = _turtle.position;
-	_turtle.position += _turtle.heading[0] * LENGTH;
-	line.secondPoint = _turtle.position;
-	_lines.push(line);
-}
-
-void Interpreter::pop() {
-	_turtle = _turtleStack.top();
-	_turtleStack.pop();
-}
-
-void Interpreter::push() {
-	_turtleStack.push(_turtle);
-}
-

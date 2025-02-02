@@ -10,29 +10,38 @@
 #include <cstdlib>
 #include <ctime>
 
-#include <LSystem.hpp>
-#include <Interpreter.hpp>
-#include <StochasticRules.hpp>
-#include <MainFrame.hpp>
+#include <LSystem/LSystem.hpp>
+#include <LSystem/Interpreter.hpp>
+#include <LSystem/Turtle.hpp>
+#include <LSystem/StochasticRules.hpp>
+#include <WindowGL/MainFrame.hpp>
  
 int main() {
-	
-	MainFrame mainFrame("Application", {400, 400});
-	mainFrame.run();
 
-	/*srand(time(NULL));
-	StochasticRules rules;
-	rules.add('F', "F", 0.33);
-	rules.add('F', "F[-F]", 0.33);
-	rules.add('F', "F[+F]", 0.33);
-	LSystem system("F", &rules);
+	srand(time(NULL));
+	StochasticRules * rules = new StochasticRules;
+	rules -> add('F', "F", 0.33);
+	rules -> add('F', "F[-F]", 0.33);
+	rules -> add('F', "F[+F]", 0.33);
+	LSystem * system = new LSystem("F", rules, 5);
 	
 	glm::vec3 position = {0.0f, 0.0f, 0.0f};
 	glm::mat3 heading(1.0f);
-	Turtle turtle = {position, heading};
+	TurtleState turtleState = {position, heading};
 	float angle = 60.0f;
-	Interpreter interpreter(turtle, angle, 5);
-	interpreter.systemToWorld(system);*/
+	Turtle * turtle = new Turtle(turtleState, angle, 10.0f);
+	Interpreter interpreter(system, turtle);
+	interpreter.systemToWorld();
 	std::cout << "END" << std::endl;
+
+	MainFrame mainFrame("Application", {800, 800});
+	mainFrame.run();
 	return EXIT_SUCCESS;
 }
+
+#ifdef _WIN32
+#include <windows.h>
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
+    return main();
+}
+#endif

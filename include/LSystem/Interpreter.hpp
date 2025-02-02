@@ -9,56 +9,33 @@
 #ifndef __LSYSTEM_INTERPRETER__
 #define __LSYSTEM_INTERPRETER__
 
-#include <glm/glm.hpp>
-#include <LSystem.hpp>
+#include <LSystem/LSystem.hpp>
+#include <LSystem/Turtle.hpp>
 
 #include <unordered_map>
-#include <stack>
-#include <queue>
 
-#define FORWARD 'F'
+#define FORWARD_TOKEN 'F'
 
-#define PUSH '['
-#define POP ']'
+#define PUSH_TOKEN '['
+#define POP_TOKEN ']'
 
-#define TURN_LEFT '+'
-#define TURN_RIGHT '-'
-#define PITCH_DOWN '&'
-#define PITCH_UP '^'
-#define ROLL_LEFT '\\' 
-#define ROLL_RIGHT '/'
-#define TURN_AROUND '|'
-
-#define LENGTH 10.0f
-
-
-typedef struct {
-	glm::vec3 position;
-	glm::mat3 heading;
-} Turtle;
-
-typedef struct {
-	glm::vec3 firstPoint;
-	glm::vec3 secondPoint;
-} Line;
-
+#define TURN_LEFT_TOKEN '+'
+#define TURN_RIGHT_TOKEN '-'
+#define PITCH_DOWN_TOKEN '&'
+#define PITCH_UP_TOKEN '^'
+#define ROLL_LEFT_TOKEN '\\' 
+#define ROLL_RIGHT_TOKEN '/'
+#define TURN_AROUND_TOKEN '|'
 
 class Interpreter {
 public:
-	Interpreter(const Turtle & turtle, float angle, unsigned numberOfIterations);
-	void systemToWorld(LSystem & system);
-	std::queue<Line> & getLines();
-	void reset(const Turtle & turtle);
+	Interpreter(LSystem * system, Turtle * turtle);
+	~Interpreter();
+	void systemToWorld();
 private:
-	void forward();
-	void pop();
-	void push();
-	
-	Turtle _turtle;
-	std::unordered_map<char, glm::mat3> _rotationMatrix;
-	std::stack<Turtle> _turtleStack;
-	std::queue<Line> _lines;
-	unsigned _numberOfIterations;
+	LSystem * _system;
+	Turtle * _turtle;
+	std::unordered_map<char, Rotation> _tokenToRotation;
 };
 
 #endif

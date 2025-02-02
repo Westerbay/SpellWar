@@ -21,7 +21,9 @@ else()
 endif()
 
 
-
+# +------------------------------------------------------------------+
+# | Librairies                                               |
+# +------------------------------------------------------------------+
 set(SDL3_DIR "${CMAKE_SOURCE_DIR}/libs/SDL3")
 set(GLEW_DIR "${CMAKE_SOURCE_DIR}/libs/glew")
 set(GLM_DIR "${CMAKE_SOURCE_DIR}/libs/glm")
@@ -34,27 +36,45 @@ elseif(UNIX)
     set(GLEW_LIB "${GLEW_DIR}/lib/libGLEW.a")
 endif()
 
+
+# +------------------------------------------------------------------+
+# | Source Files                                          |
+# +------------------------------------------------------------------+
+
+file(GLOB LSYSTEM_SOURCES "src/LSystem/*.cpp")
+file(GLOB WINDOWGL_SOURCES "src/WindowGL/*.cpp")
+file(GLOB SPRITE_SOURCES "src/Sprite/*.cpp")
+
+file(GLOB LSYSTEM_HEADERS "include/LSystem/*.hpp")
+file(GLOB WINDOWGL_HEADERS "include/WindowGL/*.hpp")
+file(GLOB SPRITE_HEADERS "include/Sprite/*.hpp")
+
 set(SOURCES
     src/Main.cpp
-    src/LSystem/LSystem.cpp
-    src/LSystem/StochasticRules.cpp
-    src/LSystem/Interpreter.cpp
-    src/Window/MainFrame.cpp
+    ${LSYSTEM_SOURCES}
+    ${WINDOWGL_SOURCES}
+    ${SPRITE_SOURCES}
 )
 
 set(HEADERS
-    include/LSystem/LSystem.hpp
-    include/LSystem/StochasticRules.hpp
-    include/LSystem/Interpreter.hpp
-    include/LSystem/Rules.hpp
-    include/Window/MainFrame.hpp
+    ${LSYSTEM_HEADERS}
+    ${WINDOWGL_HEADERS}
+    ${SPRITE_HEADERS}
 )
 
-add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})   
+if(WIN32)
+    add_executable(${PROJECT_NAME} WIN32 ${SOURCES} ${HEADERS})   
+else()
+    add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})   
+endif()
 
+
+
+# +------------------------------------------------------------------+
+# | Link                                        |
+# +------------------------------------------------------------------+
 target_include_directories(${PROJECT_NAME} PRIVATE 
-	include/Window 
-	include/LSystem 
+	include
 	${GLM_DIR}
 	${SDL3_DIR}/include
 	${GLEW_DIR}/include
