@@ -11,7 +11,7 @@
 
 #include <Sprite/Sprite.hpp>
 
-#include <unordered_set >
+#include <unordered_set>
 
 class SpriteGroup {
 public:
