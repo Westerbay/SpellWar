@@ -31,7 +31,7 @@ class Interpreter {
 public:
 	Interpreter(LSystem * system, Turtle * turtle);
 	~Interpreter();
-	void systemToWorld();
+	void systemToWorld(std::string word);
 private:
 	LSystem * _system;
 	Turtle * _turtle;

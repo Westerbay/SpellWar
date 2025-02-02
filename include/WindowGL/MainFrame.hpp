@@ -9,25 +9,15 @@
 #ifndef __MAIN_FRAME__
 #define __MAIN_FRAME__
 
-#include <SDL3/SDL.h>
-#include <GL/glew.h>
+#include <WindowGL/AbstractMainFrame.hpp>
+#include <Sprite/SpriteGroup.hpp>
 
-#include <string>
-
-typedef struct {
-	unsigned width;
-	unsigned height;
-} Size;
-
-class MainFrame {
-public:
-	MainFrame(const char * title, const Size & size);
-	~MainFrame();
-	void run();
+class MainFrame : public AbstractMainFrame {
+public: 
+    MainFrame(const char * title, const Size & size);
+    void renderLoop() override;
 private:
-	SDL_Window * _mainFrame;
-	SDL_GLContext _glContext;
+    SpriteGroup _spriteGroup;
 };
 
 #endif
-

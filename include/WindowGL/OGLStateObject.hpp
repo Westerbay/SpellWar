@@ -6,13 +6,16 @@
  * No warranties are provided, and any use of this code is at your own risk.
  */
 
-#ifndef __SPRITE_H__
-#define __SPRITE_H__
+#ifndef __OGL_STATE_OBJECT_H__
+#define __OGL_STATE_OBJECT_H__
 
-class Sprite {
+#include <GL/glew.h>
+
+class OGLStateObject {
 public:
-    virtual void update() = 0;
-    virtual ~Sprite() = default;
+    virtual void bind() const = 0;
+    virtual void unbind() const = 0;
+    virtual ~OGLStateObject() = default;
 };
 
 #endif

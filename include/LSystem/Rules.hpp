@@ -14,6 +14,7 @@
 class Rules {
 public:
 	virtual std::string nextSuccessor(char predecessor) = 0;
+	virtual ~Rules() = default;
 };
  
 #endif

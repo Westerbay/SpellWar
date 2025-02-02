@@ -25,8 +25,7 @@ Interpreter::~Interpreter() {
 	delete _turtle;
 }
 
-void Interpreter::systemToWorld() {
-	std::string word = _system -> generate();
+void Interpreter::systemToWorld(std::string word) {
 	for (char token : word) {
 		switch (token) {
 			case FORWARD_TOKEN:

@@ -5,58 +5,15 @@
  * You are free to copy, modify, and distribute this file without restriction.
  * No warranties are provided, and any use of this code is at your own risk.
  */
- 
+
 #include <WindowGL/MainFrame.hpp>
+#include <LSystem/Spell.hpp>
 
-#include <iostream>
-#include <stdexcept>
-
-MainFrame::MainFrame(const char * title, const Size & size) {
-	if (!SDL_Init(SDL_INIT_VIDEO)) {
-		throw std::runtime_error(std::string("Error SDL : ") + SDL_GetError());		
-	}
-	
-	_mainFrame = SDL_CreateWindow(
-		title,
-		size.width, size.height,
-		SDL_WINDOW_OPENGL
-	);
-	if (!_mainFrame) {
-		SDL_Quit();
-		throw std::runtime_error(std::string("Error creating window : ") + SDL_GetError());	
-	}
-	
-	_glContext = SDL_GL_CreateContext(_mainFrame);
-	if (!_glContext) {
-		SDL_DestroyWindow(_mainFrame);
-		SDL_Quit();
-		throw std::runtime_error(std::string("Error creating GL context : ") + SDL_GetError());
-	}
-	
-	glewExperimental = GL_TRUE;
-	if (glewInit() != GLEW_OK) {
-		SDL_GL_DestroyContext(_glContext);
-		SDL_DestroyWindow(_mainFrame);
-		SDL_Quit();
-		throw std::runtime_error("Error init GLEW");
-	}
+MainFrame::MainFrame(const char * title, const Size & size) :
+    AbstractMainFrame(title, size) {
+    _spriteGroup.add(new Spell());
 }
 
-MainFrame::~MainFrame() {
-	SDL_GL_DestroyContext(_glContext);
-	SDL_DestroyWindow(_mainFrame);
-	SDL_Quit();
-}
-
-void MainFrame::run() {
-	SDL_Event event;
-	bool running = true;
-	while (running) {
-		while (SDL_PollEvent(&event)) {
-			if (event.type == SDL_EVENT_QUIT) {
-				running = false;
-			}
-		}
-	}
-	SDL_GL_SwapWindow(_mainFrame);
+void MainFrame::renderLoop() {
+    _spriteGroup.update();
 }

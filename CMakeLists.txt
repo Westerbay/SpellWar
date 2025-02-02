@@ -44,13 +44,14 @@ endif()
 file(GLOB LSYSTEM_SOURCES "src/LSystem/*.cpp")
 file(GLOB WINDOWGL_SOURCES "src/WindowGL/*.cpp")
 file(GLOB SPRITE_SOURCES "src/Sprite/*.cpp")
+file(GLOB GLOBAL_SOURCES "src/*.cpp")
 
 file(GLOB LSYSTEM_HEADERS "include/LSystem/*.hpp")
 file(GLOB WINDOWGL_HEADERS "include/WindowGL/*.hpp")
 file(GLOB SPRITE_HEADERS "include/Sprite/*.hpp")
 
 set(SOURCES
-    src/Main.cpp
+    ${GLOBAL_SOURCES}
     ${LSYSTEM_SOURCES}
     ${WINDOWGL_SOURCES}
     ${SPRITE_SOURCES}

@@ -17,23 +17,7 @@
 #include <WindowGL/MainFrame.hpp>
  
 int main() {
-
 	srand(time(NULL));
-	StochasticRules * rules = new StochasticRules;
-	rules -> add('F', "F", 0.33);
-	rules -> add('F', "F[-F]", 0.33);
-	rules -> add('F', "F[+F]", 0.33);
-	LSystem * system = new LSystem("F", rules, 5);
-	
-	glm::vec3 position = {0.0f, 0.0f, 0.0f};
-	glm::mat3 heading(1.0f);
-	TurtleState turtleState = {position, heading};
-	float angle = 60.0f;
-	Turtle * turtle = new Turtle(turtleState, angle, 10.0f);
-	Interpreter interpreter(system, turtle);
-	interpreter.systemToWorld();
-	std::cout << "END" << std::endl;
-
 	MainFrame mainFrame("Application", {800, 800});
 	mainFrame.run();
 	return EXIT_SUCCESS;

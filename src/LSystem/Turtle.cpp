@@ -25,7 +25,9 @@ void Turtle::rotate(Rotation rotation) {
 }
 
 void Turtle::forward() {
+	_lines.push_back(_state.position);
 	_state.position += _state.heading[0] * _length;
+	_lines.push_back(_state.position);
 }
 
 void Turtle::pop() {
@@ -35,5 +37,14 @@ void Turtle::pop() {
 
 void Turtle::push() {
 	_stackStates.push(_state);
+}
+
+std::vector<glm::vec3> & Turtle::getLines() {
+	return _lines;
+}
+
+void Turtle::reset(const TurtleState & state) {
+	_state = state;
+	_lines = std::vector<glm::vec3>();
 }
 

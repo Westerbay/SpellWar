@@ -36,11 +36,14 @@ public:
     void forward();
 	void pop();
 	void push();
+    std::vector<glm::vec3> & getLines();
+    void reset(const TurtleState & state);
 private:
     float _length;
     TurtleState _state;
     std::unordered_map<Rotation, glm::mat3> _rotationMatrix;
 	std::stack<TurtleState> _stackStates;
+    std::vector<glm::vec3> _lines;
 };
 
 #endif
