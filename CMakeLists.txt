@@ -41,31 +41,11 @@ endif()
 # | Source Files                                          |
 # +------------------------------------------------------------------+
 
-file(GLOB LSYSTEM_SOURCES "src/LSystem/*.cpp")
-file(GLOB WINDOWGL_SOURCES "src/WindowGL/*.cpp")
-file(GLOB SPRITE_SOURCES "src/Sprite/*.cpp")
-file(GLOB OBJECTGL_SOURCES "src/ObjectGL/*.cpp")
-file(GLOB GLOBAL_SOURCES "src/*.cpp")
+file(GLOB_RECURSE FILE_SOURCES "src/*.cpp")
+file(GLOB_RECURSE FILE_HEADERS "include/*.hpp")
 
-file(GLOB LSYSTEM_HEADERS "include/LSystem/*.hpp")
-file(GLOB WINDOWGL_HEADERS "include/WindowGL/*.hpp")
-file(GLOB SPRITE_HEADERS "include/Sprite/*.hpp")
-file(GLOB OBJECTGL_HEADERS "include/ObjectGL/*.hpp")
-
-set(SOURCES
-    ${GLOBAL_SOURCES}
-    ${LSYSTEM_SOURCES}
-    ${WINDOWGL_SOURCES}
-    ${SPRITE_SOURCES}
-    ${OBJECTGL_SOURCES}
-)
-
-set(HEADERS
-    ${LSYSTEM_HEADERS}
-    ${WINDOWGL_HEADERS}
-    ${SPRITE_HEADERS}
-    ${OBJECTGL_HEADERS}
-)
+set(SOURCES ${FILE_SOURCES})
+set(HEADERS ${FILE_HEADERS})
 
 if(WIN32)
     add_executable(${PROJECT_NAME} WIN32 ${SOURCES} ${HEADERS})   

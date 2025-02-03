@@ -10,11 +10,7 @@
 #include <cstdlib>
 #include <ctime>
 
-#include <LSystem/LSystem.hpp>
-#include <LSystem/Interpreter.hpp>
-#include <LSystem/Turtle.hpp>
-#include <LSystem/StochasticRules.hpp>
-#include <WindowGL/MainFrame.hpp>
+#include <spellwar/gui/MainFrame.hpp>
  
 int main() {
 	srand(time(NULL));
