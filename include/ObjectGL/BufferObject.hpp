@@ -6,19 +6,20 @@
  * No warranties are provided, and any use of this code is at your own risk.
  */
 
-#ifndef __BUFFER_GL_H__
-#define __BUFFER_GL_H__
+#ifndef __BUFFER_OBJECT_GL_H__
+#define __BUFFER_OBJECT_GL_H__
 
-#include <WindowGL/OGLStateObject.hpp>
-#include <WindowGL/AttributeProperties.hpp>
+#include <ObjectGL/IObjectGL.hpp>
+#include <ObjectGL/AttributeProperties.hpp>
 
 #include <vector>
 
-class Buffer : public OGLStateObject {
+class BufferObject : public IObjectGL {
 public:
-    Buffer(GLenum target);
-    ~Buffer();
-    template <typename T> void setData(const std::vector<T> & values);
+    BufferObject(GLenum target);
+    ~BufferObject();
+    template <typename T> 
+    void setData(const std::vector<T> & values);
     GLenum getComponentTypeOfAttribute() const;
     GLuint getNumberOfComponentsOfAttribute() const;
     GLsizei getNumberOfAttributes() const;
@@ -32,7 +33,8 @@ private:
     GLsizei _numberOfAttributes;
 };
 
-template <typename T> void Buffer::setData(const std::vector<T> & values) {
+template <typename T> 
+void BufferObject::setData(const std::vector<T> & values) {
     AttributeProperties<T> attributeProperties;
     _componentTypeOfAttribute = attributeProperties.typeEnum;
     _numberOfComponentsOfAttribute = attributeProperties.components;
@@ -43,3 +45,4 @@ template <typename T> void Buffer::setData(const std::vector<T> & values) {
 }
 
 #endif 
+

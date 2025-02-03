@@ -6,32 +6,33 @@
  * No warranties are provided, and any use of this code is at your own risk.
  */
 
-#include <WindowGL/Buffer.hpp>
+#include <ObjectGL/BufferObject.hpp>
 
-Buffer::Buffer(GLenum target) : _target(target) {
+BufferObject::BufferObject(GLenum target) : _target(target) {
     glGenBuffers(1, &_buffer);
 }
 
-Buffer::~Buffer() {
+BufferObject::~BufferObject() {
     glDeleteBuffers(1, &_buffer);
 }
 
-GLenum Buffer::getComponentTypeOfAttribute() const {
+GLenum BufferObject::getComponentTypeOfAttribute() const {
     return _componentTypeOfAttribute;
 }
 
-GLuint Buffer::getNumberOfComponentsOfAttribute() const {
+GLuint BufferObject::getNumberOfComponentsOfAttribute() const {
     return _numberOfComponentsOfAttribute;
 }
 
-GLsizei Buffer::getNumberOfAttributes() const {
+GLsizei BufferObject::getNumberOfAttributes() const {
     return _numberOfAttributes;
 }
 
-void Buffer::bind() const {
+void BufferObject::bind() const {
     glBindBuffer(_target, _buffer);
 }
 
-void Buffer::unbind() const {
+void BufferObject::unbind() const {
     glBindBuffer(_target, 0);
 }
+

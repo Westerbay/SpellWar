@@ -15,5 +15,5 @@ MainFrame::MainFrame(const char * title, const Size & size) :
 }
 
 void MainFrame::renderLoop() {
-    _spriteGroup.update();
+    _spriteGroup.render();
 }

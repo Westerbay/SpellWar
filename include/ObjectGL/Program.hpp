@@ -9,9 +9,9 @@
 #ifndef __PROGRAM_GL_H__
 #define __PROGRAM_GL_H__
 
-#include <WindowGL/OGLStateObject.hpp>
+#include <ObjectGL/IObjectGL.hpp>
 
-class Program : public OGLStateObject {
+class Program : public IObjectGL {
 public:
     Program(
         const char * vertexShaderFilePath, 
@@ -26,3 +26,4 @@ private:
 };
 
 #endif
+

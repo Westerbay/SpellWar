@@ -6,25 +6,25 @@
  * No warranties are provided, and any use of this code is at your own risk.
  */
 
-#include <WindowGL/VertexArray.hpp>
+#include <ObjectGL/VertexArrayObject.hpp>
 
-VertexArray::VertexArray(unsigned numberOfBuffer) {
-    _buffers = new Buffer * [numberOfBuffer];
+VertexArrayObject::VertexArrayObject(unsigned numberOfBuffer) {
+    _vbos = new BufferObject * [numberOfBuffer];
     for (unsigned i = 0; i < numberOfBuffer; i ++) {
-        _buffers[i] = new Buffer(GL_ARRAY_BUFFER);
+        _vbos[i] = new BufferObject(GL_ARRAY_BUFFER);
     }
-    _ibo = new Buffer(GL_ELEMENT_ARRAY_BUFFER);
+    _ibo = new BufferObject(GL_ELEMENT_ARRAY_BUFFER);
     _isIBObound = false;
     glGenVertexArrays(1, &_array);
 }
 
-VertexArray::~VertexArray() {
+VertexArrayObject::~VertexArrayObject() {
     delete _ibo;
-    delete[] _buffers;
+    delete[] _vbos;
     glDeleteVertexArrays(1, &_array);
 }
 
-void VertexArray::draw(GLenum mode) const {
+void VertexArrayObject::draw(GLenum mode) const {
     bind();
     if (_isIBObound) {
         _ibo -> bind();
@@ -37,25 +37,25 @@ void VertexArray::draw(GLenum mode) const {
         _ibo -> unbind();
     }
     else {
-        glDrawArrays(mode, 0, _buffers[0] -> getNumberOfAttributes());
+        glDrawArrays(mode, 0, _vbos[0] -> getNumberOfAttributes());
     }
     unbind();
 }
 
-void VertexArray::bind() const {
+void VertexArrayObject::bind() const {
     glBindVertexArray(_array);
 }
 
-void VertexArray::unbind() const {
+void VertexArrayObject::unbind() const {
     glBindVertexArray(0);
 }
 
-void VertexArray::encapsulateVBO(unsigned bufferIndex) const {
-    Buffer * vbo = _buffers[bufferIndex];
+void VertexArrayObject::encapsulateVBO(unsigned vboIndex) const {
+    BufferObject * vbo = _vbos[vboIndex];
     vbo -> bind();
-    glEnableVertexAttribArray(bufferIndex);
+    glEnableVertexAttribArray(vboIndex);
     glVertexAttribPointer(
-        bufferIndex,
+        vboIndex,
         vbo -> getNumberOfComponentsOfAttribute(),
         vbo -> getComponentTypeOfAttribute(),
         GL_FALSE,
@@ -64,3 +64,4 @@ void VertexArray::encapsulateVBO(unsigned bufferIndex) const {
     );
     vbo -> unbind();
 }
+

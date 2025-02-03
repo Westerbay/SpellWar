@@ -13,12 +13,12 @@
 
 #include <unordered_set>
 
-class SpriteGroup {
+class SpriteGroup : Sprite {
 public:
     ~SpriteGroup();    
     void add(Sprite * sprite);
     void remove(Sprite * sprite);
-    void update();
+    void render() override;
 private:
     std::unordered_set<Sprite *> _sprites;
 };

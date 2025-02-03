@@ -10,7 +10,7 @@
 
 Spell::Spell() {
     _program = new Program(VERTEX_SHADER_PATH, FRAGMENT_SHADER_PATH);
-    _vao = new VertexArray(1);
+    _vao = new VertexArrayObject(1);
 
     StochasticRules * rules = new StochasticRules;
 	rules -> add('F', "F[+F]F[-F]F", 0.33);
@@ -33,7 +33,7 @@ Spell::~Spell() {
     delete _interpreter;
 }
 
-void Spell::update() {
+void Spell::render() {
     _interpreter -> systemToWorld(_word);
     _vao -> setVBO(0, _turtle -> getLines());
     _program -> bind();
@@ -44,3 +44,4 @@ void Spell::update() {
         glm::mat3(1.0f)
     });
 }
+

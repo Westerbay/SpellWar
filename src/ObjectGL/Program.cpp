@@ -6,7 +6,7 @@
  * No warranties are provided, and any use of this code is at your own risk.
  */
 
-#include <WindowGL/Program.hpp>
+#include <ObjectGL/Program.hpp>
 
 #include <string>
 #include <iostream>
@@ -62,3 +62,4 @@ void Program::bind() const {
 void Program::unbind() const {
     glUseProgram(0);
 }
+

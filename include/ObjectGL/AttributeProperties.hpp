@@ -85,3 +85,4 @@ template <> struct AttributeProperties<glm::vec4> {
 };
 
 #endif 
+

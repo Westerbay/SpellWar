@@ -22,8 +22,8 @@ void SpriteGroup::remove(Sprite * sprite) {
     _sprites.erase(sprite);
 }
 
-void SpriteGroup::update() {
+void SpriteGroup::render() {
     for (Sprite * sprite : _sprites) {
-        sprite -> update();
+        sprite -> render();
     }
 }

@@ -10,8 +10,8 @@
 #define __SPELL_H__
 
 #include <Sprite/Sprite.hpp>
-#include <WindowGL/Program.hpp>
-#include <WindowGL/VertexArray.hpp>
+#include <ObjectGL/Program.hpp>
+#include <ObjectGL/VertexArrayObject.hpp>
 #include <LSystem/LSystem.hpp>
 #include <LSystem/Turtle.hpp>
 #include <LSystem/StochasticRules.hpp>
@@ -24,10 +24,10 @@ class Spell : public Sprite {
 public:
     Spell();
     ~Spell();
-    void update() override;
+    void render() override;
 private:
     Program * _program;
-    VertexArray * _vao;
+    VertexArrayObject * _vao;
     LSystem * _system;
     Turtle * _turtle;
     Interpreter * _interpreter;
@@ -35,3 +35,4 @@ private:
 };
 
 #endif
+
