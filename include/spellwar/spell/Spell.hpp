@@ -21,8 +21,7 @@
 #define FRAGMENT_SHADER_PATH "shaders/spell.f.glsl"
 
 
-using namespace wgame::opengl;
-using namespace wgame::gui;
+using namespace wgame;
 
 class Spell : public Sprite {
 public:

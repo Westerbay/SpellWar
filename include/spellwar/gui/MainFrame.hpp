@@ -10,19 +10,15 @@
 #ifndef __MAIN_FRAME__
 #define __MAIN_FRAME__
 
-#include <wgame/gui/AbstractMainFrame.hpp>
-#include <wgame/gui/SpriteGroup.hpp>
+#include <wgame/wgame.hpp>
 
 
-using namespace wgame::gui;
-using namespace wgame::geometry;
+using namespace wgame;
 
-class MainFrame : public AbstractMainFrame {
+class MainFrame : public AbstractFrame {
 public: 
     MainFrame(const char * title, const Size & size);
     void render() override;
-private:
-    SpriteGroup _spriteGroup;
 };
 
 #endif

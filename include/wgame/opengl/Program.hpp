@@ -13,7 +13,7 @@
 #include <wgame/opengl/IObjectGL.hpp>
 
 
-namespace wgame::opengl {
+namespace wgame {
 
 class Program : public IObjectGL {
 public:

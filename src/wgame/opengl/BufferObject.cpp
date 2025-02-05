@@ -10,7 +10,7 @@
 #include <wgame/opengl/BufferObject.hpp>
 
 
-namespace wgame::opengl {
+namespace wgame {
 
 BufferObject::BufferObject(GLenum target) : _target(target) {
     glGenBuffers(1, &_buffer);

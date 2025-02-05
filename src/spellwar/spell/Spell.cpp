@@ -8,6 +8,7 @@
 
 
 #include <spellwar/spell/Spell.hpp>
+#include <iostream>
 
 
 Spell::Spell() {

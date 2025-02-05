@@ -6,19 +6,11 @@
  * No warranties are provided, and any use of this code is at your own risk.
  */
 
+#include <spellwar/core/Game.hpp>
 
-#ifndef __SPRITE_H__
-#define __SPRITE_H__
+Game::Game(unsigned tps) : AbstractGame(tps) {}
 
-
-namespace wgame {
-
-class Sprite {
-public:
-    virtual void render() = 0;
-    virtual ~Sprite() = default;
-};
+void Game::update() {
 
 }
 
-#endif

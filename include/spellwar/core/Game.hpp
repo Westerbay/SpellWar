@@ -7,18 +7,19 @@
  */
 
 
-#ifndef __SPRITE_H__
-#define __SPRITE_H__
+#ifndef __GAME__
+#define __GAME__
 
+#include <wgame/wgame.hpp>
 
-namespace wgame {
+using namespace wgame;
 
-class Sprite {
+class Game : public AbstractGame {
 public:
-    virtual void render() = 0;
-    virtual ~Sprite() = default;
+    Game(unsigned tps = DEFAULT_TPS);
+    void update() override;
 };
 
-}
 
 #endif
+

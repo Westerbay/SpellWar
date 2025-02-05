@@ -10,14 +10,14 @@
 #ifndef __LSYSTEM_TURTLE__
 #define __LSYSTEM_TURTLE__
 
-#include <wgame/geometry/Geometry.hpp>
+#include <wgame/wgame.hpp>
 
 #include <unordered_map>
 #include <stack>
 #include <vector>
 
 
-using namespace wgame::geometry;
+using namespace wgame;
 
 typedef enum {
     TURN_LEFT,

@@ -16,7 +16,7 @@
 #include <vector>
 
 
-namespace wgame::opengl {
+namespace wgame {
 
 class BufferObject : public IObjectGL {
 public:

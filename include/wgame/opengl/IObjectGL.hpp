@@ -13,7 +13,7 @@
 #include <GL/glew.h>
 
 
-namespace wgame::opengl {
+namespace wgame {
 
 class IObjectGL {
 public:

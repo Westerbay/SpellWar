@@ -12,10 +12,11 @@
 
 
 MainFrame::MainFrame(const char * title, const Size & size) :
-    AbstractMainFrame(title, size) {
-    _spriteGroup.add(new Spell());
+    AbstractFrame(title, size) {
+    addSprite(new Spell());
 }
 
 void MainFrame::render() {
-    _spriteGroup.render();
+    displaySprite();
 }
+

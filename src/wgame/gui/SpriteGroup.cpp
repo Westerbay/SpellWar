@@ -10,7 +10,7 @@
 #include <wgame/gui/SpriteGroup.hpp>
 
 
-namespace wgame::gui {
+namespace wgame {
 
 SpriteGroup::~SpriteGroup() {
     for (Sprite * sprite : _sprites) {

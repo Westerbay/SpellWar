@@ -10,7 +10,7 @@
 #include <wgame/opengl/VertexArrayObject.hpp>
 
 
-namespace wgame::opengl {
+namespace wgame {
 
 VertexArrayObject::VertexArrayObject(unsigned numberOfBuffer) {
     _vbos = new BufferObject * [numberOfBuffer];

@@ -15,7 +15,7 @@
 #include <unordered_set>
 
 
-namespace wgame::gui {
+namespace wgame {
 
 class SpriteGroup : Sprite {
 public:

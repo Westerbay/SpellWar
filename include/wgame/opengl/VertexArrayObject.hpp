@@ -15,7 +15,7 @@
 #include <vector>
 
 
-namespace wgame::opengl {
+namespace wgame {
 
 class VertexArrayObject : public IObjectGL {
 public:

@@ -14,7 +14,7 @@
 #include <glm/glm.hpp>
 
 
-namespace wgame::opengl {
+namespace wgame {
 
 /// Traits structure for attribute properties
 template <typename T> struct AttributeProperties {

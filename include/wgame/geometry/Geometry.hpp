@@ -14,7 +14,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 
-namespace wgame::geometry {
+namespace wgame {
 
 typedef glm::vec2 Point2D;
 typedef glm::vec3 Point3D;

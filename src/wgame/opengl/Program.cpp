@@ -15,7 +15,7 @@
 #include <sstream>
 
 
-namespace wgame::opengl {
+namespace wgame {
 
 Program::Program(
     const char * vertexShaderFilePath, 
