@@ -18,7 +18,8 @@ using namespace wgame;
 class MainFrame : public AbstractFrame {
 public: 
     MainFrame(const char * title, const Size & size);
-    void render() override;
+    void renderScene() override;
+    void renderHUD() override;
 };
 
 #endif

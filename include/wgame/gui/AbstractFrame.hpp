@@ -36,7 +36,8 @@ public:
 	void addSprite(Sprite * sprite);
 	void removeSprite(Sprite * sprite);
 	void displaySprites();
-	virtual void render() = 0;
+	virtual void renderScene() = 0;
+	virtual void renderHUD() = 0;
 private:
 	void initSDL(const char * title, const Size & size);
 	SpriteGroup _group;

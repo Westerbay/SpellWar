@@ -55,22 +55,25 @@ void AbstractFrame::start() {
 	SDL_Event event;
 	_running = true;
 	while (_running) {
-        Uint64 frameStart = SDL_GetTicks();		
-        while (SDL_PollEvent(&event)) {
-            if (event.type == SDL_EVENT_QUIT) {
+		Uint64 frameStart = SDL_GetTicks();
+		while (SDL_PollEvent(&event)) {
+			if (event.type == SDL_EVENT_QUIT) {
 				stop();
 				return;
-            }
-        }
-		glClear(GL_COLOR_BUFFER_BIT);
-        render();
+			}
+		}
+		glEnable(GL_DEPTH_TEST);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		renderScene();
+		glDisable(GL_DEPTH_TEST);
+		renderHUD();
 		SDL_GL_SwapWindow(_mainFrame);
-        Uint64 frameTime = SDL_GetTicks() - frameStart;
-        if (frameTime < _frameDelay) {
-            std::this_thread::sleep_for(
-                std::chrono::milliseconds(_frameDelay - frameTime)
-            );
-        }
+		Uint64 frameTime = SDL_GetTicks() - frameStart;
+		if (frameTime < _frameDelay) {
+			std::this_thread::sleep_for(
+				std::chrono::milliseconds(_frameDelay - frameTime)
+			);
+		}
     }
 }
 

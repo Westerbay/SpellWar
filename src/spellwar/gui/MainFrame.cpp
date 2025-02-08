@@ -16,7 +16,10 @@ MainFrame::MainFrame(const char * title, const Size & size) :
     addSprite(new Spell());
 }
 
-void MainFrame::render() {
+void MainFrame::renderScene() {
     displaySprites();
+}
+
+void MainFrame::renderHUD() {
 }
 
