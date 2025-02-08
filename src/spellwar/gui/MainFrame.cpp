@@ -17,6 +17,6 @@ MainFrame::MainFrame(const char * title, const Size & size) :
 }
 
 void MainFrame::render() {
-    displaySprite();
+    displaySprites();
 }
 

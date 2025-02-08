@@ -19,16 +19,6 @@ AbstractFrame::AbstractFrame(const char * title, const Size & size, unsigned fps
 	setFPS(fps);
 }
 
-void AbstractFrame::setFPS(unsigned fps) {
-	_frameDelay = 1000 / fps;
-}
-
-AbstractFrame::~AbstractFrame() {
-	SDL_GL_DestroyContext(_glContext);
-	SDL_DestroyWindow(_mainFrame);
-	SDL_Quit();
-}
-
 void AbstractFrame::initSDL(const char * title, const Size & size) {
 	if (!SDL_Init(SDL_INIT_VIDEO)) {
 		throw std::runtime_error(std::string("Error SDL : ") + SDL_GetError());		
@@ -39,32 +29,43 @@ void AbstractFrame::initSDL(const char * title, const Size & size) {
 		SDL_WINDOW_OPENGL
 	);
 	if (!_mainFrame) {
-		SDL_Quit();
 		throw std::runtime_error(std::string("Error creating window : ") + SDL_GetError());	
 	}
 	_glContext = SDL_GL_CreateContext(_mainFrame);
 	if (!_glContext) {
-		SDL_DestroyWindow(_mainFrame);
-		SDL_Quit();
 		throw std::runtime_error(std::string("Error creating GL context : ") + SDL_GetError());
 	}
 	glewExperimental = GL_TRUE;
 	if (glewInit() != GLEW_OK) {
-		SDL_GL_DestroyContext(_glContext);
-		SDL_DestroyWindow(_mainFrame);
-		SDL_Quit();
 		throw std::runtime_error("Error init GLEW");
 	}
 }
 
+void AbstractFrame::setFPS(unsigned fps) {
+	_frameDelay = 1000 / fps;
+}
+
+AbstractFrame::~AbstractFrame() {
+	SDL_GL_DestroyContext(_glContext);
+	SDL_DestroyWindow(_mainFrame);
+	SDL_Quit();
+}
+
 void AbstractFrame::start() {
+	SDL_Event event;
 	_running = true;
 	while (_running) {
-        Uint32 frameStart = SDL_GetTicks();
+        Uint64 frameStart = SDL_GetTicks();		
+        while (SDL_PollEvent(&event)) {
+            if (event.type == SDL_EVENT_QUIT) {
+				stop();
+				return;
+            }
+        }
 		glClear(GL_COLOR_BUFFER_BIT);
         render();
 		SDL_GL_SwapWindow(_mainFrame);
-        Uint32 frameTime = SDL_GetTicks() - frameStart;
+        Uint64 frameTime = SDL_GetTicks() - frameStart;
         if (frameTime < _frameDelay) {
             std::this_thread::sleep_for(
                 std::chrono::milliseconds(_frameDelay - frameTime)
@@ -85,7 +86,7 @@ void AbstractFrame::removeSprite(Sprite * sprite) {
 	_group.remove(sprite);
 }
 
-void AbstractFrame::displaySprite() {
+void AbstractFrame::displaySprites() {
 	_group.render();
 }
 

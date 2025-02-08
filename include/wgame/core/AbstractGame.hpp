@@ -10,6 +10,8 @@
 #ifndef __ABSTRACT_GAME_H__
 #define __ABSTRACT_GAME_H__
 
+#include <wgame/core/EntityGroup.hpp>
+
 #include <atomic>
 #include <thread>
 #include <chrono>
@@ -26,8 +28,12 @@ public:
     void setTPS(unsigned tps);
     void start();
     void stop();
+    void addEntity(Entity * entity);
+    void removeEntity(Entity * entity);
+    void updateEntities();
     virtual void update() = 0;
 private:
+    EntityGroup _group;
     std::atomic<unsigned> _updateDelay;
     std::atomic<bool> _running;
 };

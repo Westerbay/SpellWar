@@ -24,9 +24,9 @@ void AbstractGame::setTPS(unsigned tps) {
 void AbstractGame::start() {
     _running = true;
     while (_running) {
-        Uint32 updateStart = SDL_GetTicks();
+        Uint64 updateStart = SDL_GetTicks();
         update();
-        Uint32 updateTime = SDL_GetTicks() - updateStart;
+        Uint64 updateTime = SDL_GetTicks() - updateStart;
         if (updateTime < _updateDelay) {
             std::this_thread::sleep_for(
                 std::chrono::milliseconds(_updateDelay - updateTime)
@@ -37,6 +37,18 @@ void AbstractGame::start() {
 
 void AbstractGame::stop() {
     _running = false;
+}
+
+void AbstractGame::addEntity(Entity * entity) {
+    _group.add(entity);
+}
+
+void AbstractGame::removeEntity(Entity * entity) {
+    _group.remove(entity);
+}
+
+void AbstractGame::updateEntities() {
+    _group.update();
 }
 
 }

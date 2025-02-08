@@ -22,14 +22,10 @@ class GameEngine {
 public:
     GameEngine(AbstractGame * game, AbstractFrame * frame);
     ~GameEngine();
-    bool isRunning() const;
     void start();
-    void pause();
-    void exit();
 private:
     AbstractGame * _game;
     AbstractFrame * _frame;
-    std::atomic<bool> _running;
 };
 
 }

@@ -42,7 +42,7 @@ void BufferObject::setData(const std::vector<T> & values) {
     AttributeProperties<T> attributeProperties;
     _componentTypeOfAttribute = attributeProperties.typeEnum;
     _numberOfComponentsOfAttribute = attributeProperties.components;
-    _numberOfAttributes = values.size();
+    _numberOfAttributes = (GLsizei) values.size();
     bind();
     glBufferData(_target, sizeof(T) * values.size(), values.data(), GL_STATIC_DRAW);
     unbind();

@@ -35,7 +35,7 @@ public:
 	void stop();
 	void addSprite(Sprite * sprite);
 	void removeSprite(Sprite * sprite);
-	void displaySprite();
+	void displaySprites();
 	virtual void render() = 0;
 private:
 	void initSDL(const char * title, const Size & size);
