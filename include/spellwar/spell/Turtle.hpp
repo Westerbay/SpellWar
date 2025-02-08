@@ -32,6 +32,7 @@ typedef enum {
 typedef struct {
     Point3D position;
 	Matrix3D heading;
+    float length;
 } TurtleState;
 
 class Turtle {

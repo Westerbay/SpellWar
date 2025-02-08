@@ -33,11 +33,13 @@ void Turtle::forward() {
 
 void Turtle::pop() {
 	_state = _stackStates.top();
+	_length = _state.length;
 	_stackStates.pop();
 }
 
 void Turtle::push() {
 	_stackStates.push(_state);
+	_length *= 0.5f;
 }
 
 std::vector<Point3D> & Turtle::getLines() {

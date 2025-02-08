@@ -10,10 +10,10 @@
 #ifndef __LSYSTEM_INTERPRETER__
 #define __LSYSTEM_INTERPRETER__
 
-#include <spellwar/spell/LSystem.hpp>
 #include <spellwar/spell/Turtle.hpp>
 
 #include <unordered_map>
+#include <iostream>
 
 #define FORWARD_TOKEN 'F'
 
@@ -31,11 +31,10 @@
 
 class Interpreter {
 public:
-	Interpreter(LSystem * system, Turtle * turtle);
+	Interpreter(Turtle * turtle);
 	~Interpreter();
 	void systemToWorld(std::string word);
 private:
-	LSystem * _system;
 	Turtle * _turtle;
 	std::unordered_map<char, Rotation> _tokenToRotation;
 };

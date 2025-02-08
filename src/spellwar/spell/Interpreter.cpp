@@ -9,8 +9,7 @@
  
 #include <spellwar/spell/Interpreter.hpp>
 
-Interpreter::Interpreter(LSystem * system, Turtle * turtle) :
-	_system(system), _turtle(turtle) {
+Interpreter::Interpreter(Turtle * turtle) : _turtle(turtle) {
 	_tokenToRotation[TURN_LEFT_TOKEN] = TURN_LEFT;
 	_tokenToRotation[TURN_RIGHT_TOKEN] = TURN_RIGHT;
 	_tokenToRotation[PITCH_DOWN_TOKEN] = PITCH_DOWN;
@@ -21,7 +20,6 @@ Interpreter::Interpreter(LSystem * system, Turtle * turtle) :
 }
 
 Interpreter::~Interpreter() {
-	delete _system;
 	delete _turtle;
 }
 

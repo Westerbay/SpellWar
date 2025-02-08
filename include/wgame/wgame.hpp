@@ -23,4 +23,6 @@
 
 #include <wgame/core/GameEngine.hpp>
 #include <wgame/core/AbstractGame.hpp>
+#include <wgame/core/Entity.hpp>
+#include <wgame/core/EntityGroup.hpp>
 
