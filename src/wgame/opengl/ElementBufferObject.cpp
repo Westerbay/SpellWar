@@ -5,17 +5,13 @@
  * You are free to copy, modify, and distribute this file without restriction.
  * No warranties are provided, and any use of this code is at your own risk.
  */
- 
-#ifndef __RULES__
-#define __RULES__
- 
-#include <string>
- 
-class Rules {
-public:
-	virtual std::string nextSuccessor(char predecessor) = 0;
-	virtual ~Rules() = default;
-};
- 
-#endif
- 
+
+
+#include <wgame/opengl/ElementBufferObject.hpp>
+
+
+namespace wgame {
+
+ElementBufferObject::ElementBufferObject() : BufferObject(GL_ELEMENT_ARRAY_BUFFER) {}
+
+}

@@ -7,26 +7,29 @@
  */
 
 
-#ifndef __PROGRAM_GL_H__
-#define __PROGRAM_GL_H__
+#ifndef __SHADER_GL_H__
+#define __SHADER_GL_H__
 
 #include <wgame/opengl/IObjectGL.hpp>
+
+#define DEFAULT_VERTEX_SHADER "shaders/default.v.glsl"
+#define DEFAULT_FRAGMENT_SHADER "shaders/default.f.glsl"
 
 
 namespace wgame {
 
-class Program : public IObjectGL {
+class Shader : public IObjectGL {
 public:
-    Program(
-        const char * vertexShaderFilePath, 
-        const char * fragmentShaderFilePath
+    Shader(
+        const char * vertexShaderFilePath = DEFAULT_VERTEX_SHADER, 
+        const char * fragmentShaderFilePath = DEFAULT_FRAGMENT_SHADER
     );
-    ~Program();
+    ~Shader();
     void bind() const override;
     void unbind() const override;
 private:
     GLuint compileShader(GLenum type, const char * filePath);
-    GLuint _program;
+    GLuint _shader;
 };
 
 }

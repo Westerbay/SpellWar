@@ -7,7 +7,7 @@
  */
 
 
-#include <wgame/opengl/Program.hpp>
+#include <wgame/opengl/Shader.hpp>
 
 #include <string>
 #include <iostream>
@@ -17,26 +17,24 @@
 
 namespace wgame {
 
-Program::Program(
-    const char * vertexShaderFilePath, 
-    const char * fragmentShaderFilePath) {
-    _program = glCreateProgram();
+Shader::Shader(const char * vertexShaderFilePath, const char * fragmentShaderFilePath) {
+    _shader = glCreateProgram();
     GLuint vertexShader = compileShader(GL_VERTEX_SHADER, vertexShaderFilePath);
     GLuint fragmentShader = compileShader(GL_FRAGMENT_SHADER, fragmentShaderFilePath);
-    glAttachShader(_program, vertexShader);
-    glAttachShader(_program, fragmentShader);
-    glLinkProgram(_program);
-    glDetachShader(_program, vertexShader);
-    glDetachShader(_program, fragmentShader);
+    glAttachShader(_shader, vertexShader);
+    glAttachShader(_shader, fragmentShader);
+    glLinkProgram(_shader);
+    glDetachShader(_shader, vertexShader);
+    glDetachShader(_shader, fragmentShader);
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
 }
 
-Program::~Program() {
-    glDeleteProgram(_program);
+Shader::~Shader() {
+    glDeleteProgram(_shader);
 }
 
-GLuint Program::compileShader(GLenum type, const char * filePath) {
+GLuint Shader::compileShader(GLenum type, const char * filePath) {
     std::ifstream shaderFile(filePath);
     if (!shaderFile.is_open()) {
         throw std::runtime_error("Cannot open shader files !");	
@@ -59,11 +57,11 @@ GLuint Program::compileShader(GLenum type, const char * filePath) {
     return shader;
 }
 
-void Program::bind() const {
-    glUseProgram(_program);
+void Shader::bind() const {
+    glUseProgram(_shader);
 }
 
-void Program::unbind() const {
+void Shader::unbind() const {
     glUseProgram(0);
 }
 

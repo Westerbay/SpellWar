@@ -10,47 +10,52 @@
 #ifndef __VERTEX_ARRAY_H__
 #define __VERTEX_ARRAY_H__
 
-#include <wgame/opengl/BufferObject.hpp>
+#include <wgame/opengl/VertexBufferObject.hpp>
+#include <wgame/opengl/ElementBufferObject.hpp>
 
 #include <vector>
+
+#define VBO_COORD 0
+#define VBO_COLOR 1
+#define NUMBER_OF_VBOS 2
+
+#define DRAW_TRIANGLES GL_TRIANGLES
 
 
 namespace wgame {
 
 class VertexArrayObject : public IObjectGL {
 public:
-    VertexArrayObject(unsigned numberOfBuffer);
+    VertexArrayObject();
     ~VertexArrayObject();
     template <typename T> 
     void setVBO(unsigned vboIndex, const std::vector<T> & values);
     template <typename T> 
-    void setIBO(const std::vector<T> & values);
+    void setEBO(const std::vector<T> & values);
     void draw(GLenum mode) const;
     void bind() const override;
     void unbind() const override;
 private:
-    void encapsulateVBO(unsigned vboIndex) const;
+    void encapsulateVBO(unsigned vboIndex);
     GLuint _array;
-    BufferObject * _ibo;
-    BufferObject ** _vbos;
-    bool _isIBObound;
+    ElementBufferObject _ebo;
+    VertexBufferObject _vbos[NUMBER_OF_VBOS];
 };
 
 
 template <typename T> 
 void VertexArrayObject::setVBO(unsigned vboIndex, const std::vector<T> & values) {
     bind();
-    _vbos[vboIndex] -> setData(values);
+    _vbos[vboIndex].setData(values);
     encapsulateVBO(vboIndex);
     unbind();
 }
 
 template <typename T> 
-void VertexArrayObject::setIBO(const std::vector<T> & values) {
+void VertexArrayObject::setEBO(const std::vector<T> & values) {
     bind();
-    _ibo -> setData(values);
+    _ebo.setData(values);
     unbind();
-    _isIBObound = true;
 }
 
 }

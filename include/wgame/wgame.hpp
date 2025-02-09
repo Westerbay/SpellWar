@@ -19,7 +19,7 @@
 #include <wgame/opengl/BufferObject.hpp>
 #include <wgame/opengl/VertexArrayObject.hpp>
 #include <wgame/opengl/IObjectGL.hpp>
-#include <wgame/opengl/Program.hpp>
+#include <wgame/opengl/Shader.hpp>
 
 #include <wgame/core/GameEngine.hpp>
 #include <wgame/core/AbstractGame.hpp>

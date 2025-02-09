@@ -12,37 +12,24 @@
 
 namespace wgame {
 
-VertexArrayObject::VertexArrayObject(unsigned numberOfBuffer) {
-    _vbos = new BufferObject * [numberOfBuffer];
-    for (unsigned i = 0; i < numberOfBuffer; i ++) {
-        _vbos[i] = new BufferObject(GL_ARRAY_BUFFER);
-    }
-    _ibo = new BufferObject(GL_ELEMENT_ARRAY_BUFFER);
-    _isIBObound = false;
+VertexArrayObject::VertexArrayObject() {
     glGenVertexArrays(1, &_array);
 }
 
 VertexArrayObject::~VertexArrayObject() {
-    delete _ibo;
-    delete[] _vbos;
     glDeleteVertexArrays(1, &_array);
 }
 
 void VertexArrayObject::draw(GLenum mode) const {
     bind();
-    if (_isIBObound) {
-        _ibo -> bind();
-        glDrawElements(
-            mode,
-            _ibo -> getNumberOfAttributes(),
-            _ibo -> getComponentTypeOfAttribute(),
-            nullptr
-        );
-        _ibo -> unbind();
-    }
-    else {
-        glDrawArrays(mode, 0, _vbos[0] -> getNumberOfAttributes());
-    }
+    _ebo.bind();
+    glDrawElements(
+        mode,
+        _ebo.getNumberOfAttributes(),
+        _ebo.getComponentTypeOfAttribute(),
+        nullptr
+    );
+    _ebo.unbind();
     unbind();
 }
 
@@ -54,8 +41,8 @@ void VertexArrayObject::unbind() const {
     glBindVertexArray(0);
 }
 
-void VertexArrayObject::encapsulateVBO(unsigned vboIndex) const {
-    BufferObject * vbo = _vbos[vboIndex];
+void VertexArrayObject::encapsulateVBO(unsigned vboIndex) {
+    VertexBufferObject * vbo = _vbos + vboIndex;
     vbo -> bind();
     glEnableVertexAttribArray(vboIndex);
     glVertexAttribPointer(

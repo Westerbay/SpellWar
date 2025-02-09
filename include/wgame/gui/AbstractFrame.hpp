@@ -31,6 +31,7 @@ public:
 	AbstractFrame(const char * title, const Size & size, unsigned fps = DEFAULT_FPS);
 	virtual ~AbstractFrame();
 	void setFPS(unsigned fps);
+	void setBackgroundColor(unsigned red, unsigned green, unsigned blue);
 	void start();
 	void stop();
 	void addSprite(Sprite * sprite);
@@ -40,6 +41,7 @@ public:
 	virtual void renderHUD() = 0;
 private:
 	void initSDL(const char * title, const Size & size);
+	Vector3D _backgroundColor;
 	SpriteGroup _group;
 	SDL_Window * _mainFrame;
 	SDL_GLContext _glContext;
