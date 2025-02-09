@@ -51,8 +51,8 @@ AbstractFrame::~AbstractFrame() {
 	SDL_Quit();
 }
 
-void AbstractFrame::setBackgroundColor(unsigned red, unsigned green, unsigned blue) {
-	_backgroundColor = Vector3D(red, green, blue);
+void AbstractFrame::setBackgroundColor(GLclampf red, GLclampf green, GLclampf blue) {
+	glClearColor(red, green, blue, 1.0f);
 }
 
 void AbstractFrame::start() {
@@ -66,7 +66,6 @@ void AbstractFrame::start() {
 				return;
 			}
 		}
-		glClearColor(_backgroundColor.r, _backgroundColor.g, _backgroundColor.b, 1.0f);
 		glEnable(GL_DEPTH_TEST);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		renderScene();
