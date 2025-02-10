@@ -15,40 +15,34 @@
 namespace wgame {
 
 AbstractFrame::AbstractFrame(const char * title, const Size & size, unsigned fps) : _running(false) {
-	initSDL(title, size);
+	if (!glfwInit()) {
+		throw std::runtime_error("Failed to initialize GLFW ! ");
+	}
+	
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, GL_VERSION_USED);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, GL_VERSION_USED);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	
+	_frame = glfwCreateWindow(size.width, size.height, title, NULL, NULL);
+	if (_frame == NULL) {
+		throw std::runtime_error("Failed to create GLFW window ! ");
+	}
+	
+	glfwMakeContextCurrent(_frame);
+	gladLoadGL();
+	
+	glViewport(0, 0, size.width, size.height);
+	
 	setFPS(fps);
 }
 
-void AbstractFrame::initSDL(const char * title, const Size & size) {
-	if (!SDL_Init(SDL_INIT_VIDEO)) {
-		throw std::runtime_error(std::string("Error SDL : ") + SDL_GetError());		
-	}
-	_mainFrame = SDL_CreateWindow(
-		title,
-		size.width, size.height,
-		SDL_WINDOW_OPENGL
-	);
-	if (!_mainFrame) {
-		throw std::runtime_error(std::string("Error creating window : ") + SDL_GetError());	
-	}
-	_glContext = SDL_GL_CreateContext(_mainFrame);
-	if (!_glContext) {
-		throw std::runtime_error(std::string("Error creating GL context : ") + SDL_GetError());
-	}
-	glewExperimental = GL_TRUE;
-	if (glewInit() != GLEW_OK) {
-		throw std::runtime_error("Error init GLEW");
-	}
+AbstractFrame::~AbstractFrame() {
+	glfwDestroyWindow(_frame);
+	glfwTerminate();
 }
 
 void AbstractFrame::setFPS(unsigned fps) {
 	_frameDelay = 1000 / fps;
-}
-
-AbstractFrame::~AbstractFrame() {
-	SDL_GL_DestroyContext(_glContext);
-	SDL_DestroyWindow(_mainFrame);
-	SDL_Quit();
 }
 
 void AbstractFrame::setBackgroundColor(GLclampf red, GLclampf green, GLclampf blue) {
@@ -56,26 +50,24 @@ void AbstractFrame::setBackgroundColor(GLclampf red, GLclampf green, GLclampf bl
 }
 
 void AbstractFrame::start() {
-	SDL_Event event;
+	using namespace std::chrono;
 	_running = true;
-	while (_running) {
-		Uint64 frameStart = SDL_GetTicks();
-		while (SDL_PollEvent(&event)) {
-			if (event.type == SDL_EVENT_QUIT) {
-				stop();
-				return;
-			}
-		}
+	while (!glfwWindowShouldClose(_frame) && _running) {
+		steady_clock::time_point frameStart = std::chrono::steady_clock::now();
+		
+		glfwPollEvents();
 		glEnable(GL_DEPTH_TEST);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		renderScene();
 		glDisable(GL_DEPTH_TEST);
 		renderHUD();
-		SDL_GL_SwapWindow(_mainFrame);
-		Uint64 frameTime = SDL_GetTicks() - frameStart;
+		glfwSwapBuffers(_frame);
+		
+		steady_clock::time_point frameEnd = std::chrono::steady_clock::now();
+		unsigned frameTime = duration_cast<milliseconds>(frameEnd - frameStart).count();
 		if (frameTime < _frameDelay) {
 			std::this_thread::sleep_for(
-				std::chrono::milliseconds(_frameDelay - frameTime)
+				milliseconds(_frameDelay - frameTime)
 			);
 		}
     }

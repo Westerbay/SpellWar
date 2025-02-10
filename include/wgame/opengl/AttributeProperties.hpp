@@ -10,7 +10,6 @@
 #ifndef __ATTRIBUTE_PROPERTIES_H__
 #define __ATTRIBUTE_PROPERTIES_H__
 
-#include <GL/glew.h>
 #include <glm/glm.hpp>
 
 

@@ -24,16 +24,12 @@ endif()
 # +------------------------------------------------------------------+
 # | Librairies                                               |
 # +------------------------------------------------------------------+
-set(SDL3_DIR "${CMAKE_SOURCE_DIR}/libs/SDL3")
-set(GLEW_DIR "${CMAKE_SOURCE_DIR}/libs/glew")
-set(GLM_DIR "${CMAKE_SOURCE_DIR}/libs/glm")
+set(GLFW_DIR "${CMAKE_SOURCE_DIR}/libs/GLFW")
 
 if(WIN32)
-    set(SDL3_LIB "${SDL3_DIR}/lib/SDL3.lib")
-    set(GLEW_LIB "${GLEW_DIR}/lib/glew32.lib")
+    set(GLFW_LIB "${GLFW_DIR}/lib/glfw3.lib")
 elseif(UNIX)
-    set(SDL3_LIB "${SDL3_DIR}/lib/libSDL3.a")
-    set(GLEW_LIB "${GLEW_DIR}/lib/libGLEW.a")
+    set(GLFW_LIB "${GLFW_DIR}/lib/libglfw3.a")
 endif()
 
 
@@ -41,10 +37,10 @@ endif()
 # | Source Files                                          |
 # +------------------------------------------------------------------+
 
-file(GLOB_RECURSE FILE_SOURCES "src/*.cpp")
-file(GLOB_RECURSE FILE_HEADERS "include/*.hpp")
+file(GLOB_RECURSE FILE_SOURCES "src/*.c*")
+file(GLOB_RECURSE FILE_HEADERS "include/*.h*")
 
-set(SOURCES ${FILE_SOURCES})
+set(SOURCES ${FILE_SOURCES} ${GLFW_LIB}/src/)
 set(HEADERS ${FILE_HEADERS})
 
 if(WIN32)
@@ -59,15 +55,12 @@ endif()
 # | Link                                        |
 # +------------------------------------------------------------------+
 target_include_directories(${PROJECT_NAME} PRIVATE 
-	include
-	${GLM_DIR}
-	${SDL3_DIR}/include
-	${GLEW_DIR}/include
+	${CMAKE_SOURCE_DIR}/include
+	${GLFW_DIR}/include
 )
 
 target_link_libraries(${PROJECT_NAME} 
-	${SDL3_LIB}
-	${GLEW_LIB}
+	${GLFW_LIB}
 	OpenGL::GL
 )
 

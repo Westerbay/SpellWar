@@ -8,7 +8,6 @@
 
 
 #include <wgame/core/AbstractGame.hpp>
-#include <SDL3/SDL.h>
 
 
 namespace wgame {
@@ -22,14 +21,18 @@ void AbstractGame::setTPS(unsigned tps) {
 }
 
 void AbstractGame::start() {
+	using namespace std::chrono;
     _running = true;
     while (_running) {
-        Uint64 updateStart = SDL_GetTicks();
+        steady_clock::time_point updateStart = std::chrono::steady_clock::now();
+        
         update();
-        Uint64 updateTime = SDL_GetTicks() - updateStart;
+        
+        steady_clock::time_point updateEnd = std::chrono::steady_clock::now();
+		unsigned updateTime = duration_cast<milliseconds>(updateEnd - updateStart).count();
         if (updateTime < _updateDelay) {
             std::this_thread::sleep_for(
-                std::chrono::milliseconds(_updateDelay - updateTime)
+                milliseconds(_updateDelay - updateTime)
             );
         }
     }

@@ -10,8 +10,8 @@
 #ifndef __ABSTRACT_FRAME_H__
 #define __ABSTRACT_FRAME_H__
 
-#include <SDL3/SDL.h>
-#include <GL/glew.h>
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
 #include <wgame/geometry/Geometry.hpp>
 #include <wgame/gui/SpriteGroup.hpp>
 
@@ -21,6 +21,7 @@
 #include <chrono>
 
 
+#define GL_VERSION_USED 4
 #define DEFAULT_FPS 60
 
 
@@ -40,10 +41,8 @@ public:
 	virtual void renderScene() = 0;
 	virtual void renderHUD() = 0;
 private:
-	void initSDL(const char * title, const Size & size);
+	GLFWwindow * _frame;
 	SpriteGroup _group;
-	SDL_Window * _mainFrame;
-	SDL_GLContext _glContext;
 	std::atomic<unsigned> _frameDelay;
 	std::atomic<bool> _running;
 };
