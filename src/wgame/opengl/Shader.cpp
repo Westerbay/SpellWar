@@ -65,4 +65,57 @@ void Shader::unbind() const {
     glUseProgram(0);
 }
 
+bool Shader::bound() const {
+ 	GLint currentProgram;
+	glGetIntegerv(GL_CURRENT_PROGRAM, &currentProgram);
+	return _shader == (GLuint) currentProgram;
+}
+
+bool Shader::getUniformLocation(const std::string & name, GLuint & location) const {
+	location = glGetUniformLocation(_shader, name.data());
+	if (location == GL_INVALID_VALUE) {
+		return false;
+	}
+	if (location == GL_INVALID_OPERATION) {
+		return false;
+	}
+	return true;
+}
+
+template <> void Shader::uniformDispatcher(GLuint location, const int & val) {
+	glUniform1i(location, val);
+}
+
+template <> void Shader::uniformDispatcher(GLuint location, const unsigned & val) {
+	glUniform1ui(location, val);
+}
+
+template <> void Shader::uniformDispatcher(GLuint location, const float & val) {
+	glUniform1f(location, val);
+}
+
+template <> void Shader::uniformDispatcher(GLuint location, const glm::vec2 & val) {
+	glUniform2fv(location, 1, glm::value_ptr(val));
+}
+
+template <> void Shader::uniformDispatcher(GLuint location, const glm::vec3 & val) {
+	glUniform3fv(location, 1, glm::value_ptr(val));
+}
+
+template <> void Shader::uniformDispatcher(GLuint location, const glm::vec4 & val) {
+	glUniform4fv(location, 1, glm::value_ptr(val));
+}
+
+template <> void Shader::uniformDispatcher(GLuint location, const glm::mat2 & val) {
+	glUniformMatrix2fv(location, 1, GL_FALSE, glm::value_ptr(val));
+}
+
+template <> void Shader::uniformDispatcher(GLuint location, const glm::mat3 & val) {
+	glUniformMatrix3fv(location, 1, GL_FALSE, glm::value_ptr(val));
+}
+
+template <> void Shader::uniformDispatcher(GLuint location, const glm::mat4 & val) {
+	glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(val));
+}
+
 }

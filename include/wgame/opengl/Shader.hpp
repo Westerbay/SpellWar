@@ -11,6 +11,11 @@
 #define __SHADER_GL_H__
 
 #include <wgame/opengl/IObjectGL.hpp>
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
+#include <string>
+#include <stdexcept>
 
 #define DEFAULT_VERTEX_SHADER "shaders/default.v.glsl"
 #define DEFAULT_FRAGMENT_SHADER "shaders/default.f.glsl"
@@ -25,12 +30,32 @@ public:
         const char * fragmentShaderFilePath = DEFAULT_FRAGMENT_SHADER
     );
     ~Shader();
+    template <typename T> 
+    void setUniform(const std::string & name, const T & val) const;
     void bind() const override;
     void unbind() const override;
+    bool bound() const;
 private:
+	bool getUniformLocation(const std::string & name, GLuint & location) const;
+    template <typename T> static void uniformDispatcher(GLuint location, const T & value);
     GLuint compileShader(GLenum type, const char * filePath);
     GLuint _shader;
 };
+
+template <typename T> 
+void Shader::setUniform(const std::string & name, const T & val) const {
+ 	GLuint location;
+ 	if (getUniformLocation(name, location) and bound()) {
+		uniformDispatcher<T>(location, val);
+ 	}
+ 	else if (not bound()) {
+		throw std::runtime_error("Uniform was required but shader is not bound ! ");
+	}
+ 	else {
+		throw std::runtime_error("Uniform was required but does not exist ! ");
+	}
+}
+
 
 }
 

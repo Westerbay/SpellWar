@@ -27,24 +27,28 @@ endif()
 set(GLFW_DIR "${CMAKE_SOURCE_DIR}/libs/GLFW")
 
 if(WIN32)
-    set(GLFW_LIB "${GLFW_DIR}/lib/glfw3.lib")
+    set(GLFW_LIB "${GLFW_DIR}/glfw3.lib")
 elseif(UNIX)
-    set(GLFW_LIB "${GLFW_DIR}/lib/libglfw3.a")
+    set(GLFW_LIB "${GLFW_DIR}/libglfw3.a")
 endif()
 
 
 # +------------------------------------------------------------------+
-# | Source Files                                          |
+# | Source/Header Files                                          |
 # +------------------------------------------------------------------+
 
-file(GLOB_RECURSE FILE_SOURCES "src/*.c*")
-file(GLOB_RECURSE FILE_HEADERS "include/*.h*")
+set(SRC_DIR "${CMAKE_SOURCE_DIR}/src")
+set(INCLUDE_DIR "${CMAKE_SOURCE_DIR}/include")
 
-set(SOURCES ${FILE_SOURCES} ${GLFW_LIB}/src/)
+file(GLOB_RECURSE FILE_SOURCES "${SRC_DIR}/*.c*")
+file(GLOB_RECURSE FILE_HEADERS "${INCLUDE_DIR}/*.h*")
+
+set(SOURCES ${FILE_SOURCES})
 set(HEADERS ${FILE_HEADERS})
 
 if(WIN32)
-    add_executable(${PROJECT_NAME} WIN32 ${SOURCES} ${HEADERS})   
+	add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})   
+    #add_executable(${PROJECT_NAME} WIN32 ${SOURCES} ${HEADERS})   
 else()
     add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})   
 endif()
@@ -55,8 +59,7 @@ endif()
 # | Link                                        |
 # +------------------------------------------------------------------+
 target_include_directories(${PROJECT_NAME} PRIVATE 
-	${CMAKE_SOURCE_DIR}/include
-	${GLFW_DIR}/include
+	${INCLUDE_DIR}
 )
 
 target_link_libraries(${PROJECT_NAME} 
