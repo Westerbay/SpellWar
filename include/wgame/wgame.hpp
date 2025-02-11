@@ -9,20 +9,21 @@
 
 #pragma once
 
-#include <wgame/geometry/Geometry.hpp>
+#include "geometry/Geometry.hpp"
+#include "geometry/Cuboid.hpp"
 
-#include <wgame/gui/AbstractFrame.hpp>
-#include <wgame/gui/Sprite.hpp>
-#include <wgame/gui/SpriteGroup.hpp>
+#include "gui/AbstractFrame.hpp"
+#include "gui/Sprite.hpp"
+#include "gui/SpriteGroup.hpp"
 
-#include <wgame/opengl/AttributeProperties.hpp>
-#include <wgame/opengl/BufferObject.hpp>
-#include <wgame/opengl/VertexArrayObject.hpp>
-#include <wgame/opengl/IObjectGL.hpp>
-#include <wgame/opengl/Shader.hpp>
+#include "opengl/AttributeProperties.hpp"
+#include "opengl/BufferObject.hpp"
+#include "opengl/VertexArrayObject.hpp"
+#include "opengl/IObjectGL.hpp"
+#include "opengl/Shader.hpp"
 
-#include <wgame/core/GameEngine.hpp>
-#include <wgame/core/AbstractGame.hpp>
-#include <wgame/core/Entity.hpp>
-#include <wgame/core/EntityGroup.hpp>
+#include "core/GameEngine.hpp"
+#include "core/AbstractGame.hpp"
+#include "core/Entity.hpp"
+#include "core/EntityGroup.hpp"
 
