@@ -34,5 +34,8 @@ void ColorDrawer::drawCuboid(const Cuboid & cuboid, const ColorRGB & color) {
     _shader.unbind();
 }
 
+ColorDrawer::ColorShader::ColorShader() : 
+Shader(VERTEX_SHADER_PATH, FRAGMENT_SHADER_PATH){}
+
 }
 
