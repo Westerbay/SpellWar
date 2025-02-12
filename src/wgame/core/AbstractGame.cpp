@@ -42,16 +42,16 @@ void AbstractGame::stop() {
     _running = false;
 }
 
-void AbstractGame::addEntity(Entity * entity) {
-    _group.add(entity);
+void AbstractGame::addToWorld(Entity * entity) {
+    _world.add(entity);
 }
 
-void AbstractGame::removeEntity(Entity * entity) {
-    _group.remove(entity);
+void AbstractGame::removeFromWorld(Entity * entity) {
+    _world.remove(entity);
 }
 
-void AbstractGame::updateEntities() {
-    _group.update();
+void AbstractGame::updateWorld() {
+    _world.update();
 }
 
 }

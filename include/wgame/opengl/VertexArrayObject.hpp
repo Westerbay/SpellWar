@@ -15,7 +15,7 @@
 
 #include <vector>
 
-#define VBO_COORD 0
+#define VBO_VERTEX 0
 #define VBO_COLOR 1
 #define NUMBER_OF_VBOS 2
 

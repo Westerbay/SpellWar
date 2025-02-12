@@ -18,18 +18,20 @@
 namespace wgame {
 
 struct Cuboid {
-    Cuboid(
-        Point3D position, 
-        float width, 
-        float height,         
-        float length
-    );
-    bool containsPoint(const Point3D & point) const;
-    bool intersectCuboid(const Cuboid &other) const;
     Point3D position;
-    float width;
-    float height;    
-    float length;
+    Vector3D size;
+    Matrix3D orientation;
+    Cuboid(
+        const Point3D & position,
+        const Vector3D & size,
+        Matrix3D orientation = Matrix3D(1.0f)
+    );
+    std::vector<Point3D> getVertices() const;
+    bool contains(const Point3D & point) const;
+    bool collidesWith(const Cuboid & other) const;
+    void rotate(float angle, const Vector3D & axis);
+    bool isSeparated(const Cuboid & other, const Point3D & axis) const;
+    void projectOntoAxis(const Point3D & axis, float & minProj, float & maxProj) const;
 };
 
 }

@@ -13,6 +13,16 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
+#define AXIS_X Point3D(1.0f, 0.0f, 0.0f)
+#define AXIS_Y Point3D(0.0f, 1.0f, 0.0f)
+#define AXIS_Z Point3D(0.0f, 0.0f, 1.0f)
+
+#define AXIS_XY Point3D(1.0f, 1.0f, 0.0f)
+#define AXIS_XZ Point3D(1.0f, 0.0f, 1.0f)
+#define AXIS_YZ Point3D(0.0f, 1.0f, 1.0f)
+
+#define AXIS_XYZ Point3D(1.0f, 1.0f, 1.0f)
+
 
 namespace wgame {
 
@@ -25,6 +35,7 @@ typedef glm::vec4 Vector4D;
 typedef glm::mat2 Matrix2D;
 typedef glm::mat3 Matrix3D;
 typedef glm::mat4 Matrix4D;
+typedef glm::vec3 ColorRGB;
 
 typedef struct {
 	unsigned width;

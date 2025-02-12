@@ -15,6 +15,7 @@
 #include "gui/AbstractFrame.hpp"
 #include "gui/Sprite.hpp"
 #include "gui/SpriteGroup.hpp"
+#include "gui/ColorDrawer.hpp"
 
 #include "opengl/AttributeProperties.hpp"
 #include "opengl/BufferObject.hpp"

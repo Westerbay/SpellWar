@@ -28,12 +28,12 @@ public:
     void setTPS(unsigned tps);
     void start();
     void stop();
-    void addEntity(Entity * entity);
-    void removeEntity(Entity * entity);
-    void updateEntities();
+    void addToWorld(Entity * entity);
+    void removeFromWorld(Entity * entity);
+    void updateWorld();
     virtual void update() = 0;
 private:
-    EntityGroup _group;
+    EntityGroup _world;
     std::atomic<unsigned> _updateDelay;
     std::atomic<bool> _running;
 };

@@ -38,7 +38,7 @@ public:
 	void addSprite(Sprite * sprite);
 	void removeSprite(Sprite * sprite);
 	void displaySprites();
-	virtual void renderScene() = 0;
+	virtual void renderWorld() = 0;
 	virtual void renderHUD() = 0;
 private:
 	GLFWwindow * _frame;

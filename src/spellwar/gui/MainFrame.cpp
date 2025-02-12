@@ -13,12 +13,13 @@
 MainFrame::MainFrame(const char * title, const Size & size) :
     AbstractFrame(title, size) {
     setBackgroundColor(255, 255, 255);
-    addSprite(new PlatformSprite(new Platform(
-        Point3D(0.0f, 0.0f, 0.0f), 0.5f, 0.5f, 0.5f
-    )));
+
+    Cuboid cuboid(Point3D(0.0f, 0.0f, 0.0f), Point3D(0.5f, 0.5f, 0.5f));
+    cuboid.rotate(glm::radians(45.0f), AXIS_XY);
+    addSprite(new PlatformSprite(new Platform(cuboid)));
 }
 
-void MainFrame::renderScene() {
+void MainFrame::renderWorld() {
     displaySprites();
 }
 
