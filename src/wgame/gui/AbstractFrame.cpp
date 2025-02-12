@@ -45,13 +45,19 @@ void AbstractFrame::setFPS(unsigned fps) {
 	_frameDelay = 1000 / fps;
 }
 
+void AbstractFrame::setWord(GameObjectGroup & world) {
+	_world = &world;
+}
+
 void AbstractFrame::setBackgroundColor(GLclampf red, GLclampf green, GLclampf blue) {
 	glClearColor(red, green, blue, 1.0f);
 }
 
 void AbstractFrame::start() {
 	using namespace std::chrono;
-	_running = true;
+	Shader shader;
+	shader.bind();
+	_running = true;	
 	while (!glfwWindowShouldClose(_frame) && _running) {
 		steady_clock::time_point frameStart = std::chrono::steady_clock::now();
 		
@@ -63,7 +69,7 @@ void AbstractFrame::start() {
 		glEnable(GL_DEPTH_TEST);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		renderWorld();
+		_world -> render();
 
 		glDisable(GL_DEPTH_TEST);
 		renderHUD();
@@ -78,22 +84,11 @@ void AbstractFrame::start() {
 			);
 		}
     }
+	shader.unbind();
 }
 
 void AbstractFrame::stop() {
 	_running = false;
-}
-
-void AbstractFrame::addSprite(Sprite * sprite) {
-	_group.add(sprite);
-}
-
-void AbstractFrame::removeSprite(Sprite * sprite) {
-	_group.remove(sprite);
-}
-
-void AbstractFrame::displaySprites() {
-	_group.render();
 }
 
 };

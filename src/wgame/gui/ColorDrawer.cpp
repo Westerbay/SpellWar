@@ -13,7 +13,6 @@
 namespace wgame {
 
 void ColorDrawer::drawCuboid(const Cuboid & cuboid, const ColorRGB & color) {
-    _shader.bind();
     std::vector<Point3D> vertices = cuboid.getVertices();
     std::vector<ColorRGB> colors = {
         color, color, color, color,
@@ -31,11 +30,7 @@ void ColorDrawer::drawCuboid(const Cuboid & cuboid, const ColorRGB & color) {
     _vao.setVBO(VBO_VERTEX, vertices);
     _vao.setVBO(VBO_COLOR, colors);
     _vao.draw(DRAW_TRIANGLES);
-    _shader.unbind();
 }
-
-ColorDrawer::ColorShader::ColorShader() : 
-Shader(VERTEX_SHADER_PATH, FRAGMENT_SHADER_PATH){}
 
 }
 

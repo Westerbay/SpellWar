@@ -12,6 +12,7 @@
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 #define AXIS_X Point3D(1.0f, 0.0f, 0.0f)
 #define AXIS_Y Point3D(0.0f, 1.0f, 0.0f)

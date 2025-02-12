@@ -12,6 +12,7 @@
 
 #include <wgame/core/AbstractGame.hpp>
 #include <wgame/gui/AbstractFrame.hpp>
+#include "GameObjectGroup.hpp"
 
 #include <atomic>
 
@@ -26,6 +27,7 @@ public:
 private:
     AbstractGame * _game;
     AbstractFrame * _frame;
+    GameObjectGroup _world;
 };
 
 }

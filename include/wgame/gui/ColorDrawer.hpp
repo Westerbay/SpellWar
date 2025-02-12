@@ -11,11 +11,7 @@
 #define __COLOR_DRAWER_H__
 
 #include "../opengl/VertexArrayObject.hpp"
-#include "../opengl/Shader.hpp"
 #include "../geometry/Cuboid.hpp"
-
-#define VERTEX_SHADER_PATH "shaders/color.vert"
-#define FRAGMENT_SHADER_PATH "shaders/color.frag"
 
 
 namespace wgame {
@@ -23,13 +19,8 @@ namespace wgame {
 class ColorDrawer {
 public:
     void drawCuboid(const Cuboid & cuboid, const ColorRGB & color);
-    class ColorShader : public Shader {
-    public:
-        ColorShader();
-    };
 private:
     VertexArrayObject _vao;
-    ColorShader _shader;
 };
 
 }

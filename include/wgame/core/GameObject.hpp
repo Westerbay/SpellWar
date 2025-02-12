@@ -7,18 +7,20 @@
  */
 
 
-#ifndef __SPRITE_H__
-#define __SPRITE_H__
+#ifndef __GAME_OBJECT_H__
+#define __GAME_OBJECT_H__
 
 
 namespace wgame {
 
-class Sprite {
+class GameObject {
 public:
-    virtual void render() = 0;
-    virtual ~Sprite() = default;
+    virtual void update() = 0;
+    virtual void render() {};
+    virtual ~GameObject() = default;
 };
 
-}
+};
+
 
 #endif

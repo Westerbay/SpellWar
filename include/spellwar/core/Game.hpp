@@ -17,7 +17,7 @@ using namespace wgame;
 class Game : public AbstractGame {
 public:
     Game(unsigned tps = DEFAULT_TPS);
-    void update() override;
+    void init() override;
 };
 
 

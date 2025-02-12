@@ -10,7 +10,7 @@
 #ifndef __ABSTRACT_GAME_H__
 #define __ABSTRACT_GAME_H__
 
-#include <wgame/core/EntityGroup.hpp>
+#include <wgame/core/GameObjectGroup.hpp>
 
 #include <atomic>
 #include <thread>
@@ -26,14 +26,15 @@ public:
     AbstractGame(unsigned tps = DEFAULT_TPS);
     virtual ~AbstractGame() = default;
     void setTPS(unsigned tps);
+    void setWord(GameObjectGroup & world);
     void start();
     void stop();
-    void addToWorld(Entity * entity);
-    void removeFromWorld(Entity * entity);
+    void addToWorld(GameObject * gameObject);
+    void removeFromWorld(GameObject * gameObject);
     void updateWorld();
-    virtual void update() = 0;
+    virtual void init() = 0;
 private:
-    EntityGroup _world;
+    GameObjectGroup * _world;
     std::atomic<unsigned> _updateDelay;
     std::atomic<bool> _running;
 };

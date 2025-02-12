@@ -13,8 +13,6 @@
 #include "geometry/Cuboid.hpp"
 
 #include "gui/AbstractFrame.hpp"
-#include "gui/Sprite.hpp"
-#include "gui/SpriteGroup.hpp"
 #include "gui/ColorDrawer.hpp"
 
 #include "opengl/AttributeProperties.hpp"
@@ -25,6 +23,6 @@
 
 #include "core/GameEngine.hpp"
 #include "core/AbstractGame.hpp"
-#include "core/Entity.hpp"
-#include "core/EntityGroup.hpp"
+#include "core/GameObject.hpp"
+#include "core/GameObjectGroup.hpp"
 

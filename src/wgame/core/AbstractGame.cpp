@@ -20,13 +20,17 @@ void AbstractGame::setTPS(unsigned tps) {
     _updateDelay = 1000 / tps;
 }
 
+void AbstractGame::setWord(GameObjectGroup & world) {
+    _world = &world;
+}
+
 void AbstractGame::start() {
 	using namespace std::chrono;
     _running = true;
     while (_running) {
         steady_clock::time_point updateStart = std::chrono::steady_clock::now();
         
-        update();
+        updateWorld();
         
         steady_clock::time_point updateEnd = std::chrono::steady_clock::now();
 		unsigned updateTime = duration_cast<milliseconds>(updateEnd - updateStart).count();
@@ -42,16 +46,16 @@ void AbstractGame::stop() {
     _running = false;
 }
 
-void AbstractGame::addToWorld(Entity * entity) {
-    _world.add(entity);
+void AbstractGame::addToWorld(GameObject * gameObject) {
+    _world -> add(gameObject);
 }
 
-void AbstractGame::removeFromWorld(Entity * entity) {
-    _world.remove(entity);
+void AbstractGame::removeFromWorld(GameObject * gameObject) {
+    _world -> remove(gameObject);
 }
 
 void AbstractGame::updateWorld() {
-    _world.update();
+    _world -> update();
 }
 
 }

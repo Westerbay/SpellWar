@@ -8,19 +8,10 @@
 
 
 #include <spellwar/gui/MainFrame.hpp>
-#include <spellwar/sprites/PlatformSprite.hpp>
 
 MainFrame::MainFrame(const char * title, const Size & size) :
     AbstractFrame(title, size) {
-    setBackgroundColor(255, 255, 255);
-
-    Cuboid cuboid(Point3D(0.0f, 0.0f, 0.0f), Point3D(0.5f, 0.5f, 0.5f));
-    cuboid.rotate(glm::radians(45.0f), AXIS_XY);
-    addSprite(new PlatformSprite(new Platform(cuboid)));
-}
-
-void MainFrame::renderWorld() {
-    displaySprites();
+    setBackgroundColor(255, 255, 255);    
 }
 
 void MainFrame::renderHUD() {

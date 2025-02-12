@@ -13,7 +13,8 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <wgame/geometry/Geometry.hpp>
-#include <wgame/gui/SpriteGroup.hpp>
+#include <wgame/opengl/Shader.hpp>
+#include <wgame/core/GameObjectGroup.hpp>
 
 #include <string>
 #include <atomic>
@@ -32,19 +33,16 @@ public:
 	AbstractFrame(const char * title, const Size & size, unsigned fps = DEFAULT_FPS);
 	virtual ~AbstractFrame();
 	void setFPS(unsigned fps);
+	void setWord(GameObjectGroup & world);
 	void setBackgroundColor(GLclampf red, GLclampf green, GLclampf blue);
 	void start();
 	void stop();
-	void addSprite(Sprite * sprite);
-	void removeSprite(Sprite * sprite);
-	void displaySprites();
-	virtual void renderWorld() = 0;
 	virtual void renderHUD() = 0;
 private:
 	GLFWwindow * _frame;
-	SpriteGroup _group;
+	GameObjectGroup * _world;
 	std::atomic<unsigned> _frameDelay;
-	std::atomic<bool> _running;
+	std::atomic<bool> _running;	
 };
 
 }

@@ -7,26 +7,28 @@
  */
 
 
-#ifndef __SPRITE_GROUP_H__
-#define __SPRITE_GROUP_H__
+#ifndef __GAME_OBJECT_GROUP_H__
+#define __GAME_OBJECT_GROUP_H__
 
-#include <wgame/gui/Sprite.hpp>
+#include <wgame/core/GameObject.hpp>
 
 #include <unordered_set>
 
 
 namespace wgame {
 
-class SpriteGroup : Sprite {
+class GameObjectGroup : public GameObject {
 public:
-    ~SpriteGroup();    
-    void add(Sprite * sprite);
-    void remove(Sprite * sprite);
+    ~GameObjectGroup();
+    void add(GameObject * gameObject);
+    void remove(GameObject * gameObject);
+    void update() override;
     void render() override;
 private:
-    std::unordered_set<Sprite *> _sprites;
+    std::unordered_set<GameObject *> _objects;
 };
 
 }
+
 
 #endif

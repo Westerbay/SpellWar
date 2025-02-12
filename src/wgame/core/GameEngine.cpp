@@ -25,6 +25,9 @@ static void gameLoop(AbstractGame * game) {
 }
 
 void GameEngine::start() {
+    _game -> setWord(_world);
+    _frame -> setWord(_world);
+    _game -> init();
     std::thread gameThread(gameLoop, _game);
     _frame -> start();
     _game -> stop();
