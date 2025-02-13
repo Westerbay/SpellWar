@@ -12,8 +12,10 @@
 
 namespace wgame {
 
-GameEngine::GameEngine(AbstractGame * game, AbstractFrame * frame) : 
-    _game(game), _frame(frame) {}
+GameEngine::GameEngine(AbstractGame * game, AbstractFrame * frame) {
+    _game = game;
+    _frame = frame;
+}
 
 GameEngine::~GameEngine() {
     delete _game;
@@ -25,11 +27,17 @@ static void gameLoop(AbstractGame * game) {
 }
 
 void GameEngine::start() {
-    _game -> setWord(_world);
-    _frame -> setWord(_world);
+    _game -> initWorld(_world);
+    _frame -> initWorld(_world);
+
+    _game -> initCamera(_camera);
+    _frame -> initCamera(_camera);
+
     _game -> init();
+
     std::thread gameThread(gameLoop, _game);
     _frame -> start();
+
     _game -> stop();
     gameThread.join();
 }

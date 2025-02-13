@@ -10,9 +10,9 @@
 #ifndef __ABSTRACT_GAME_H__
 #define __ABSTRACT_GAME_H__
 
-#include <wgame/core/GameObjectGroup.hpp>
+#include "GameObjectGroup.hpp"
+#include "GameCamera.hpp"
 
-#include <atomic>
 #include <thread>
 #include <chrono>
 
@@ -26,17 +26,20 @@ public:
     AbstractGame(unsigned tps = DEFAULT_TPS);
     virtual ~AbstractGame() = default;
     void setTPS(unsigned tps);
-    void setWord(GameObjectGroup & world);
+    GameCamera * getCamera();
+    void initWorld(GameObjectGroup & world);
+    void initCamera(GameCamera & camera);
     void start();
-    void stop();
+    void stop();    
     void addToWorld(GameObject * gameObject);
     void removeFromWorld(GameObject * gameObject);
     void updateWorld();
     virtual void init() = 0;
 private:
     GameObjectGroup * _world;
-    std::atomic<unsigned> _updateDelay;
-    std::atomic<bool> _running;
+    GameCamera * _camera;
+    unsigned _updateDelay;
+    bool _running;
 };
 
 }

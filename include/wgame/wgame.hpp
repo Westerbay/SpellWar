@@ -12,7 +12,6 @@
 #include "geometry/Geometry.hpp"
 #include "geometry/Cuboid.hpp"
 
-#include "gui/AbstractFrame.hpp"
 #include "gui/ColorDrawer.hpp"
 
 #include "opengl/AttributeProperties.hpp"
@@ -25,4 +24,5 @@
 #include "core/AbstractGame.hpp"
 #include "core/GameObject.hpp"
 #include "core/GameObjectGroup.hpp"
+#include "core/AbstractFrame.hpp"
 

@@ -12,7 +12,7 @@
 Game::Game(unsigned tps) : AbstractGame(tps) {}
 
 void Game::init() {
-    Cuboid cuboid(Point3D(0.0f, 0.0f, 0.0f), Point3D(0.5f, 0.5f, 0.5f));
+    Cuboid cuboid(Point3D(0.0f, 0.0f, 2.0f), Point3D(0.5f, 0.5f, 0.5f));
     cuboid.rotate(glm::radians(45.0f), AXIS_XY);
     addToWorld(new Platform(cuboid));
 }

@@ -12,34 +12,32 @@
 
 #include "../geometry/Geometry.hpp"
 #include "GameObject.hpp"
+#include <iostream>
 
-#define DEFAULT_FOV_DEG 45 
-#define DEFAULT_NEAR_PLANE 0.1
-#define DEFAULT_FAR_PLANE 100
+#define DEFAULT_FOV_DEG 45.0f
+#define DEFAULT_NEAR_PLANE 0.1f
+#define DEFAULT_FAR_PLANE 100.0f
 
 
 namespace wgame {
 
-class GameCamera : GameObject {
+class GameCamera : public GameObject {
 public:
-    Point3D position;
-    Size size;
-    float nearPlane;
-    float farPlane;
-    GameCamera(
-        const Point3D & position, 
-        const Size & size, 
-        float FOVdeg = DEFAULT_FOV_DEG,
-        float nearPlane = DEFAULT_NEAR_PLANE,
-        float farPlane = DEFAULT_FAR_PLANE
-    );
-    void setFOVdeg(float FOVdeg);
+    GameCamera();
+    void setSize(const Size & size);
+    void setFOVdeg(float FOVDeg);
+    void setNearPlane(float nearPlane);
+    void setFarPlane(float farPlane);
+    void attachGameObject(GameObject * gameObject);
+    Matrix4D getMatrix();
     void update() override;
-    void * getMatrixValuePtr();
 private:
-    Vector3D _orientation;
+    float _FOVDeg;    
+    float _nearPlane;
+    float _farPlane;
+    GameObject * _attachedObject;
     Vector3D _up;
-    float _FOVrad;
+    Vector3D _orientation;
     Matrix4D _cameraMatrix;
 };
 

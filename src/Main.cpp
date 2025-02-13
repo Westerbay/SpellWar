@@ -10,13 +10,13 @@
 #include <cstdlib>
 #include <ctime>
 
-#include <spellwar/gui/MainFrame.hpp>
+#include <spellwar/core/MainFrame.hpp>
 #include <spellwar/core/Game.hpp>
 #include <wgame/wgame.hpp>
  
 int main() {
 	srand(time(NULL));
-	MainFrame * mainFrame = new MainFrame("Application", {800, 800});
+	MainFrame * mainFrame = new MainFrame("Application", {1280, 720});
 	Game * game = new Game();
 	GameEngine gameEngine(game, mainFrame);
 	gameEngine.start();

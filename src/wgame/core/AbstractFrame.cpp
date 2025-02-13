@@ -7,7 +7,7 @@
  */
 
 
-#include <wgame/gui/AbstractFrame.hpp>
+#include <wgame/core/AbstractFrame.hpp>
 
 #include <stdexcept>
 
@@ -34,6 +34,9 @@ AbstractFrame::AbstractFrame(const char * title, const Size & size, unsigned fps
 	glViewport(0, 0, size.width, size.height);
 	
 	setFPS(fps);
+	_size = size;
+	_world = nullptr;
+	_camera = nullptr;
 }
 
 AbstractFrame::~AbstractFrame() {
@@ -45,12 +48,22 @@ void AbstractFrame::setFPS(unsigned fps) {
 	_frameDelay = 1000 / fps;
 }
 
-void AbstractFrame::setWord(GameObjectGroup & world) {
-	_world = &world;
-}
-
 void AbstractFrame::setBackgroundColor(GLclampf red, GLclampf green, GLclampf blue) {
 	glClearColor(red, green, blue, 1.0f);
+}
+
+void AbstractFrame::initWorld(GameObjectGroup & world) {
+	if (_world != nullptr) {
+		throw std::runtime_error("World already initialized ! ");
+	}
+	_world = &world;
+}
+void AbstractFrame::initCamera(GameCamera & camera) {
+	if (_camera != nullptr) {
+		throw std::runtime_error("Camera already initialized ! ");
+	}
+	_camera = &camera;
+	_camera -> setSize(_size);
 }
 
 void AbstractFrame::start() {
@@ -63,12 +76,10 @@ void AbstractFrame::start() {
 		
 		glfwPollEvents();
 
-		glEnable(GL_CULL_FACE);
-		glCullFace(GL_BACK); 
-		glFrontFace(GL_CCW);
 		glEnable(GL_DEPTH_TEST);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+		shader.setUniform("cameraMatrix", _camera -> getMatrix());
 		_world -> render();
 
 		glDisable(GL_DEPTH_TEST);
@@ -77,7 +88,7 @@ void AbstractFrame::start() {
 		glfwSwapBuffers(_frame);
 		
 		steady_clock::time_point frameEnd = std::chrono::steady_clock::now();
-		unsigned frameTime = duration_cast<milliseconds>(frameEnd - frameStart).count();
+		milliseconds::rep frameTime = duration_cast<milliseconds>(frameEnd - frameStart).count();
 		if (frameTime < _frameDelay) {
 			std::this_thread::sleep_for(
 				milliseconds(_frameDelay - frameTime)

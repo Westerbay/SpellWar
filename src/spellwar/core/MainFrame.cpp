@@ -7,7 +7,7 @@
  */
 
 
-#include <spellwar/gui/MainFrame.hpp>
+#include <spellwar/core/MainFrame.hpp>
 
 MainFrame::MainFrame(const char * title, const Size & size) :
     AbstractFrame(title, size) {

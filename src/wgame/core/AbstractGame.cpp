@@ -14,14 +14,29 @@ namespace wgame {
 
 AbstractGame::AbstractGame(unsigned tps) : _running(false) {
     setTPS(tps);
+    _world = nullptr;
+    _camera = nullptr;
 }
 
 void AbstractGame::setTPS(unsigned tps) {
     _updateDelay = 1000 / tps;
 }
 
-void AbstractGame::setWord(GameObjectGroup & world) {
-    _world = &world;
+GameCamera * AbstractGame::getCamera() {
+    return _camera;
+}
+
+void AbstractGame::initWorld(GameObjectGroup & world) {
+	if (_world != nullptr) {
+		throw std::runtime_error("World already initialized ! ");
+	}
+	_world = &world;
+}
+void AbstractGame::initCamera(GameCamera & camera) {
+	if (_camera != nullptr) {
+		throw std::runtime_error("Camera already initialized ! ");
+	}
+	_camera = &camera;
 }
 
 void AbstractGame::start() {
@@ -31,6 +46,7 @@ void AbstractGame::start() {
         steady_clock::time_point updateStart = std::chrono::steady_clock::now();
         
         updateWorld();
+        _camera -> update();
         
         steady_clock::time_point updateEnd = std::chrono::steady_clock::now();
 		unsigned updateTime = duration_cast<milliseconds>(updateEnd - updateStart).count();

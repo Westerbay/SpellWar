@@ -44,10 +44,10 @@ private:
 template <typename T> 
 void Shader::setUniform(const std::string & name, const T & val) const {
  	GLuint location;
- 	if (getUniformLocation(name, location) and bound()) {
+ 	if (getUniformLocation(name, location) && bound()) {
 		uniformDispatcher<T>(location, val);
  	}
- 	else if (not bound()) {
+ 	else if (!bound()) {
 		throw std::runtime_error("Uniform was required but shader is not bound ! ");
 	}
  	else {

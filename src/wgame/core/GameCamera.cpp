@@ -12,34 +12,57 @@
 
 namespace wgame {
 
-GameCamera::GameCamera(
-    const Point3D & position, 
-    const Size & size, 
-    float FOVdeg,
-    float nearPlane,
-    float farPlane
-) : position(position), size(size), nearPlane(nearPlane), farPlane(farPlane) {
-    _orientation = Vector3D(0.0f, 0.0f, -1.0f);
+GameCamera::GameCamera() {
+    _FOVDeg = DEFAULT_FOV_DEG;
+    _nearPlane = DEFAULT_NEAR_PLANE;
+    _farPlane = DEFAULT_FAR_PLANE;
+    _attachedObject = nullptr;
     _up = Vector3D(0.0f, 1.0f, 0.0f);
-    setFOVdeg(FOVdeg);
-    update();
+    _orientation = Vector3D(0.0f, 0.0f, 1.0f);
+    _cameraMatrix = Matrix4D(1.0f);
 }
 
-void GameCamera::setFOVdeg(float FOVdeg) {
-    _FOVrad = glm::radians(FOVdeg);
+void GameCamera::setSize(const Size & size) {
+    hitbox.size = Vector3D(size.width, size.height, 0.0f);
+}
+
+void GameCamera::setFOVdeg(float FOVDeg) {
+    _FOVDeg = FOVDeg;
+}
+
+void GameCamera::setNearPlane(float nearPlane) {
+    _nearPlane = nearPlane;
+}
+
+void GameCamera::setFarPlane(float farPlane) {
+    _farPlane = farPlane;
+}
+
+void GameCamera::attachGameObject(GameObject * gameObject) {
+    _attachedObject = gameObject;
 }
 
 void GameCamera::update() {
-    Matrix4D view(1.0f);
-    Matrix4D projection(1.0f);
+    Point3D position(0.0f);
+    if (_attachedObject != nullptr) {
+        position = _attachedObject -> getHitbox().position;
+    }
 
+    Matrix4D view(1.0f);
+    Matrix4D projection(1.0f);    
     view = glm::lookAt(position, position + _orientation, _up);
-    projection = glm::perspective(_FOVrad, (float) (size.width / size.height), nearPlane, farPlane);
-    _cameraMatrix = projection * view;    
+    projection = glm::perspective(
+        glm::radians(_FOVDeg), 
+        (float) (hitbox.size.x / hitbox.size.y),
+         _nearPlane, 
+         _farPlane
+    );
+    
+    _cameraMatrix = projection * view;
 }
 
-void * GameCamera::getMatrixValuePtr() {
-    return glm::value_ptr(_cameraMatrix);
+Matrix4D GameCamera::getMatrix() {
+    return _cameraMatrix;
 }
 
 }

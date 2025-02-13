@@ -22,8 +22,8 @@ struct Cuboid {
     Vector3D size;
     Matrix3D orientation;
     Cuboid(
-        const Point3D & position,
-        const Vector3D & size,
+        const Point3D & position = Point3D(),
+        const Vector3D & size = Vector3D(),
         Matrix3D orientation = Matrix3D(1.0f)
     );
     std::vector<Point3D> getVertices() const;
@@ -33,6 +33,8 @@ struct Cuboid {
     bool isSeparated(const Cuboid & other, const Point3D & axis) const;
     void projectOntoAxis(const Point3D & axis, float & minProj, float & maxProj) const;
 };
+
+typedef Cuboid Hitbox;
 
 }
 

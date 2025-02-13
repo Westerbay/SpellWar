@@ -14,10 +14,10 @@
 #include <GLFW/glfw3.h>
 #include <wgame/geometry/Geometry.hpp>
 #include <wgame/opengl/Shader.hpp>
-#include <wgame/core/GameObjectGroup.hpp>
+#include "GameObjectGroup.hpp"
+#include "GameCamera.hpp"
 
 #include <string>
-#include <atomic>
 #include <thread>
 #include <chrono>
 
@@ -33,16 +33,19 @@ public:
 	AbstractFrame(const char * title, const Size & size, unsigned fps = DEFAULT_FPS);
 	virtual ~AbstractFrame();
 	void setFPS(unsigned fps);
-	void setWord(GameObjectGroup & world);
 	void setBackgroundColor(GLclampf red, GLclampf green, GLclampf blue);
+	void initWorld(GameObjectGroup & world);
+	void initCamera(GameCamera & camera);
 	void start();
 	void stop();
 	virtual void renderHUD() = 0;
 private:
 	GLFWwindow * _frame;
 	GameObjectGroup * _world;
-	std::atomic<unsigned> _frameDelay;
-	std::atomic<bool> _running;	
+	GameCamera * _camera;
+	Size _size;
+	unsigned _frameDelay;
+	bool _running;	
 };
 
 }
