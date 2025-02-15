@@ -12,6 +12,7 @@
 
 #include <GLFW/glfw3.h>
 #include "Keys.hpp"
+#include "../geometry/Geometry.hpp"
 
 #define PRESS GLFW_PRESS
 
@@ -23,9 +24,14 @@ typedef int Key;
 class Inputs {
 public:
     static void initContext(GLFWwindow * frame);
-    bool isKeyPressed(Key key);
+    static void mouseRecord();
+    Point2D getMousePosition() const;
+    Vector2D getMouseMovement() const;
+    bool isKeyPressed(Key key) const; 
 private:
-    static GLFWwindow * _frame;    
+    static GLFWwindow * _frame;
+    static Point2D _mousePosition;
+    static Vector2D _lastMousePosition;
 };
 
 }

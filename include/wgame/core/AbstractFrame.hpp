@@ -34,11 +34,13 @@ public:
 	AbstractFrame(const char * title, const Size & size, unsigned fps = DEFAULT_FPS);
 	virtual ~AbstractFrame();
 	void setFPS(unsigned fps);
+	void setCursorActive(bool cursorActive);
 	void setBackgroundColor(GLclampf red, GLclampf green, GLclampf blue);
 	void initWorld(GameObjectGroup & world);
 	void initCamera(GameCamera & camera);
 	void start();
 	void stop();
+	void render();
 	virtual void renderHUD() = 0;
 private:
 	GLFWwindow * _frame;
@@ -46,7 +48,8 @@ private:
 	GameCamera * _camera;
 	Size _size;
 	unsigned _frameDelay;
-	bool _running;	
+	bool _running;
+	bool _cursorActive;
 };
 
 }

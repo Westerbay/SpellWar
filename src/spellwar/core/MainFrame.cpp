@@ -12,6 +12,7 @@
 MainFrame::MainFrame(const char * title, const Size & size) :
     AbstractFrame(title, size) {
     setBackgroundColor(255, 255, 255);    
+    setCursorActive(false);
 }
 
 void MainFrame::renderHUD() {

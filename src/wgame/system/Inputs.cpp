@@ -8,17 +8,37 @@
 
 
 #include <wgame/system/Inputs.hpp>
+#include <iostream>
 
 
 namespace wgame {
 
 GLFWwindow * Inputs::_frame = nullptr;
+Point2D Inputs::_mousePosition = Point2D(0.0f);
+Point2D Inputs::_lastMousePosition = Point2D(0.0f);
 
 void Inputs::initContext(GLFWwindow * frame) {
     _frame = frame;
 }
 
-bool Inputs::isKeyPressed(Key key) {
+void Inputs::mouseRecord() {
+    double mouseX;
+    double mouseY;
+    _lastMousePosition = _mousePosition;
+    glfwGetCursorPos(_frame, &mouseX, &mouseY);
+    _mousePosition.x = (float) mouseX;
+    _mousePosition.y = (float) mouseY;
+}
+
+Point2D Inputs::getMousePosition() const {
+    return _mousePosition;
+}
+
+Vector2D Inputs::getMouseMovement() const {
+    return _mousePosition - _lastMousePosition;
+}
+
+bool Inputs::isKeyPressed(Key key) const {
     return glfwGetKey(_frame, key) == PRESS;
 }
 

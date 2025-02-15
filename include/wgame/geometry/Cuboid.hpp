@@ -22,8 +22,8 @@ struct Cuboid {
     Vector3D size;
     Matrix3D orientation;
     Cuboid(
-        const Point3D & position = Point3D(),
-        const Vector3D & size = Vector3D(),
+        const Point3D & position = Point3D(0.0f),
+        const Vector3D & size = Vector3D(0.0f),
         Matrix3D orientation = Matrix3D(1.0f)
     );
     std::vector<Point3D> getVertices() const;

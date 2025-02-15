@@ -49,6 +49,17 @@ void AbstractFrame::setFPS(unsigned fps) {
 	_frameDelay = 1000 / fps;
 }
 
+void AbstractFrame::setCursorActive(bool cursorActive) {
+	_cursorActive = cursorActive;
+	if (_cursorActive) {
+		glfwSetInputMode(_frame, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+	}
+	else {		
+		glfwSetInputMode(_frame, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	}
+}
+
+
 void AbstractFrame::setBackgroundColor(GLclampf red, GLclampf green, GLclampf blue) {
 	glClearColor(red, green, blue, 1.0f);
 }
@@ -76,18 +87,11 @@ void AbstractFrame::start() {
 		steady_clock::time_point frameStart = std::chrono::steady_clock::now();
 		
 		glfwPollEvents();
-
-		glEnable(GL_DEPTH_TEST);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		Inputs::mouseRecord();
 
 		shader.setUniform("cameraMatrix", _camera -> getMatrix());
-		_world -> render();
+		render();
 
-		glDisable(GL_DEPTH_TEST);
-		renderHUD();
-		
-		glfwSwapBuffers(_frame);
-		
 		steady_clock::time_point frameEnd = std::chrono::steady_clock::now();
 		milliseconds::rep frameTime = duration_cast<milliseconds>(frameEnd - frameStart).count();
 		if (frameTime < _frameDelay) {
@@ -101,6 +105,15 @@ void AbstractFrame::start() {
 
 void AbstractFrame::stop() {
 	_running = false;
+}
+
+void AbstractFrame::render() {
+	glEnable(GL_DEPTH_TEST);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	_world -> render();
+	glDisable(GL_DEPTH_TEST);
+	renderHUD();
+	glfwSwapBuffers(_frame);
 }
 
 };
