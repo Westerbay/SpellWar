@@ -26,3 +26,6 @@
 #include "core/GameObjectGroup.hpp"
 #include "core/AbstractFrame.hpp"
 
+#include "system/Inputs.hpp"
+#include "system/Keys.hpp"
+

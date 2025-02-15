@@ -17,8 +17,6 @@ GameCamera::GameCamera() {
     _nearPlane = DEFAULT_NEAR_PLANE;
     _farPlane = DEFAULT_FAR_PLANE;
     _attachedObject = nullptr;
-    _up = Vector3D(0.0f, 1.0f, 0.0f);
-    _orientation = Vector3D(0.0f, 0.0f, 1.0f);
     _cameraMatrix = Matrix4D(1.0f);
 }
 
@@ -44,19 +42,20 @@ void GameCamera::attachGameObject(GameObject * gameObject) {
 
 void GameCamera::update() {
     Point3D position(0.0f);
+    Matrix3D orientation = hitbox.orientation;
+    
     if (_attachedObject != nullptr) {
         position = _attachedObject -> getHitbox().position;
+        orientation = _attachedObject -> getHitbox().orientation;
     }
-
-    Matrix4D view(1.0f);
-    Matrix4D projection(1.0f);    
-    view = glm::lookAt(position, position + _orientation, _up);
-    projection = glm::perspective(
+    
+    Matrix4D projection = glm::perspective(
         glm::radians(_FOVDeg), 
         (float) (hitbox.size.x / hitbox.size.y),
          _nearPlane, 
          _farPlane
     );
+    Matrix4D view = glm::lookAt(position, position + orientation[2], orientation[1]);
     
     _cameraMatrix = projection * view;
 }

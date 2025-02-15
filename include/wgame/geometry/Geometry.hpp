@@ -24,6 +24,8 @@
 
 #define AXIS_XYZ Point3D(1.0f, 1.0f, 1.0f)
 
+#define EPSILON 1e-6f
+
 
 namespace wgame {
 

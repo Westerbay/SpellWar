@@ -37,6 +37,7 @@ AbstractFrame::AbstractFrame(const char * title, const Size & size, unsigned fps
 	_size = size;
 	_world = nullptr;
 	_camera = nullptr;
+	Inputs::initContext(_frame);
 }
 
 AbstractFrame::~AbstractFrame() {
@@ -70,7 +71,7 @@ void AbstractFrame::start() {
 	using namespace std::chrono;
 	Shader shader;
 	shader.bind();
-	_running = true;	
+	_running = true;
 	while (!glfwWindowShouldClose(_frame) && _running) {
 		steady_clock::time_point frameStart = std::chrono::steady_clock::now();
 		

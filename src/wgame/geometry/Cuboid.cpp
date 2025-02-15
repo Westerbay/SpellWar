@@ -16,7 +16,9 @@ Cuboid::Cuboid(
     const Point3D & position,
     const Vector3D & size,
     Matrix3D orientation
-): position(position), size(size), orientation(orientation) {}
+): position(position), size(size), orientation(orientation) {
+    Cuboid::orientation[2] *= -1;
+}
 
 std::vector<Point3D> Cuboid::getVertices() const {
     std::vector<Point3D> vertices;
@@ -57,7 +59,7 @@ bool Cuboid::collidesWith(const Cuboid & other) const {
     for (int i = 0; i < 3; i++) {
         for (int j = 0; j < 3; j++) {
             Point3D crossProduct = glm::cross(axes[i], axes[3 + j]);
-            if (glm::length(crossProduct) > 1e-6f) {
+            if (glm::length(crossProduct) > EPSILON) {
                 axes.push_back(glm::normalize(crossProduct));
             }
         }
@@ -69,6 +71,14 @@ bool Cuboid::collidesWith(const Cuboid & other) const {
         }
     }
     return true;
+}
+
+void Cuboid::translate(float delta, const Vector3D & axis) {
+    position += delta * axis;
+}
+
+void Cuboid::move(float delta, const Vector3D & axis) {
+    position += delta * orientation * axis;
 }
 
 void Cuboid::rotate(float angle, const Vector3D & axis) {

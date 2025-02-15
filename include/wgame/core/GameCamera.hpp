@@ -36,8 +36,6 @@ private:
     float _nearPlane;
     float _farPlane;
     GameObject * _attachedObject;
-    Vector3D _up;
-    Vector3D _orientation;
     Matrix4D _cameraMatrix;
 };
 

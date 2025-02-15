@@ -29,6 +29,8 @@ struct Cuboid {
     std::vector<Point3D> getVertices() const;
     bool contains(const Point3D & point) const;
     bool collidesWith(const Cuboid & other) const;
+    void translate(float delta, const Vector3D & axis);
+    void move(float delta, const Vector3D & axis);
     void rotate(float angle, const Vector3D & axis);
     bool isSeparated(const Cuboid & other, const Point3D & axis) const;
     void projectOntoAxis(const Point3D & axis, float & minProj, float & maxProj) const;

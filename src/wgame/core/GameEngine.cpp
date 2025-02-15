@@ -34,7 +34,7 @@ void GameEngine::start() {
     _frame -> initCamera(_camera);
 
     _game -> init();
-
+    _game -> updateWorld();
     std::thread gameThread(gameLoop, _game);
     _frame -> start();
 
