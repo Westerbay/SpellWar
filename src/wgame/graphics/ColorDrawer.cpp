@@ -19,6 +19,23 @@ void ColorDrawer::drawCuboid(const Cuboid & cuboid, const ColorRGB & color) {
         color, color, color, color
     };
     std::vector<unsigned> elements = {
+        0, 1, 1, 2, 2, 3, 3, 0,
+        4, 5, 5, 6, 6, 7, 7, 4, 
+        1, 5, 2, 6, 0, 4, 3, 7        
+    };
+    _vao.setEBO(elements);
+    _vao.setVBO(VBO_VERTEX, vertices);
+    _vao.setVBO(VBO_COLOR, colors);
+    _vao.draw(DRAW_LINES);
+}
+
+void ColorDrawer::fillCuboid(const Cuboid & cuboid, const ColorRGB & color) {
+    std::vector<Point3D> vertices = cuboid.getVertices();
+    std::vector<ColorRGB> colors = {
+        color, color, color, color,
+        color, color, color, color
+    };
+    std::vector<unsigned> elements = {
         0, 1, 2, 0, 2, 3,
         4, 5, 6, 4, 6, 7,
         1, 5, 6, 1, 6, 2,

@@ -19,6 +19,7 @@ void Platform::update() {
 
 void Platform::render() {
     ColorDrawer colorDrawer;
-    colorDrawer.drawCuboid(_platform, _color);
+    colorDrawer.fillCuboid(_platform, _color);
+    colorDrawer.drawCuboid(_platform);
 }
 

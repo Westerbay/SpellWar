@@ -18,7 +18,8 @@ namespace wgame {
 
 class ColorDrawer {
 public:
-    void drawCuboid(const Cuboid & cuboid, const ColorRGB & color);
+    void drawCuboid(const Cuboid & cuboid, const ColorRGB & color = ColorRGB(0.0f));
+    void fillCuboid(const Cuboid & cuboid, const ColorRGB & color);
 private:
     VertexArrayObject _vao;
 };

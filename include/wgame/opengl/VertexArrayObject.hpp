@@ -20,6 +20,7 @@
 #define NUMBER_OF_VBOS 2
 
 #define DRAW_TRIANGLES GL_TRIANGLES
+#define DRAW_LINES GL_LINES
 
 
 namespace wgame {
