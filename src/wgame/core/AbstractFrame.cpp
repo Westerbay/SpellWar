@@ -22,7 +22,8 @@ AbstractFrame::AbstractFrame(const char * title, const Size & size, unsigned fps
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, GL_VERSION_USED);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, GL_VERSION_USED);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-	
+	glfwWindowHint(GLFW_SAMPLES, 4);
+
 	_frame = glfwCreateWindow(size.width, size.height, title, NULL, NULL);
 	if (_frame == NULL) {
 		throw std::runtime_error("Failed to create GLFW window ! ");
@@ -83,6 +84,7 @@ void AbstractFrame::start() {
 	Shader shader;
 	shader.bind();
 	_running = true;
+	initOpenGLState();
 	while (!glfwWindowShouldClose(_frame) && _running) {
 		steady_clock::time_point frameStart = std::chrono::steady_clock::now();
 		
@@ -105,6 +107,17 @@ void AbstractFrame::start() {
 
 void AbstractFrame::stop() {
 	_running = false;
+}
+
+void AbstractFrame::initOpenGLState() {
+	glEnable(GL_LINE_SMOOTH);
+	glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_MULTISAMPLE);
+	glEnable(GL_CULL_FACE);       
+	glCullFace(GL_BACK);         
+	glFrontFace(GL_CCW); 
 }
 
 void AbstractFrame::render() {

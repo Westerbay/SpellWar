@@ -40,9 +40,10 @@ public:
 	void initCamera(GameCamera & camera);
 	void start();
 	void stop();
-	void render();
 	virtual void renderHUD() = 0;
 private:
+	void initOpenGLState();
+	void render();
 	GLFWwindow * _frame;
 	GameObjectGroup * _world;
 	GameCamera * _camera;
