@@ -10,14 +10,15 @@
 #include <spellwar/world/Platform.hpp>
 
 
-Platform::Platform(const Cuboid & platform) : _platform(platform) {}
+Platform::Platform(const Cuboid & platform) : _platform(platform) {
+    _color = {rand()/(float)RAND_MAX, rand()/(float)RAND_MAX, rand()/(float)RAND_MAX};
+}
 
 void Platform::update() {
-    
 }
 
 void Platform::render() {
     ColorDrawer colorDrawer;
-    colorDrawer.drawCuboid(_platform, {1.0f, 0.0f, 0.0f});
+    colorDrawer.drawCuboid(_platform, _color);
 }
 

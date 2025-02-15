@@ -14,12 +14,16 @@ Game::Game(unsigned tps) : AbstractGame(tps) {}
 
 void Game::init() {
     Cuboid cuboid(Point3D(0.0f, 0.0f, -2.0f), Vector3D(0.5f, 0.5f, 0.5f));
-    cuboid.rotate(glm::radians(45.0f), AXIS_XY);
+    cuboid.rotateX(45.0f);
+    cuboid.rotateY(45.0f);
+    addToWorld(new Platform(cuboid));
+
+    cuboid = Cuboid(Point3D(0.0f, -55.0f, 0.0f), Vector3D(100.0f, 100.0f, 100.0f));
     addToWorld(new Platform(cuboid));
 
     Hitbox hitbox(Point3D(0.0f), Vector3D(0.0f));
     Player * player = new Player(hitbox);
     addToWorld(player);
-    getCamera() -> attachGameObject(player);
+    getCamera() -> attachGameObject(player -> getCameraObject());
 }
 

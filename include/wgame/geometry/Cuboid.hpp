@@ -31,7 +31,9 @@ struct Cuboid {
     bool collidesWith(const Cuboid & other) const;
     void translate(float delta, const Vector3D & axis);
     void move(float delta, const Vector3D & axis);
-    void rotate(float angle, const Vector3D & axis);
+    void rotateX(float angle);
+    void rotateY(float angle);
+    void rotateZ(float angle);
     bool isSeparated(const Cuboid & other, const Point3D & axis) const;
     void projectOntoAxis(const Point3D & axis, float & minProj, float & maxProj) const;
 };

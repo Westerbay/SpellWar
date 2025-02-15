@@ -81,8 +81,18 @@ void Cuboid::move(float delta, const Vector3D & axis) {
     position += delta * orientation * axis;
 }
 
-void Cuboid::rotate(float angle, const Vector3D & axis) {
-    Matrix3D rotMatrix = Matrix3D(glm::rotate(Matrix4D(1.0f), angle, axis));
+void Cuboid::rotateX(float angle) {
+    Matrix3D rotMatrix = Matrix3D(glm::rotate(Matrix4D(1.0f), glm::radians(angle), orientation[0]));
+    orientation = rotMatrix * orientation;
+}
+
+void Cuboid::rotateY(float angle) {
+    Matrix3D rotMatrix = Matrix3D(glm::rotate(Matrix4D(1.0f), glm::radians(angle), orientation[1]));
+    orientation = rotMatrix * orientation;
+}
+
+void Cuboid::rotateZ(float angle) {
+    Matrix3D rotMatrix = Matrix3D(glm::rotate(Matrix4D(1.0f), glm::radians(angle), orientation[2]));
     orientation = rotMatrix * orientation;
 }
 

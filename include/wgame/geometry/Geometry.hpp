@@ -14,15 +14,15 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#define AXIS_X Point3D(1.0f, 0.0f, 0.0f)
-#define AXIS_Y Point3D(0.0f, 1.0f, 0.0f)
-#define AXIS_Z Point3D(0.0f, 0.0f, 1.0f)
+#define AXIS_X Vector3D(1.0f, 0.0f, 0.0f)
+#define AXIS_Y Vector3D(0.0f, 1.0f, 0.0f)
+#define AXIS_Z Vector3D(0.0f, 0.0f, 1.0f)
 
-#define AXIS_XY Point3D(1.0f, 1.0f, 0.0f)
-#define AXIS_XZ Point3D(1.0f, 0.0f, 1.0f)
-#define AXIS_YZ Point3D(0.0f, 1.0f, 1.0f)
+#define AXIS_XY Vector3D(1.0f, 1.0f, 0.0f)
+#define AXIS_XZ Vector3D(1.0f, 0.0f, 1.0f)
+#define AXIS_YZ Vector3D(0.0f, 1.0f, 1.0f)
 
-#define AXIS_XYZ Point3D(1.0f, 1.0f, 1.0f)
+#define AXIS_XYZ Vector3D(1.0f, 1.0f, 1.0f)
 
 #define EPSILON 1e-6f
 

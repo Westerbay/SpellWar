@@ -22,6 +22,7 @@ public:
     void render() override;
 private:
     Cuboid _platform;
+    ColorRGB _color;
 };
 
 #endif

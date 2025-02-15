@@ -35,7 +35,7 @@ Point2D Inputs::getMousePosition() const {
 }
 
 Vector2D Inputs::getMouseMovement() const {
-    return _mousePosition - _lastMousePosition;
+    return _lastMousePosition - _mousePosition;
 }
 
 bool Inputs::isKeyPressed(Key key) const {
