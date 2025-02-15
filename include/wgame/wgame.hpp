@@ -12,7 +12,7 @@
 #include "geometry/Geometry.hpp"
 #include "geometry/Cuboid.hpp"
 
-#include "gui/ColorDrawer.hpp"
+#include "graphics/ColorDrawer.hpp"
 
 #include "opengl/AttributeProperties.hpp"
 #include "opengl/BufferObject.hpp"

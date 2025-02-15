@@ -7,7 +7,7 @@
  */
 
 
-#include <wgame/gui/ColorDrawer.hpp>
+#include <wgame/graphics/ColorDrawer.hpp>
 
 
 namespace wgame {
