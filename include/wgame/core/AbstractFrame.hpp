@@ -16,7 +16,7 @@
 #include <wgame/opengl/Shader.hpp>
 #include "GameObjectGroup.hpp"
 #include "GameCamera.hpp"
-#include "../system/Inputs.hpp"
+#include "../tools/Inputs.hpp"
 
 #include <string>
 #include <thread>

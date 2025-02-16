@@ -19,6 +19,7 @@
 #include "opengl/VertexArrayObject.hpp"
 #include "opengl/IObjectGL.hpp"
 #include "opengl/Shader.hpp"
+#include "opengl/Texture2D.hpp"
 
 #include "core/GameEngine.hpp"
 #include "core/AbstractGame.hpp"
@@ -26,6 +27,6 @@
 #include "core/GameObjectGroup.hpp"
 #include "core/AbstractFrame.hpp"
 
-#include "system/Inputs.hpp"
-#include "system/Keys.hpp"
+#include "tools/Inputs.hpp"
+#include "tools/Keys.hpp"
 

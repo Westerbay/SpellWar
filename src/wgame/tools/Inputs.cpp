@@ -7,7 +7,7 @@
  */
 
 
-#include <wgame/system/Inputs.hpp>
+#include <wgame/tools/Inputs.hpp>
 #include <iostream>
 
 
