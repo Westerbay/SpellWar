@@ -39,6 +39,7 @@ public:
     void setInterpolationMode(InterpolationMode interpolation) const;
     void setRepeatMode(RepeatMode repeat) const;
     void setData(const Image & image) const;
+    void enableAnisotropicFiltering() const;
     void bind() const override;
     void unbind() const override;
 private:

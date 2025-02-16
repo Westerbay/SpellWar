@@ -30,7 +30,7 @@ AbstractFrame::AbstractFrame(const char * title, const Size & size) : _running(f
 	}
 	
 	glfwMakeContextCurrent(_frame);
-	gladLoadGL();
+	gladLoadGL(glfwGetProcAddress);
 	
 	glViewport(0, 0, size.width, size.height);
 

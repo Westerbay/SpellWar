@@ -10,7 +10,7 @@
 #ifndef __IOBJECT_GL_H__
 #define __IOBJECT_GL_H__
 
-#include <glad/glad.h>
+#include <glad/gl.h>
 #include <GLFW/glfw3.h>
 
 namespace wgame {

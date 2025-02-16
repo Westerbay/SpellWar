@@ -13,8 +13,9 @@
 Platform::Platform(const Cuboid & platform) : _platform(platform) {
     Image image(TEXTURE_PLATFORM);
     _texture.setData(image);
-    _texture.setRepeatMode(MIRRORED_REPEAT);
+    _texture.setRepeatMode(REPEAT);
     _texture.setInterpolationMode(INTERPOLATION_LINEAR);
+    _texture.enableAnisotropicFiltering();
     //_colorDrawer.setFillCuboidData(_platform, {1.0f, 0.0f, 0.0f});
     //_hitboxDrawer.setDrawCuboidData(_platform);
     _textureDrawer.setCuboidData(_platform);

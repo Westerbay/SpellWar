@@ -57,6 +57,12 @@ void Texture2D::setData(const Image & image) const {
     unbind();
 }
 
+void Texture2D::enableAnisotropicFiltering() const {
+    GLfloat maxAniso = 1.0f;
+    glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &maxAniso);
+    setParameter(GL_TEXTURE_MAX_ANISOTROPY_EXT, maxAniso);   
+}
+
 void Texture2D::bind() const {
     glBindTexture(GL_TEXTURE_2D, _texture);
 }
