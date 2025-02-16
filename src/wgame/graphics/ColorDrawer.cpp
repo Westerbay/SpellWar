@@ -12,8 +12,7 @@
 
 namespace wgame {
 
-void ColorDrawer::drawCuboid(const Cuboid & cuboid, const ColorRGB & color) {
-    _shader.bind();
+void ColorDrawer::setDrawCuboidData(const Cuboid & cuboid, const ColorRGB & color) {
     std::vector<Point3D> vertices = cuboid.getVertices();
     std::vector<ColorRGB> colors = {
         color, color, color, color,
@@ -27,12 +26,9 @@ void ColorDrawer::drawCuboid(const Cuboid & cuboid, const ColorRGB & color) {
     _vao.setEBO(elements);
     _vao.setVBO(VBO_VERTEX, vertices);
     _vao.setVBO(VBO_COLOR, colors);
-    _vao.draw(DRAW_LINES);
-    _shader.unbind();
 }
 
-void ColorDrawer::fillCuboid(const Cuboid & cuboid, const ColorRGB & color) {
-    _shader.bind();
+void ColorDrawer::setFillCuboidData(const Cuboid & cuboid, const ColorRGB & color) {
     std::vector<Point3D> vertices = cuboid.getVertices();
     std::vector<ColorRGB> colors;
     for (int i = 0; i < vertices.size(); i ++) {
@@ -49,6 +45,26 @@ void ColorDrawer::fillCuboid(const Cuboid & cuboid, const ColorRGB & color) {
     _vao.setEBO(elements);
     _vao.setVBO(VBO_VERTEX, vertices);
     _vao.setVBO(VBO_COLOR, colors);
+}
+
+void ColorDrawer::drawCuboid(const Cuboid & cuboid, const ColorRGB & color) {
+    setDrawCuboidData(cuboid, color);
+    draw();
+}
+
+void ColorDrawer::fillCuboid(const Cuboid & cuboid, const ColorRGB & color) {
+    setFillCuboidData(cuboid, color);
+    fill();
+}
+
+void ColorDrawer::draw() {
+    _shader.bind();
+    _vao.draw(DRAW_LINES);
+    _shader.unbind();
+}
+
+void ColorDrawer::fill() {
+    _shader.bind();
     _vao.draw(DRAW_TRIANGLES);
     _shader.unbind();
 }

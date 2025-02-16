@@ -15,14 +15,21 @@ Platform::Platform(const Cuboid & platform) : _platform(platform) {
     _texture.setData(image);
     _texture.setRepeatMode(MIRRORED_REPEAT);
     _texture.setInterpolationMode(INTERPOLATION_LINEAR);
+    //_colorDrawer.setFillCuboidData(_platform, {1.0f, 0.0f, 0.0f});
+    //_hitboxDrawer.setDrawCuboidData(_platform);
+    _textureDrawer.setDrawCuboidData(_platform);
 }
 
 void Platform::update() {
 }
 
 void Platform::render() {
-    _textureDrawer.drawCuboid(_platform, _texture);
-    /*_colorDrawer.fillCuboid(_platform, {1.0f, 0.0f, 0.0f});
-    _colorDrawer.drawCuboid(_platform);*/
+    //_textureDrawer.drawCuboid(_platform, _texture);
+    //_colorDrawer.fillCuboid(_platform, {1.0f, 0.0f, 0.0f});
+    //_colorDrawer.drawCuboid(_platform);
+    //_colorDrawer.fill();
+    //_hitboxDrawer.draw();
+    _textureDrawer.draw(_texture);
+    //_textureDrawer.drawCuboid(_platform, _texture);
 }
 

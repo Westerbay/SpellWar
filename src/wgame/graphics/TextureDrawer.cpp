@@ -12,9 +12,8 @@
 
 namespace wgame {
  
-void TextureDrawer::drawCuboid(const Cuboid & cuboid, const Texture2D & texture) {
+void TextureDrawer::setDrawCuboidData(const Cuboid & cuboid) {
     _shader.bind();
-    texture.bind();
     _shader.setUniform("colorSampler", 0);
     std::vector<Point3D> vertices = cuboid.getVertices();
     std::vector<Point2D> texCoords = {
@@ -32,16 +31,25 @@ void TextureDrawer::drawCuboid(const Cuboid & cuboid, const Texture2D & texture)
         12, 14, 13, 12, 15, 14, 
         16, 18, 17, 16, 19, 18, 
         20, 22, 21, 20, 23, 22
-    };
-    
+    };    
     _vao.setEBO(elements);
     _vao.setVBO(VBO_VERTEX, vertices);
     _vao.setVBO(VBO_TEXCOORD, texCoords);
+    _shader.unbind();
+}
+
+void TextureDrawer::drawCuboid(const Cuboid & cuboid, const Texture2D & texture) {
+    setDrawCuboidData(cuboid);
+    draw(texture);
+}
+
+void TextureDrawer::draw(const Texture2D & texture) {
+    _shader.bind();
+    texture.bind();
     _vao.draw(DRAW_TRIANGLES);
     texture.unbind();
     _shader.unbind();
 }
-
  
 TextureDrawer::TextureDrawerShader::TextureDrawerShader() : 
 Shader(TEXTURE_DRAWER_VERTEX_SHADER_PATH, TEXTURE_DRAWER_FRAGMENT_SHADER_PATH) {}

@@ -22,8 +22,12 @@ namespace wgame {
 
 class ColorDrawer {
 public:
+    void setDrawCuboidData(const Cuboid & cuboid, const ColorRGB & color = ColorRGB(0.0f));
+    void setFillCuboidData(const Cuboid & cuboid, const ColorRGB & color);
     void drawCuboid(const Cuboid & cuboid, const ColorRGB & color = ColorRGB(0.0f));
     void fillCuboid(const Cuboid & cuboid, const ColorRGB & color);
+    void draw();
+    void fill();
 protected:
     class ColorDrawerShader : public Shader {
     public:

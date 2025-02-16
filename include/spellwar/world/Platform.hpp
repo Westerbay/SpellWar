@@ -26,6 +26,7 @@ private:
     Texture2D _texture;
     TextureDrawer _textureDrawer;
     ColorDrawer _colorDrawer;
+    ColorDrawer _hitboxDrawer;
     Cuboid _platform;
 };
 
