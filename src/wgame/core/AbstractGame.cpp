@@ -43,20 +43,27 @@ void AbstractGame::initCamera(GameCamera & camera) {
 void AbstractGame::start() {
 	using namespace std::chrono;
     _running = true;
+    int n = 0;
     while (_running) {
         steady_clock::time_point updateStart = steady_clock::now();
         
         Inputs::record();
         updateWorld();
         _camera -> update();
+
+        if ((n ++) % 60 == 0) std::cout << "test" <<std::endl;
         
+        #ifdef _WIN32
+        while (duration_cast<milliseconds>(steady_clock::now() - updateStart).count() < _updateDelay);
+        #else
         steady_clock::time_point updateEnd = steady_clock::now();
-		unsigned updateTime = duration_cast<milliseconds>(updateEnd - updateStart).count();
+        unsigned updateTime = duration_cast<milliseconds>(updateEnd - updateStart).count();
         if (updateTime < _updateDelay) {
             std::this_thread::sleep_for(
                 milliseconds(_updateDelay - updateTime)
             );
         }
+        #endif
     }
 }
 

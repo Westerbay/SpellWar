@@ -12,7 +12,7 @@
 
 
 Player::Player(const Hitbox & hitbox) : GameObject(hitbox) {
-    _speed = 0.1f;
+    _speed = 0.2f;
     _sensibility = 0.2f;
 }
 

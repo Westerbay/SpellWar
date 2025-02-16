@@ -17,7 +17,7 @@
 #include <chrono>
 
 
-#define DEFAULT_TPS 144
+#define DEFAULT_TPS 60
 
 namespace wgame {
 
