@@ -14,6 +14,7 @@
 #include <GLFW/glfw3.h>
 #include <wgame/geometry/Geometry.hpp>
 #include <wgame/opengl/Shader.hpp>
+#include <wgame/opengl/UniformBufferObject.hpp>
 #include "GameObjectGroup.hpp"
 #include "GameCamera.hpp"
 #include "../tools/Inputs.hpp"
@@ -25,6 +26,8 @@
 
 #define GL_VERSION_USED 4
 #define DEFAULT_FPS 60
+
+#define MATRIX_CAMERA_POINT 0 
 
 
 namespace wgame {

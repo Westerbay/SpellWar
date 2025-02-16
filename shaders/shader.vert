@@ -1,9 +1,11 @@
-#version 410 core
+#version 420 core
 
 layout(location = 0) in vec3 aPos;
 layout(location = 1) in vec3 aColor;
 
-uniform mat4 cameraMatrix;
+layout(std140, binding = 0) uniform CameraBlock {
+    mat4 cameraMatrix;
+};
 
 out vec3 color;
 

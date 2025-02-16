@@ -29,7 +29,7 @@ public:
     GLsizei getNumberOfAttributes() const;
     void bind() const override;
     void unbind() const override;
-private:
+protected:
     GLuint _buffer;
     GLenum _target;
     GLenum _componentTypeOfAttribute;

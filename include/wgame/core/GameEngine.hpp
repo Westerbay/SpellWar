@@ -26,11 +26,10 @@ public:
     ~GameEngine();
     void start();
 private:
-    AbstractGame * _game;
-    AbstractFrame * _frame;
     GameCamera _camera;
-    GameObjectGroup _world;    
-
+    GameObjectGroup _world;   
+    AbstractGame * _game;
+    AbstractFrame * _frame;     
 };
 
 }

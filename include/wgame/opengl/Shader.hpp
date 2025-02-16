@@ -17,6 +17,8 @@
 #include <string>
 #include <stdexcept>
 
+#define SHADER_LOG_BUFFER_SIZE 1024
+
 #define DEFAULT_VERTEX_SHADER "shaders/shader.vert"
 #define DEFAULT_FRAGMENT_SHADER "shaders/shader.frag"
 

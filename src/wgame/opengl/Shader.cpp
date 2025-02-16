@@ -49,8 +49,11 @@ GLuint Shader::compileShader(GLenum type, const char * filePath) {
     glCompileShader(shader);
 
     GLint success;
+    GLchar infoLog[SHADER_LOG_BUFFER_SIZE];
     glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
     if (!success) {
+        glGetShaderInfoLog(shader, SHADER_LOG_BUFFER_SIZE, NULL, infoLog);
+        std::cerr << infoLog << std::endl;
         throw std::runtime_error("Cannot compile shader !");
     }   
 

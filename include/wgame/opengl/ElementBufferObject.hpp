@@ -10,7 +10,7 @@
 #ifndef __EBO_H__
 #define __EBO_H__
 
-#include <wgame/opengl/BufferObject.hpp>
+#include "BufferObject.hpp"
 
 
 namespace wgame {

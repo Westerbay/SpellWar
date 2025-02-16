@@ -83,15 +83,17 @@ void AbstractFrame::start() {
 	using namespace std::chrono;
 	Shader shader;
 	shader.bind();
+	UniformBufferObject ubo(sizeof(glm::mat4), MATRIX_CAMERA_POINT);
 	_running = true;
 	initOpenGLState();
+	
 	while (!glfwWindowShouldClose(_frame) && _running) {
 		steady_clock::time_point frameStart = std::chrono::steady_clock::now();
 		
 		glfwPollEvents();
 		Inputs::mouseRecord();
 
-		shader.setUniform("cameraMatrix", _camera -> getMatrix());
+		ubo.setData(glm::value_ptr(_camera -> getMatrix()), sizeof(glm::mat4));
 		render();
 
 		steady_clock::time_point frameEnd = std::chrono::steady_clock::now();
