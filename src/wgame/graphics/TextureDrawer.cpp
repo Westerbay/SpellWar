@@ -12,7 +12,7 @@
 
 namespace wgame {
  
-void TextureDrawer::setDrawCuboidData(const Cuboid & cuboid) {
+void TextureDrawer::setCuboidData(const Cuboid & cuboid) {
     _shader.bind();
     _shader.setUniform("colorSampler", 0);
     std::vector<Point3D> vertices = cuboid.getVertices();
@@ -25,12 +25,12 @@ void TextureDrawer::setDrawCuboidData(const Cuboid & cuboid) {
         {0, 0}, {1, 0}, {1, 1}, {0, 1}
     };
     std::vector<unsigned> elements = {
-        0, 1, 2, 0, 2, 3, 
-        4, 6, 5, 4, 7, 6, 
-        8, 10, 9, 8, 11, 10, 
-        12, 14, 13, 12, 15, 14, 
-        16, 18, 17, 16, 19, 18, 
-        20, 22, 21, 20, 23, 22
+        0, 1, 2, 0, 2, 3,  
+        4, 5, 6, 4, 6, 7,  
+        8, 9, 10, 8, 10, 11,  
+        12, 13, 14, 12, 14, 15,  
+        16, 17, 18, 16, 18, 19,  
+        20, 21, 22, 20, 22, 23  
     };    
     _vao.setEBO(elements);
     _vao.setVBO(VBO_VERTEX, vertices);
@@ -38,8 +38,41 @@ void TextureDrawer::setDrawCuboidData(const Cuboid & cuboid) {
     _shader.unbind();
 }
 
+void TextureDrawer::setTexCoordFixed(const Cuboid & cuboid, const Vector2D & size) {
+    std::vector<Point2D> texCoords;
+    std::vector<Vector2D> faceSizes = {
+        {cuboid.size.x, cuboid.size.y}, 
+        {cuboid.size.x, cuboid.size.y}, 
+        {cuboid.size.x, cuboid.size.z}, 
+        {cuboid.size.z, cuboid.size.y}, 
+        {cuboid.size.x, cuboid.size.z}, 
+        {cuboid.size.z, cuboid.size.y}  
+    };
+    for (const Vector2D & faceSize : faceSizes) {
+        float widthFace = faceSize.x;
+        float heightFace = faceSize.y;
+        texCoords.push_back({0.0f, 0.0f});
+        texCoords.push_back({widthFace / size.x, 0.0f});
+        texCoords.push_back({widthFace / size.x, heightFace / size.y});
+        texCoords.push_back({0.0f, heightFace / size.y});
+    }
+    _vao.setVBO(VBO_TEXCOORD, texCoords);
+}
+
+void TextureDrawer::setTexCoordFlex(const Vector2D & uvScale) {
+    std::vector<Point2D> texCoords = {
+        {0, 0}, {uvScale.x, 0}, {uvScale.x, uvScale.y}, {0, uvScale.y}, 
+        {0, 0}, {uvScale.x, 0}, {uvScale.x, uvScale.y}, {0, uvScale.y},
+        {0, 0}, {uvScale.x, 0}, {uvScale.x, uvScale.y}, {0, uvScale.y},
+        {0, 0}, {uvScale.x, 0}, {uvScale.x, uvScale.y}, {0, uvScale.y},
+        {0, 0}, {uvScale.x, 0}, {uvScale.x, uvScale.y}, {0, uvScale.y},
+        {0, 0}, {uvScale.x, 0}, {uvScale.x, uvScale.y}, {0, uvScale.y}
+    };
+    _vao.setVBO(VBO_TEXCOORD, texCoords);
+}
+
 void TextureDrawer::drawCuboid(const Cuboid & cuboid, const Texture2D & texture) {
-    setDrawCuboidData(cuboid);
+    setCuboidData(cuboid);
     draw(texture);
 }
 

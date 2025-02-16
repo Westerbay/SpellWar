@@ -25,23 +25,23 @@ std::vector<Point3D> Cuboid::getVertices() const {
     Vector3D halfSize = size * 0.5f;
 
     std::vector<Point3D> localVertices = {
-        {-halfSize.x, -halfSize.y, -halfSize.z}, // 0
-        { halfSize.x, -halfSize.y, -halfSize.z}, // 1
-        { halfSize.x,  halfSize.y, -halfSize.z}, // 2
-        {-halfSize.x,  halfSize.y, -halfSize.z}, // 3
-        {-halfSize.x, -halfSize.y,  halfSize.z}, // 4
-        { halfSize.x, -halfSize.y,  halfSize.z}, // 5
-        { halfSize.x,  halfSize.y,  halfSize.z}, // 6
-        {-halfSize.x,  halfSize.y,  halfSize.z}  // 7
+        {-halfSize.x, -halfSize.y, halfSize.z}, // 0
+        { halfSize.x, -halfSize.y, halfSize.z}, // 1
+        { halfSize.x,  halfSize.y, halfSize.z}, // 2
+        {-halfSize.x,  halfSize.y, halfSize.z}, // 3
+        {-halfSize.x, -halfSize.y, -halfSize.z}, // 4
+        { halfSize.x, -halfSize.y, -halfSize.z}, // 5
+        { halfSize.x,  halfSize.y, -halfSize.z}, // 6
+        {-halfSize.x,  halfSize.y, -halfSize.z}  // 7
     };
 
     std::vector<std::vector<int>> faceIndices = {
         {0, 1, 2, 3}, 
         {4, 5, 6, 7}, 
         {0, 1, 5, 4}, 
-        {1, 2, 6, 5}, 
-        {2, 3, 7, 6}, 
-        {3, 0, 4, 7}  
+        {1, 5, 6, 2}, 
+        {3, 2, 6, 7}, 
+        {0, 4, 7, 3}  
     };
 
     for (const auto& face : faceIndices) {

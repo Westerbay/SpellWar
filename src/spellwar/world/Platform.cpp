@@ -17,7 +17,9 @@ Platform::Platform(const Cuboid & platform) : _platform(platform) {
     _texture.setInterpolationMode(INTERPOLATION_LINEAR);
     //_colorDrawer.setFillCuboidData(_platform, {1.0f, 0.0f, 0.0f});
     //_hitboxDrawer.setDrawCuboidData(_platform);
-    _textureDrawer.setDrawCuboidData(_platform);
+    _textureDrawer.setCuboidData(_platform);
+    //_textureDrawer.setTexCoordFlex({2.0f, 2.0f});
+    _textureDrawer.setTexCoordFixed(_platform, {3.0f, 3.0f});
 }
 
 void Platform::update() {

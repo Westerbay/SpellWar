@@ -23,7 +23,9 @@ namespace wgame {
  
 class TextureDrawer {
 public:
-    void setDrawCuboidData(const Cuboid & cuboid);
+    void setCuboidData(const Cuboid & cuboid);
+    void setTexCoordFixed(const Cuboid & cuboid, const Vector2D & size);
+    void setTexCoordFlex(const Vector2D & uvScale);
     void drawCuboid(const Cuboid & cuboid, const Texture2D & texture);
     void draw(const Texture2D & texture);
 protected:
