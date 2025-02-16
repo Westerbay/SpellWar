@@ -25,7 +25,6 @@
 
 
 #define GL_VERSION_USED 4
-#define DEFAULT_FPS 60
 
 #define MATRIX_CAMERA_POINT 0 
 
@@ -34,9 +33,8 @@ namespace wgame {
 
 class AbstractFrame {
 public:
-	AbstractFrame(const char * title, const Size & size, unsigned fps = DEFAULT_FPS);
+	AbstractFrame(const char * title, const Size & size);
 	virtual ~AbstractFrame();
-	void setFPS(unsigned fps);
 	void setCursorActive(bool cursorActive);
 	void setBackgroundColor(GLclampf red, GLclampf green, GLclampf blue);
 	void initWorld(GameObjectGroup & world);
@@ -51,7 +49,6 @@ private:
 	GameObjectGroup * _world;
 	GameCamera * _camera;
 	Size _size;
-	unsigned _frameDelay;
 	bool _running;
 	bool _cursorActive;
 };

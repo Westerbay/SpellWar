@@ -19,16 +19,13 @@
 
 #define SHADER_LOG_BUFFER_SIZE 1024
 
-#define DEFAULT_VERTEX_SHADER "shaders/shader.vert"
-#define DEFAULT_FRAGMENT_SHADER "shaders/shader.frag"
-
 namespace wgame {
 
 class Shader : public IObjectGL {
 public:
     Shader(
-        const char * vertexShaderFilePath = DEFAULT_VERTEX_SHADER, 
-        const char * fragmentShaderFilePath = DEFAULT_FRAGMENT_SHADER
+        const char * vertexShaderFilePath, 
+        const char * fragmentShaderFilePath
     );
     ~Shader();
     template <typename T> 

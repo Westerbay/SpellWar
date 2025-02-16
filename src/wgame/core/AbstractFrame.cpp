@@ -14,7 +14,7 @@
 
 namespace wgame {
 
-AbstractFrame::AbstractFrame(const char * title, const Size & size, unsigned fps) : _running(false) {
+AbstractFrame::AbstractFrame(const char * title, const Size & size) : _running(false) {
 	if (!glfwInit()) {
 		throw std::runtime_error("Failed to initialize GLFW ! ");
 	}
@@ -33,8 +33,7 @@ AbstractFrame::AbstractFrame(const char * title, const Size & size, unsigned fps
 	gladLoadGL();
 	
 	glViewport(0, 0, size.width, size.height);
-	
-	setFPS(fps);
+
 	_size = size;
 	_world = nullptr;
 	_camera = nullptr;
@@ -46,10 +45,6 @@ AbstractFrame::~AbstractFrame() {
 	glfwTerminate();
 }
 
-void AbstractFrame::setFPS(unsigned fps) {
-	_frameDelay = 1000 / fps;
-}
-
 void AbstractFrame::setCursorActive(bool cursorActive) {
 	_cursorActive = cursorActive;
 	if (_cursorActive) {
@@ -59,7 +54,6 @@ void AbstractFrame::setCursorActive(bool cursorActive) {
 		glfwSetInputMode(_frame, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	}
 }
-
 
 void AbstractFrame::setBackgroundColor(GLclampf red, GLclampf green, GLclampf blue) {
 	glClearColor(red, green, blue, 1.0f);
@@ -80,31 +74,14 @@ void AbstractFrame::initCamera(GameCamera & camera) {
 }
 
 void AbstractFrame::start() {
-	using namespace std::chrono;
-	Shader shader;
-	shader.bind();
-	UniformBufferObject ubo(sizeof(glm::mat4), MATRIX_CAMERA_POINT);
-	_running = true;
+	using namespace std::chrono;	
 	initOpenGLState();
-	
+	_running = true;
 	while (!glfwWindowShouldClose(_frame) && _running) {
-		steady_clock::time_point frameStart = std::chrono::steady_clock::now();
-		
 		glfwPollEvents();
-		Inputs::mouseRecord();
-
-		ubo.setData(glm::value_ptr(_camera -> getMatrix()), sizeof(glm::mat4));
 		render();
-
-		steady_clock::time_point frameEnd = std::chrono::steady_clock::now();
-		milliseconds::rep frameTime = duration_cast<milliseconds>(frameEnd - frameStart).count();
-		if (frameTime < _frameDelay) {
-			std::this_thread::sleep_for(
-				milliseconds(_frameDelay - frameTime)
-			);
-		}
+		glfwSwapBuffers(_frame);
     }
-	shader.unbind();
 }
 
 void AbstractFrame::stop() {
@@ -119,16 +96,16 @@ void AbstractFrame::initOpenGLState() {
 	glEnable(GL_MULTISAMPLE);
 	glEnable(GL_CULL_FACE);       
 	glCullFace(GL_BACK);         
-	glFrontFace(GL_CCW); 
+	glFrontFace(GL_CCW);
 }
 
 void AbstractFrame::render() {
 	glEnable(GL_DEPTH_TEST);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	_world -> render();
+	_camera -> render();
+	_world -> render();	
 	glDisable(GL_DEPTH_TEST);
 	renderHUD();
-	glfwSwapBuffers(_frame);
 }
 
 };

@@ -11,12 +11,15 @@
 #define __GAME_CAMERA_H__
 
 #include "../geometry/Geometry.hpp"
+#include "../opengl/UniformBufferObject.hpp"
 #include "GameObject.hpp"
 #include <iostream>
 
 #define DEFAULT_FOV_DEG 45.0f
 #define DEFAULT_NEAR_PLANE 0.1f
 #define DEFAULT_FAR_PLANE 100.0f
+
+#define CAMERA_MATRIX_POINT 0
 
 
 namespace wgame {
@@ -31,7 +34,14 @@ public:
     void attachGameObject(GameObject * gameObject);
     Matrix4D getMatrix();
     void update() override;
+    void render() override;
+protected:
+    class UniformCamera : public UniformBufferObject {
+    public:
+        UniformCamera();
+    };
 private:
+    UniformCamera _ubo;
     float _FOVDeg;    
     float _nearPlane;
     float _farPlane;

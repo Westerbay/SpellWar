@@ -60,8 +60,11 @@ void GameCamera::update() {
     _cameraMatrix = projection * view;
 }
 
-Matrix4D GameCamera::getMatrix() {
-    return _cameraMatrix;
+void GameCamera::render() {
+    _ubo.setData(glm::value_ptr(_cameraMatrix), sizeof(Matrix4D));
 }
+
+GameCamera::UniformCamera::UniformCamera() :
+UniformBufferObject(sizeof(Matrix4D), CAMERA_MATRIX_POINT) {}
 
 }

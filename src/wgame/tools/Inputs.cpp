@@ -21,7 +21,7 @@ void Inputs::initContext(GLFWwindow * frame) {
     _frame = frame;
 }
 
-void Inputs::mouseRecord() {
+void Inputs::record() {
     double mouseX;
     double mouseY;
     _lastMousePosition = _mousePosition;

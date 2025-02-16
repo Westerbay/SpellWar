@@ -13,7 +13,7 @@
 
 Player::Player(const Hitbox & hitbox) : GameObject(hitbox) {
     _speed = 0.067f;
-    _sensibility = 0.1f;
+    _sensibility = 0.2f;
 }
 
 GameObject * Player::getCameraObject() {

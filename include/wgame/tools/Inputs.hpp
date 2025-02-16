@@ -24,7 +24,7 @@ typedef int Key;
 class Inputs {
 public:
     static void initContext(GLFWwindow * frame);
-    static void mouseRecord();
+    static void record();
     Point2D getMousePosition() const;
     Vector2D getMouseMovement() const;
     bool isKeyPressed(Key key) const; 
