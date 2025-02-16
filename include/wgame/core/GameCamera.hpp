@@ -32,7 +32,6 @@ public:
     void setNearPlane(float nearPlane);
     void setFarPlane(float farPlane);
     void attachGameObject(GameObject * gameObject);
-    Matrix4D getMatrix();
     void update() override;
     void render() override;
 protected:

@@ -65,6 +65,7 @@ void AbstractFrame::initWorld(GameObjectGroup & world) {
 	}
 	_world = &world;
 }
+
 void AbstractFrame::initCamera(GameCamera & camera) {
 	if (_camera != nullptr) {
 		throw std::runtime_error("Camera already initialized ! ");
@@ -74,7 +75,6 @@ void AbstractFrame::initCamera(GameCamera & camera) {
 }
 
 void AbstractFrame::start() {
-	using namespace std::chrono;	
 	initOpenGLState();
 	_running = true;
 	while (!glfwWindowShouldClose(_frame) && _running) {

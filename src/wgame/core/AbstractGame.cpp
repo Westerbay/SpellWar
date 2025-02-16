@@ -44,13 +44,13 @@ void AbstractGame::start() {
 	using namespace std::chrono;
     _running = true;
     while (_running) {
-        steady_clock::time_point updateStart = std::chrono::steady_clock::now();
+        steady_clock::time_point updateStart = steady_clock::now();
         
         Inputs::record();
         updateWorld();
         _camera -> update();
         
-        steady_clock::time_point updateEnd = std::chrono::steady_clock::now();
+        steady_clock::time_point updateEnd = steady_clock::now();
 		unsigned updateTime = duration_cast<milliseconds>(updateEnd - updateStart).count();
         if (updateTime < _updateDelay) {
             std::this_thread::sleep_for(
