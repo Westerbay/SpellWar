@@ -1,0 +1,40 @@
+/*
+ * Wester
+ * This code is open source and free to use.
+ * 
+ * You are free to copy, modify, and distribute this file without restriction.
+ * No warranties are provided, and any use of this code is at your own risk.
+ */
+
+
+#ifndef __TEXTURE_DRAWER_H__
+#define __TEXTURE_DRAWER_H__
+ 
+#include "../opengl/VertexArrayObject.hpp"
+#include "../opengl/Shader.hpp"
+#include "../opengl/Texture2D.hpp"
+#include "../geometry/Cuboid.hpp"
+ 
+#define TEXTURE_DRAWER_VERTEX_SHADER_PATH "shaders/texturedrawer.vert"
+#define TEXTURE_DRAWER_FRAGMENT_SHADER_PATH "shaders/texturedrawer.frag"
+ 
+ 
+namespace wgame {
+ 
+class TextureDrawer {
+public:
+    void drawCuboid(const Cuboid & cuboid, const Texture2D & texture);
+protected:
+    class TextureDrawerShader : public Shader {
+    public:
+        TextureDrawerShader();
+    };
+private:
+    TextureDrawerShader _shader;
+    VertexArrayObject _vao;
+};
+ 
+}
+ 
+#endif
+ 

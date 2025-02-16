@@ -13,6 +13,7 @@
 #include "geometry/Cuboid.hpp"
 
 #include "graphics/ColorDrawer.hpp"
+#include "graphics/TextureDrawer.hpp"
 
 #include "opengl/AttributeProperties.hpp"
 #include "opengl/BufferObject.hpp"

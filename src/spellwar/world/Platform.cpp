@@ -11,15 +11,18 @@
 
 
 Platform::Platform(const Cuboid & platform) : _platform(platform) {
-    _color = {rand()/(float)RAND_MAX, rand()/(float)RAND_MAX, rand()/(float)RAND_MAX};
+    Image image(TEXTURE_PLATFORM);
+    _texture.setData(image);
+    _texture.setRepeatMode(MIRRORED_REPEAT);
+    _texture.setInterpolationMode(INTERPOLATION_LINEAR);
 }
 
 void Platform::update() {
 }
 
 void Platform::render() {
-    ColorDrawer colorDrawer;
-    colorDrawer.fillCuboid(_platform, _color);
-    colorDrawer.drawCuboid(_platform);
+    _textureDrawer.drawCuboid(_platform, _texture);
+    /*_colorDrawer.fillCuboid(_platform, {1.0f, 0.0f, 0.0f});
+    _colorDrawer.drawCuboid(_platform);*/
 }
 

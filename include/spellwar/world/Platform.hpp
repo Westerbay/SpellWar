@@ -12,6 +12,8 @@
 
 #include <wgame/wgame.hpp>
 
+#define TEXTURE_PLATFORM "assets/textures/magical/1_diffuseOriginal.bmp"
+
 
 using namespace wgame;
 
@@ -21,8 +23,10 @@ public:
     void update() override;
     void render() override;
 private:
+    Texture2D _texture;
+    TextureDrawer _textureDrawer;
+    ColorDrawer _colorDrawer;
     Cuboid _platform;
-    ColorRGB _color;
 };
 
 #endif
