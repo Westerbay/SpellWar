@@ -13,7 +13,7 @@
 Game::Game(unsigned tps) : AbstractGame(tps) {}
 
 void Game::init() {
-    Cuboid cuboid(Point3D(0.0f, -6.0f, -2.0f), Vector3D(10.0f, 2.0f, 20.0f));
+    Cuboid cuboid(Point3D(0.0f, -20.0f, -2.0f), Vector3D(10.0f, 10.0f, 10.0f));
     addToWorld(new Platform(cuboid));
 
     Hitbox hitbox(Point3D(0.0f), Vector3D(0.0f));

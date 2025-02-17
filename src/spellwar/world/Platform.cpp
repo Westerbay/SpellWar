@@ -14,13 +14,13 @@ Platform::Platform(const Cuboid & platform) : _platform(platform) {
     Image image(TEXTURE_PLATFORM);
     _texture.setData(image);
     _texture.setRepeatMode(REPEAT);
-    _texture.setInterpolationMode(INTERPOLATION_LINEAR);
+    _texture.setInterpolationMode(INTERPOLATION_NEAREST);
     _texture.enableAnisotropicFiltering();
     //_colorDrawer.setFillCuboidData(_platform, {1.0f, 0.0f, 0.0f});
     //_hitboxDrawer.setDrawCuboidData(_platform);
     _textureDrawer.setCuboidData(_platform);
-    //_textureDrawer.setTexCoordFlex({2.0f, 2.0f});
-    _textureDrawer.setTexCoordFixed(_platform, {3.0f, 3.0f});
+    _textureDrawer.setTexCoordFlex({1.0f, 1.0f});
+    //_textureDrawer.setTexCoordFixed(_platform, {1.0f, 1.0f});
 }
 
 void Platform::update() {
