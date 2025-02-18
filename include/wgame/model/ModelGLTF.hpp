@@ -20,6 +20,8 @@
 #define MODEL_DRAWER_VERTEX_SHADER_PATH "shaders/modeldrawer.vert"
 #define MODEL_DRAWER_FRAGMENT_SHADER_PATH "shaders/modeldrawer.frag"
 
+#define GLTF_EXT "gltf"
+#define GLB_EXT "glb"
 
 namespace wgame {
 
@@ -35,11 +37,17 @@ protected:
         ShaderModel(); 
     };
 private:
-    void process();
+    void process(const tinygltf::Model & model);
     Matrix4D getNodeTransform(const tinygltf::Node & node);
-    void processNodes(const tinygltf::Node & node, Matrix4D matrix = Matrix4D(1.0f));
-    void processMesh(const tinygltf::Mesh & mesh, Matrix4D matrix);
-    tinygltf::Model _model;
+    void processNodes(
+        const tinygltf::Model & model, 
+        const tinygltf::Node & node, 
+        Matrix4D matrix = Matrix4D(1.0f)
+    );
+    void processMesh(
+        const tinygltf::Model & model, 
+        const tinygltf::Mesh & mesh, Matrix4D matrix
+    );
     float _scale;
     ShaderModel _shader;
     std::vector<ModelMesh *> _meshes;

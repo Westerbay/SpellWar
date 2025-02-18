@@ -47,6 +47,6 @@ void Player::update() {
 
 void Player::render() {
     
-	static ModelGLTF model("assets/model/player.glb");
+	static ModelGLTF model("assets/model/sword/scene.gltf");
     model.draw();
 }
