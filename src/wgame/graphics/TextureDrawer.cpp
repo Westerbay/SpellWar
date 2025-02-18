@@ -35,7 +35,7 @@ void TextureDrawer::setCuboidData(const Cuboid & cuboid) {
      
     _vao.setEBO(elements);
     _vao.setVBO(VBO_VERTEX, vertices);
-    _vao.setVBO(VBO_TEXCOORD, texCoords);
+    _vao.setVBO(VBO_TEXCOORD_0, texCoords);
     _shader.unbind();
 }
 
@@ -57,7 +57,7 @@ void TextureDrawer::setTexCoordFixed(const Cuboid & cuboid, const Vector2D & siz
         texCoords.push_back({widthFace / size.x, heightFace / size.y});
         texCoords.push_back({0.0f, heightFace / size.y});
     }
-    _vao.setVBO(VBO_TEXCOORD, texCoords);
+    _vao.setVBO(VBO_TEXCOORD_0, texCoords);
 }
 
 void TextureDrawer::setTexCoordFlex(const Vector2D & uvScale) {
@@ -69,7 +69,7 @@ void TextureDrawer::setTexCoordFlex(const Vector2D & uvScale) {
         {0, 0}, {uvScale.x, 0}, {uvScale.x, uvScale.y}, {0, uvScale.y},
         {0, 0}, {uvScale.x, 0}, {uvScale.x, uvScale.y}, {0, uvScale.y}
     };
-    _vao.setVBO(VBO_TEXCOORD, texCoords);
+    _vao.setVBO(VBO_TEXCOORD_0, texCoords);
 }
 
 void TextureDrawer::drawCuboid(const Cuboid & cuboid, const Texture2D & texture) {

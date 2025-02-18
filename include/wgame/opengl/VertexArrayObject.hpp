@@ -17,8 +17,11 @@
 
 #define VBO_VERTEX 0
 #define VBO_COLOR 1
-#define VBO_TEXCOORD 2
-#define NUMBER_OF_VBOS 3
+#define VBO_NORMAL 2
+#define VBO_TEXCOORD_0 3
+#define VBO_TEXCOORD_1 4
+
+#define NUMBER_OF_VBOS 5
 
 #define DRAW_TRIANGLES GL_TRIANGLES
 #define DRAW_LINES GL_LINES

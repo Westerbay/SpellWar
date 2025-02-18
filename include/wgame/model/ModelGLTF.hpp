@@ -21,6 +21,10 @@
 #define GLB_EXT "glb"
 
 #define POSITION "POSITION"
+#define COLOR "COLOR"
+#define NORMAL "NORMAL"
+#define TEXCOORD_0 "TEXCOORD_0"
+#define TEXCOORD_1 "TEXCOORD_1"
 
 
 namespace wgame {
@@ -33,6 +37,7 @@ public:
     float getScaleFactor() const;
     std::vector<ModelMesh *> & getMeshes();
 private:
+    int getVBOIndex(const std::string & key) const;
     void process(const tinygltf::Model & model);
     Matrix4D getNodeTransform(const tinygltf::Node & node);
     void processNodes(

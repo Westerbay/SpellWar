@@ -14,7 +14,7 @@
 Player::Player(const Hitbox & hitbox) : GameObject(hitbox) {
     _speed = 0.2f;
     _sensibility = 0.2f;
-    _model = new ModelGLTF("assets/model/test/scene.gltf");
+    _model = new ModelGLTF("assets/model/player.glb");
 }
 
 Player::~Player() {

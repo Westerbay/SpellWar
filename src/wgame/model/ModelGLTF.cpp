@@ -57,6 +57,25 @@ ModelGLTF::~ModelGLTF() {
     }
 }
 
+int ModelGLTF::getVBOIndex(const std::string & key) const {
+    if (key.compare(POSITION) == 0) {
+        return VBO_VERTEX;
+    }
+    if (key.compare(COLOR) == 0) {
+        return VBO_COLOR;
+    }
+    if (key.compare(NORMAL) == 0) {
+        return VBO_NORMAL;
+    }
+    if (key.compare(TEXCOORD_0) == 0) {
+        return VBO_TEXCOORD_0;
+    }
+    if (key.compare(TEXCOORD_1) == 0) {
+        return VBO_TEXCOORD_1;
+    }
+    return -1;
+}
+
 void ModelGLTF::process(const tinygltf::Model & model) {
     const tinygltf::Scene & scene = model.scenes[model.defaultScene];
     for (int i = 0; i < scene.nodes.size(); ++ i) {
@@ -143,15 +162,12 @@ void ModelGLTF::processMesh(
                 size = accessor.type;
             }
 
-            int attribute = -1;
-            if (attrib.first.compare(POSITION) == 0) {
-                attribute = VBO_VERTEX;
-            }
-            if (attribute >= 0) {
+            int vboIndex = getVBOIndex(attrib.first);
+            if (vboIndex >= 0) {
                 modelMesh -> setVBO(
                     (GLsizei) bufferView.byteLength,
                     &buffer.data.at(0) + bufferView.byteOffset,
-                    attribute, size, accessor.componentType,
+                    (GLuint) vboIndex, size, accessor.componentType,
                     accessor.normalized ? GL_TRUE : GL_FALSE,
                     byteStride, (char *)NULL + accessor.byteOffset
                 );
