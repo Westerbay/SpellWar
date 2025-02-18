@@ -7,7 +7,7 @@
  */
 
 
-#include <wgame/tools/Model.hpp>
+#include <wgame/model/ModelGLTF.hpp>
 
 #include <stdexcept>
 #include <iostream>
@@ -15,7 +15,7 @@
 
 namespace wgame {
 
-Model::Model(const std::string & filename, float scale) : _scale(scale) {
+ModelGLTF::ModelGLTF(const std::string & filename, float scale) : _scale(scale) {
     tinygltf::TinyGLTF loader;
     std::string err, warn;
 
@@ -35,32 +35,15 @@ Model::Model(const std::string & filename, float scale) : _scale(scale) {
     }
 
     process();
-    std::cout << "END" << std::endl;
 }
 
-Model::~Model() {
+ModelGLTF::~ModelGLTF() {
+    for (ModelMesh * mesh : _meshes) {
+        delete mesh;
+    }
 }
 
-void Model::process() {
-    /*for (int i = 0; i < _model.bufferViews.size(); ++ i) {
-        const tinygltf::BufferView & bufferView = _model.bufferViews[i];
-        if (bufferView.target == 0) {
-            continue;
-        }        
-        const tinygltf::Buffer & buffer = _model.buffers[bufferView.buffer];
-
-        GLuint bufferID;
-        glGenBuffers(1, &bufferID);
-        _buffers[i] = bufferID;
-        glBindBuffer(bufferView.target, bufferID);
-        glBufferData(
-            bufferView.target, bufferView.byteLength, 
-            &buffer.data.at(0) + bufferView.byteOffset, 
-            GL_STATIC_DRAW
-        );
-        glBindBuffer(bufferView.target, 0);
-    }*/
-
+void ModelGLTF::process() {
     const tinygltf::Scene & scene = _model.scenes[_model.defaultScene];
     for (int i = 0; i < scene.nodes.size(); ++ i) {
         if (scene.nodes[i] >= 0 && scene.nodes[i] < _model.nodes.size()) {
@@ -69,7 +52,7 @@ void Model::process() {
     }
 }
 
-Matrix4D Model::getNodeTransform(const tinygltf::Node & node) {
+Matrix4D ModelGLTF::getNodeTransform(const tinygltf::Node & node) {
     Matrix4D transform(1.0f); 
 
     if (!node.matrix.empty()) {
@@ -85,7 +68,7 @@ Matrix4D Model::getNodeTransform(const tinygltf::Node & node) {
     return transform;
 }
 
-void Model::processNodes(const tinygltf::Node & node, Matrix4D matrix) {
+void ModelGLTF::processNodes(const tinygltf::Node & node, Matrix4D matrix) {
     glm::mat4 nodeTransform = matrix * getNodeTransform(node);
     if (node.mesh >= 0 && node.mesh < _model.meshes.size()) {
         processMesh(_model.meshes[node.mesh], nodeTransform);
@@ -97,14 +80,19 @@ void Model::processNodes(const tinygltf::Node & node, Matrix4D matrix) {
     }
 }
 
-void Model::processMesh(const tinygltf::Mesh & mesh, Matrix4D matrix) {
+void ModelGLTF::processMesh(const tinygltf::Mesh & mesh, Matrix4D matrix) {
     for (size_t i = 0; i < mesh.primitives.size(); ++ i) {
-        Mesh meshStruct;
-        meshStruct.nodeTransform = matrix;
-        glGenVertexArrays(1, &meshStruct.vao);
-        glBindVertexArray(meshStruct.vao);
-
         tinygltf::Primitive primitive = mesh.primitives[i];
+        tinygltf::Accessor & indexAccessor = _model.accessors[primitive.indices];
+
+        ElementArrayBufferInfo elementsInfo;
+        elementsInfo.drawMode = primitive.mode;
+        elementsInfo.countElement = indexAccessor.count;
+        elementsInfo.componentType = indexAccessor.componentType;
+        elementsInfo.offsetElement = (char *)NULL + indexAccessor.byteOffset;
+
+        ModelMesh * modelMesh = new ModelMesh(elementsInfo, matrix);
+        modelMesh -> bind();        
         for (auto & attrib : primitive.attributes) {
             tinygltf::Accessor accessor = _model.accessors[attrib.second];
             tinygltf::BufferView & bufferView = _model.bufferViews[accessor.bufferView];
@@ -118,55 +106,43 @@ void Model::processMesh(const tinygltf::Mesh & mesh, Matrix4D matrix) {
 
             int attribute = -1;
             if (attrib.first.compare("POSITION") == 0) {
-                attribute = VBO_VERTEX;
+                attribute = VBO_POSITION;
             }
             if (attribute >= 0) {
-                glGenBuffers(1, &meshStruct.vbo);
-                glBindBuffer(GL_ARRAY_BUFFER, meshStruct.vbo);
-                glBufferData(GL_ARRAY_BUFFER, bufferView.byteLength, &buffer.data.at(0) + bufferView.byteOffset, GL_STATIC_DRAW);
-                glEnableVertexAttribArray(attribute);
-                glVertexAttribPointer(
+                modelMesh -> setVBO(
+                    bufferView.byteLength,
+                    &buffer.data.at(0) + bufferView.byteOffset,
                     attribute, size, accessor.componentType,
                     accessor.normalized ? GL_TRUE : GL_FALSE,
                     byteStride, (char *)NULL + accessor.byteOffset
                 );
-                glBindBuffer(GL_ARRAY_BUFFER, 0);
             }
-        }
-        tinygltf::Accessor & accessor = _model.accessors[primitive.indices];
-        tinygltf::BufferView & bufferView =  _model.bufferViews[accessor.bufferView];
+        }        
+        tinygltf::BufferView & bufferView =  _model.bufferViews[indexAccessor.bufferView];
         tinygltf::Buffer & buffer = _model.buffers[bufferView.buffer];
         
-        glGenBuffers(1, &meshStruct.ebo);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, meshStruct.ebo);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, bufferView.byteLength, &buffer.data.at(0) + bufferView.byteOffset, GL_STATIC_DRAW);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-        glBindVertexArray(0);
-        meshStruct.drawMode = primitive.mode;
-        meshStruct.count = accessor.count;
-        meshStruct.componentType = accessor.componentType;
-        meshStruct.offset = (char *)NULL + accessor.byteOffset;
-        _meshes.push_back(meshStruct);
+        modelMesh -> setEBO(
+            bufferView.byteLength, 
+            &buffer.data.at(0) + bufferView.byteOffset
+        );
+        modelMesh -> unbind();        
+        _meshes.push_back(modelMesh);
     }    
 }
 
-void Model::draw() {
+void ModelGLTF::draw() {
     _shader.bind();
     Matrix4D model(1.0f);
     model = glm::scale(model, Vector3D(_scale, _scale, _scale));
-    for (const Mesh & mesh: _meshes) {
+    for (ModelMesh * mesh: _meshes) {
         _shader.setUniform("model", model);
-        _shader.setUniform("matNode", Matrix4D(1.0f));
-        glBindVertexArray(mesh.vao);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.ebo);
-        glDrawElements(mesh.drawMode, mesh.count, mesh.componentType, mesh.offset);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-        glBindVertexArray(0);
+        _shader.setUniform("matNode", mesh -> getTransformation());
+        mesh -> draw();
     }
     _shader.unbind();
 }
 
-Model::ShaderModel::ShaderModel() : 
+ModelGLTF::ShaderModel::ShaderModel() : 
 Shader(MODEL_DRAWER_VERTEX_SHADER_PATH, MODEL_DRAWER_FRAGMENT_SHADER_PATH) {}
 
 }

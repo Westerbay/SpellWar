@@ -27,7 +27,6 @@ private:
     float _sensibility;
     Inputs _inputs;
     PlayerCamera _camera;
-    Model * model;
 };
 
 

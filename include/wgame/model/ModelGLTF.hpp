@@ -13,8 +13,7 @@
 #include <tinygltf/tiny_gltf.h>
 #include <glad/gl.h>
 #include "../opengl/Shader.hpp"
-#include "../opengl/VertexArrayObject.hpp"
-#include "../geometry/Geometry.hpp"
+#include "ModelMesh.hpp"
 
 #include <unordered_map>
 
@@ -22,31 +21,13 @@
 #define MODEL_DRAWER_FRAGMENT_SHADER_PATH "shaders/modeldrawer.frag"
 
 
-
 namespace wgame {
 
-struct TransformNode {
-    Vector3D translation;
-    Vector3D scale;
-    Quaternion rotation;
-    Matrix4D matrix;
-};
 
-struct Mesh {
-    GLuint vao;
-    GLuint ebo;
-    GLuint vbo;
-    Matrix4D nodeTransform;
-    GLenum drawMode;
-    GLsizei count;
-    GLenum componentType;
-    char * offset;
-};
-
-class Model {
+class ModelGLTF {
 public:
-    Model(const std::string & filename, float scale = 1.0f);    
-    ~Model();
+    ModelGLTF(const std::string & filename, float scale = 1.0f);    
+    ~ModelGLTF();
     void draw();
 protected:
     class ShaderModel : public Shader {
@@ -61,7 +42,7 @@ private:
     tinygltf::Model _model;
     float _scale;
     ShaderModel _shader;
-    std::vector<Mesh> _meshes;
+    std::vector<ModelMesh *> _meshes;
 };
 
 }

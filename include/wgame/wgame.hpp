@@ -30,5 +30,6 @@
 
 #include "tools/Inputs.hpp"
 #include "tools/Keys.hpp"
-#include "tools/Model.hpp"
+
+#include "model/ModelGLTF.hpp"
 
