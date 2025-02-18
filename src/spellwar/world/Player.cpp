@@ -44,3 +44,9 @@ void Player::update() {
     _camera.increaseAngle(mouseMovement.y * _sensibility);
     _camera.updatePlayer(hitbox);
 }
+
+void Player::render() {
+    
+	static Model model("assets/model/player.glb");
+    model.draw();
+}

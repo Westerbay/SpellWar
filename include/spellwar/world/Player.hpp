@@ -21,11 +21,13 @@ public:
     Player(const Hitbox & hitbox);    
     GameObject * getCameraObject();
     void update() override;
+    void render() override;
 private: 
     float _speed;
     float _sensibility;
     Inputs _inputs;
     PlayerCamera _camera;
+    Model * model;
 };
 
 
