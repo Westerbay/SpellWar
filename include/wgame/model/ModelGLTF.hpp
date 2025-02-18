@@ -12,16 +12,16 @@
 
 #include <tinygltf/tiny_gltf.h>
 #include <glad/gl.h>
-#include "../opengl/Shader.hpp"
+
 #include "ModelMesh.hpp"
 
 #include <unordered_map>
 
-#define MODEL_DRAWER_VERTEX_SHADER_PATH "shaders/modeldrawer.vert"
-#define MODEL_DRAWER_FRAGMENT_SHADER_PATH "shaders/modeldrawer.frag"
-
 #define GLTF_EXT "gltf"
 #define GLB_EXT "glb"
+
+#define POSITION "POSITION"
+
 
 namespace wgame {
 
@@ -30,12 +30,8 @@ class ModelGLTF {
 public:
     ModelGLTF(const std::string & filename, float scale = 1.0f);    
     ~ModelGLTF();
-    void draw();
-protected:
-    class ShaderModel : public Shader {
-    public:
-        ShaderModel(); 
-    };
+    float getScaleFactor() const;
+    std::vector<ModelMesh *> & getMeshes();
 private:
     void process(const tinygltf::Model & model);
     Matrix4D getNodeTransform(const tinygltf::Node & node);
@@ -48,8 +44,7 @@ private:
         const tinygltf::Model & model, 
         const tinygltf::Mesh & mesh, Matrix4D matrix
     );
-    float _scale;
-    ShaderModel _shader;
+    float _scale;    
     std::vector<ModelMesh *> _meshes;
 };
 

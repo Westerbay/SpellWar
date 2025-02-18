@@ -19,6 +19,7 @@ using namespace wgame;
 class Player : public GameObject {
 public:
     Player(const Hitbox & hitbox);    
+    ~Player();
     GameObject * getCameraObject();
     void update() override;
     void render() override;
@@ -27,6 +28,8 @@ private:
     float _sensibility;
     Inputs _inputs;
     PlayerCamera _camera;
+    ModelGLTF * _model;
+    ModelDrawer _modelDrawer;
 };
 
 

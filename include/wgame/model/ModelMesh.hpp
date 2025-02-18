@@ -13,9 +13,7 @@
 #include <glad/gl.h>
 
 #include "../geometry/Geometry.hpp"
-
-#define VBO_POSITION 0
-#define NUMBER_OF_VBOS 1
+#include "../opengl/VertexArrayObject.hpp"
 
 
 namespace wgame {

@@ -14,6 +14,7 @@
 
 #include "graphics/ColorDrawer.hpp"
 #include "graphics/TextureDrawer.hpp"
+#include "graphics/ModelDrawer.hpp"
 
 #include "opengl/AttributeProperties.hpp"
 #include "opengl/BufferObject.hpp"
@@ -32,4 +33,5 @@
 #include "tools/Keys.hpp"
 
 #include "model/ModelGLTF.hpp"
+#include "model/ModelMesh.hpp"
 

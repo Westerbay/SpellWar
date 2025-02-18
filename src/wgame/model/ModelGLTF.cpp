@@ -144,8 +144,8 @@ void ModelGLTF::processMesh(
             }
 
             int attribute = -1;
-            if (attrib.first.compare("POSITION") == 0) {
-                attribute = VBO_POSITION;
+            if (attrib.first.compare(POSITION) == 0) {
+                attribute = VBO_VERTEX;
             }
             if (attribute >= 0) {
                 modelMesh -> setVBO(
@@ -169,19 +169,12 @@ void ModelGLTF::processMesh(
     }    
 }
 
-void ModelGLTF::draw() {
-    _shader.bind();
-    Matrix4D model(1.0f);
-    model = glm::scale(model, Vector3D(_scale, _scale, _scale));
-    for (ModelMesh * mesh: _meshes) {
-        _shader.setUniform("model", model);
-        _shader.setUniform("matNode", mesh -> getTransformation());
-        mesh -> draw();
-    }
-    _shader.unbind();
+float ModelGLTF::getScaleFactor() const {
+    return _scale;
 }
 
-ModelGLTF::ShaderModel::ShaderModel() : 
-Shader(MODEL_DRAWER_VERTEX_SHADER_PATH, MODEL_DRAWER_FRAGMENT_SHADER_PATH) {}
+std::vector<ModelMesh *> & ModelGLTF::getMeshes() {
+    return _meshes;
+}   
 
 }

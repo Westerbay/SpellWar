@@ -14,6 +14,11 @@
 Player::Player(const Hitbox & hitbox) : GameObject(hitbox) {
     _speed = 0.2f;
     _sensibility = 0.2f;
+    _model = new ModelGLTF("assets/model/test/scene.gltf");
+}
+
+Player::~Player() {
+    delete _model;
 }
 
 GameObject * Player::getCameraObject() {
@@ -46,7 +51,5 @@ void Player::update() {
 }
 
 void Player::render() {
-    
-	static ModelGLTF model("assets/model/sword/scene.gltf");
-    model.draw();
+    _modelDrawer.draw(*_model);
 }
