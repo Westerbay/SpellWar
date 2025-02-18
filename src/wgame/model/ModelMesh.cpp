@@ -17,6 +17,7 @@ ModelMesh::ModelMesh(
     Matrix4D nodeTransform
 ) : _elementsInfo(elementsInfo), _nodeTransform(nodeTransform) {
     glGenVertexArrays(1, &_vao);
+    _texture0 = 0;
 }
 
 ModelMesh::~ModelMesh() {
@@ -29,6 +30,36 @@ ModelMesh::~ModelMesh() {
 
 Matrix4D ModelMesh::getTransformation() const {
     return _nodeTransform;
+}
+
+void ModelMesh::setTexture0(int width, int height, int numChannels, const void * data) {
+    glGenTextures(1, &_texture0);
+    glBindTexture(GL_TEXTURE_2D, _texture0);
+    GLint internalFormat;
+    switch(numChannels) {
+        case RGBA_CHANNELS:
+            internalFormat = GL_RGBA;
+            break;
+        case RGB_CHANNELS:
+            internalFormat = GL_RGB;
+            break;
+        default:
+            throw std::runtime_error("Texture2D : Unknown channel format");
+    }
+    glTexImage2D(
+        GL_TEXTURE_2D, 0, internalFormat, 
+        width, height,
+        0, internalFormat, 
+        GL_UNSIGNED_BYTE, data
+    );
+    glGenerateMipmap(GL_TEXTURE_2D);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    
+    glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void ModelMesh::setVBO(
@@ -65,6 +96,8 @@ void ModelMesh::unbind() const {
 
 void ModelMesh::draw() const {
     bind();
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, _texture0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ebo);
     glDrawElements(
         _elementsInfo.drawMode, 
@@ -73,6 +106,7 @@ void ModelMesh::draw() const {
         _elementsInfo.offsetElement
     );
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    glBindTexture(GL_TEXTURE_2D, 0);
     unbind();
 }
 

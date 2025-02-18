@@ -14,6 +14,7 @@
 
 #include "../geometry/Geometry.hpp"
 #include "../opengl/VertexArrayObject.hpp"
+#include "../opengl/Texture2D.hpp"
 
 
 namespace wgame {
@@ -40,6 +41,7 @@ public:
     );
     ~ModelMesh();
     Matrix4D getTransformation() const;
+    void setTexture0(int width, int height, int numChannels, const void * data);
     void setVBO(
         GLsizei byteLength, const void * data,
         GLuint vboIndex, GLint size, GLenum type,
@@ -52,6 +54,8 @@ public:
 private:
     ElementArrayBufferInfo _elementsInfo;   
     Matrix4D _nodeTransform;
+    GLuint _texture0;
+    GLuint _texture1;
     GLuint _vao;
     GLuint _ebo; 
     GLuint _vbos[NUMBER_OF_VBOS]; 

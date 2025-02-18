@@ -141,7 +141,7 @@ void ModelGLTF::processMesh(
 ) {
     for (size_t i = 0; i < mesh.primitives.size(); ++ i) {
         const tinygltf::Primitive primitive = mesh.primitives[i];
-        const tinygltf::Accessor & indexAccessor = model.accessors[primitive.indices];
+        const tinygltf::Accessor & indexAccessor = model.accessors[primitive.indices];    
 
         ElementArrayBufferInfo elementsInfo;
         elementsInfo.drawMode = primitive.mode;
@@ -180,6 +180,24 @@ void ModelGLTF::processMesh(
             (GLsizei) bufferView.byteLength, 
             &buffer.data.at(0) + bufferView.byteOffset
         );
+
+        if (primitive.material >= 0) {
+            const tinygltf::Material & mat = model.materials[primitive.material];
+            int textureIndex = mat.pbrMetallicRoughness.baseColorTexture.index;
+            if (textureIndex < 0) {
+                textureIndex = mat.emissiveTexture.index;
+            }
+            if (textureIndex >=0) {
+                const tinygltf::Texture & texture = model.textures[textureIndex];
+                int imageIndex = texture.source;
+                if (textureIndex >= 0) {
+                    const tinygltf::Image & image = model.images[imageIndex];
+                    modelMesh -> setTexture0(image.width, image.height, image.component, image.image.data());
+                }
+            }                
+        }    
+
+
         modelMesh -> unbind();        
         _meshes.push_back(modelMesh);
     }    
