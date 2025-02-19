@@ -101,10 +101,11 @@ void ModelMesh::unbind() const {
     glBindVertexArray(0);
 }
 
-void ModelMesh::draw() const {
+void ModelMesh::draw(const Shader & shader) const {
     bind();
     glActiveTexture(GL_TEXTURE0);
     for (const ModelSubMeshInfo & subMesh : _subMeshesInfo) {
+        shader.setUniform("matNode", subMesh.nodeTransform);
         glBindTexture(GL_TEXTURE_2D, subMesh.textureID == -1 ? 0 : _textures[subMesh.textureID]);
         for (const VertexBufferInfo & vboInfo : subMesh.vboInfo) {
             glBindBuffer(GL_ARRAY_BUFFER, _vbos[vboInfo.vboIndex]);

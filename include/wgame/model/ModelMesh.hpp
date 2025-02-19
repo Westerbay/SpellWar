@@ -15,6 +15,7 @@
 #include "../geometry/Geometry.hpp"
 #include "../opengl/VertexArrayObject.hpp"
 #include "../opengl/Texture2D.hpp"
+#include "../opengl/Shader.hpp"
 
 #define MAX_NUMBER_OF_GPU_ARRAYS 10
 
@@ -63,7 +64,7 @@ public:
     void addSubMesh(const ModelSubMeshInfo & modelSubMeshinfo);
     void bind() const;
     void unbind() const;
-    void draw() const;
+    void draw(const Shader & shader) const;
 private:
     GLuint _vao;    
     GLuint _ebos[MAX_NUMBER_OF_GPU_ARRAYS];

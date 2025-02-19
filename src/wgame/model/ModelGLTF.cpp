@@ -212,12 +212,14 @@ void ModelGLTF::processMesh(
     }    
 }
 
-float ModelGLTF::getScaleFactor() const {
-    return _scale;
-}
-
-void ModelGLTF::draw() const {
-    _modelMesh.draw();
+void ModelGLTF::draw(const Shader & shader) const {
+    shader.bind();
+    Matrix4D modelMatrix(1.0f);
+    modelMatrix = glm::scale(modelMatrix, Vector3D(_scale, _scale, _scale));
+    shader.setUniform("textureDiffuse", 0);
+    shader.setUniform("model", modelMatrix);
+    _modelMesh.draw(shader);
+    shader.unbind();
 }   
 
 }

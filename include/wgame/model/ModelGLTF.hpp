@@ -31,8 +31,7 @@ namespace wgame {
 class ModelGLTF {
 public:
     ModelGLTF(const std::string & filename, float scale = 1.0f);    
-    float getScaleFactor() const;
-    void draw() const;
+    void draw(const Shader & shader) const;
 private:
     int getVBOIndex(const std::string & key) const;
     void process(const tinygltf::Model & model);
