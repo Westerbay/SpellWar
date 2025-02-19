@@ -110,11 +110,19 @@ void ModelMesh::draw(const Shader & shader) const {
         for (const VertexBufferInfo & vboInfo : subMesh.vboInfo) {
             glBindBuffer(GL_ARRAY_BUFFER, _vbos[vboInfo.vboIndex]);
             glEnableVertexAttribArray(vboInfo.vboLocation);
-            glVertexAttribPointer(
-                vboInfo.vboLocation, vboInfo.size, 
-                vboInfo.type, vboInfo.normalized, 
-                vboInfo.stride, vboInfo.pointer
-            );            
+            if (vboInfo.vboLocation == VBO_JOINTS) {
+                glVertexAttribIPointer(
+                    vboInfo.vboLocation, vboInfo.size, 
+                    vboInfo.type, vboInfo.stride, vboInfo.pointer
+                ); 
+            } else {
+                glVertexAttribPointer(
+                    vboInfo.vboLocation, vboInfo.size, 
+                    vboInfo.type, vboInfo.normalized, 
+                    vboInfo.stride, vboInfo.pointer
+                );   
+            }
+                     
         }
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ebos[subMesh.elementsInfo.eboIndex]);

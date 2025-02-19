@@ -51,6 +51,7 @@ ModelGLTF::ModelGLTF(const std::string & filename, float scale) : _scale(scale) 
     _modelMesh.bind();
     process(model);
     _modelMesh.unbind();
+    std::cout << model.skins[0].joints.size() << std::endl;
 }
 
 int ModelGLTF::getVBOIndex(const std::string & key) const {
@@ -62,6 +63,12 @@ int ModelGLTF::getVBOIndex(const std::string & key) const {
     }
     if (key.compare(TEXCOORD_0) == 0) {
         return VBO_TEXCOORD_0;
+    }
+    if (key.compare(JOINTS) == 0) {
+        return VBO_JOINTS;
+    }
+    if (key.compare(WEIGHTS) == 0) {
+        return VBO_WEIGHTS;
     }
     return -1;
 }

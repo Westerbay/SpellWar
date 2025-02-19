@@ -23,6 +23,8 @@
 #define POSITION "POSITION"
 #define NORMAL "NORMAL"
 #define TEXCOORD_0 "TEXCOORD_0"
+#define JOINTS "JOINTS_0"
+#define WEIGHTS "WEIGHTS_0"
 
 
 namespace wgame {

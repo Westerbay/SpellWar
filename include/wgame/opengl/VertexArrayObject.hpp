@@ -20,8 +20,10 @@
 #define VBO_NORMAL 2
 #define VBO_TEXCOORD_0 3
 #define VBO_TEXCOORD_1 4
+#define VBO_JOINTS 5
+#define VBO_WEIGHTS 6
 
-#define NUMBER_OF_VBOS 5
+#define NUMBER_OF_VBOS 7
 
 #define DRAW_TRIANGLES GL_TRIANGLES
 #define DRAW_LINES GL_LINES
