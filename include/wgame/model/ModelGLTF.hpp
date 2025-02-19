@@ -21,10 +21,8 @@
 #define GLB_EXT "glb"
 
 #define POSITION "POSITION"
-#define COLOR "COLOR"
 #define NORMAL "NORMAL"
 #define TEXCOORD_0 "TEXCOORD_0"
-#define TEXCOORD_1 "TEXCOORD_1"
 
 
 namespace wgame {
@@ -33,9 +31,8 @@ namespace wgame {
 class ModelGLTF {
 public:
     ModelGLTF(const std::string & filename, float scale = 1.0f);    
-    ~ModelGLTF();
     float getScaleFactor() const;
-    std::vector<ModelMesh *> & getMeshes();
+    void draw() const;
 private:
     int getVBOIndex(const std::string & key) const;
     void process(const tinygltf::Model & model);
@@ -50,7 +47,7 @@ private:
         const tinygltf::Mesh & mesh, Matrix4D matrix
     );
     float _scale;    
-    std::vector<ModelMesh *> _meshes;
+    ModelMesh _modelMesh;
 };
 
 }

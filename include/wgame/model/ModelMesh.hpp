@@ -16,6 +16,8 @@
 #include "../opengl/VertexArrayObject.hpp"
 #include "../opengl/Texture2D.hpp"
 
+#define MAX_NUMBER_OF_GPU_ARRAYS 10
+
 
 namespace wgame {
 
@@ -26,40 +28,48 @@ struct TransformNode {
     Matrix4D matrix;
 };
 
-struct ElementArrayBufferInfo {
+struct ElementBufferInfo {
+    int eboIndex;
     GLsizei countElement;   
     GLenum drawMode;    
     GLenum componentType;
     char * offsetElement;
 };
 
+struct VertexBufferInfo {
+    int vboIndex;
+    GLuint vboLocation;
+    GLuint size;
+    GLenum type;   
+    GLboolean normalized;    
+    GLsizei stride;
+    const void * pointer;
+};
+
+struct ModelSubMeshInfo {
+    Matrix4D nodeTransform;
+    int textureID;
+    ElementBufferInfo elementsInfo;
+    std::vector<VertexBufferInfo> vboInfo;
+};
+
 class ModelMesh {
 public:
-    ModelMesh(
-        ElementArrayBufferInfo elementsInfo,
-        Matrix4D nodeTransform
-    );
+    ModelMesh();
     ~ModelMesh();
-    Matrix4D getTransformation() const;
-    void setTexture0(int width, int height, int numChannels, const void * data);
-    void setVBO(
-        GLsizei byteLength, const void * data,
-        GLuint vboIndex, GLint size, GLenum type,
-        GLboolean normalized, GLsizei stride, const void * pointer
-    );
-    void setEBO(GLsizei byteLength, const void * data);
+    void setVBO(int vboIndex, GLsizei byteLength, const void * data);
+    void setEBO(int eboIndex, GLsizei byteLength, const void * data);
+    void setTexture0(int textureIndex, int width, int height, int numChannels, const void * data);
+    void addSubMesh(const ModelSubMeshInfo & modelSubMeshinfo);
     void bind() const;
     void unbind() const;
     void draw() const;
 private:
-    ElementArrayBufferInfo _elementsInfo;   
-    Matrix4D _nodeTransform;
-    GLuint _texture0;
-    GLuint _texture1;
-    GLuint _vao;
-    GLuint _ebo; 
-    GLuint _vbos[NUMBER_OF_VBOS]; 
-    std::vector<GLuint> _vboIndices;
+    GLuint _vao;    
+    GLuint _ebos[MAX_NUMBER_OF_GPU_ARRAYS];
+    GLuint _vbos[MAX_NUMBER_OF_GPU_ARRAYS]; 
+    GLuint _textures[MAX_NUMBER_OF_GPU_ARRAYS]; 
+    std::vector<ModelSubMeshInfo> _subMeshesInfo;
 };
 
 }

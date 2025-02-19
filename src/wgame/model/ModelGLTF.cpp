@@ -47,31 +47,21 @@ ModelGLTF::ModelGLTF(const std::string & filename, float scale) : _scale(scale) 
         std::cerr << "Can't open model: " << filename << std::endl;
         throw std::runtime_error("Cannot open model !");
     }
-    
-    process(model);
-}
 
-ModelGLTF::~ModelGLTF() {
-    for (ModelMesh * mesh : _meshes) {
-        delete mesh;
-    }
+    _modelMesh.bind();
+    process(model);
+    _modelMesh.unbind();
 }
 
 int ModelGLTF::getVBOIndex(const std::string & key) const {
     if (key.compare(POSITION) == 0) {
         return VBO_VERTEX;
     }
-    if (key.compare(COLOR) == 0) {
-        return VBO_COLOR;
-    }
     if (key.compare(NORMAL) == 0) {
         return VBO_NORMAL;
     }
     if (key.compare(TEXCOORD_0) == 0) {
         return VBO_TEXCOORD_0;
-    }
-    if (key.compare(TEXCOORD_1) == 0) {
-        return VBO_TEXCOORD_1;
     }
     return -1;
 }
@@ -142,16 +132,10 @@ void ModelGLTF::processMesh(
     for (size_t i = 0; i < mesh.primitives.size(); ++ i) {
         const tinygltf::Primitive primitive = mesh.primitives[i];
         const tinygltf::Accessor & indexAccessor = model.accessors[primitive.indices];    
-
-        ElementArrayBufferInfo elementsInfo;
-        elementsInfo.drawMode = primitive.mode;
-        elementsInfo.countElement = (GLsizei) indexAccessor.count;
-        elementsInfo.componentType = indexAccessor.componentType;
-        elementsInfo.offsetElement = (char *)NULL + indexAccessor.byteOffset;
-
-        ModelMesh * modelMesh = new ModelMesh(elementsInfo, matrix);
-        modelMesh -> bind();        
+        
+        std::vector<VertexBufferInfo> vboInfo;
         for (auto & attrib : primitive.attributes) {
+            
             const tinygltf::Accessor accessor = model.accessors[attrib.second];
             const tinygltf::BufferView & bufferView = model.bufferViews[accessor.bufferView];
             const tinygltf::Buffer & buffer = model.buffers[bufferView.buffer];
@@ -162,44 +146,69 @@ void ModelGLTF::processMesh(
                 size = accessor.type;
             }
 
-            int vboIndex = getVBOIndex(attrib.first);
-            if (vboIndex >= 0) {
-                modelMesh -> setVBO(
+            int vboIndex = getVBOIndex(attrib.first);            
+            if (vboIndex >= 0) {   
+                _modelMesh.setVBO(
+                    accessor.bufferView, 
                     (GLsizei) bufferView.byteLength,
-                    &buffer.data.at(0) + bufferView.byteOffset,
-                    (GLuint) vboIndex, size, accessor.componentType,
-                    accessor.normalized ? GL_TRUE : GL_FALSE,
-                    byteStride, (char *)NULL + accessor.byteOffset
+                    &buffer.data.at(0) + bufferView.byteOffset
                 );
+                VertexBufferInfo vboData = {
+                    accessor.bufferView,
+                    (GLuint) vboIndex,
+                    (GLuint) size,
+                    (GLenum) accessor.componentType,
+                    (GLboolean) accessor.normalized ? GL_TRUE : GL_FALSE,
+                    byteStride,
+                    (char *)NULL + accessor.byteOffset
+                };
+                vboInfo.push_back(vboData);
             }
         }        
+
         const tinygltf::BufferView & bufferView = model.bufferViews[indexAccessor.bufferView];
         const tinygltf::Buffer & buffer = model.buffers[bufferView.buffer];
         
-        modelMesh -> setEBO(
-            (GLsizei) bufferView.byteLength, 
+        _modelMesh.setEBO(
+            indexAccessor.bufferView,
+            (GLsizei) bufferView.byteLength,
             &buffer.data.at(0) + bufferView.byteOffset
         );
+        ElementBufferInfo elementsInfo = {
+            indexAccessor.bufferView,
+            (GLsizei) indexAccessor.count,
+            (GLenum) primitive.mode,
+            (GLenum) indexAccessor.componentType,
+            (char *)NULL + indexAccessor.byteOffset
+        };
 
+        int textureID = -1;
         if (primitive.material >= 0) {
             const tinygltf::Material & mat = model.materials[primitive.material];
             int textureIndex = mat.pbrMetallicRoughness.baseColorTexture.index;
             if (textureIndex < 0) {
                 textureIndex = mat.emissiveTexture.index;
             }
-            if (textureIndex >=0) {
+            if (textureIndex >= 0) {
                 const tinygltf::Texture & texture = model.textures[textureIndex];
                 int imageIndex = texture.source;
                 if (textureIndex >= 0) {
                     const tinygltf::Image & image = model.images[imageIndex];
-                    modelMesh -> setTexture0(image.width, image.height, image.component, image.image.data());
+                    _modelMesh.setTexture0(
+                        imageIndex, image.width, image.height, 
+                        image.component, image.image.data()
+                    );
+                    textureID = imageIndex;
                 }
             }                
-        }    
-
-
-        modelMesh -> unbind();        
-        _meshes.push_back(modelMesh);
+        } 
+        ModelSubMeshInfo subMesh = {
+            matrix,
+            textureID,
+            elementsInfo,
+            vboInfo
+        };
+        _modelMesh.addSubMesh(subMesh);
     }    
 }
 
@@ -207,8 +216,8 @@ float ModelGLTF::getScaleFactor() const {
     return _scale;
 }
 
-std::vector<ModelMesh *> & ModelGLTF::getMeshes() {
-    return _meshes;
+void ModelGLTF::draw() const {
+    _modelMesh.draw();
 }   
 
 }

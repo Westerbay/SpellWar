@@ -17,12 +17,10 @@ void ModelDrawer::draw(ModelGLTF & model) const {
     Matrix4D modelMatrix(1.0f);
     float scale = model.getScaleFactor();
     modelMatrix = glm::scale(modelMatrix, Vector3D(scale, scale, scale));
-    for (ModelMesh * mesh: model.getMeshes()) {
-        _shader.setUniform("textureDiffuse", 0);
-        _shader.setUniform("model", modelMatrix);
-        _shader.setUniform("matNode", Matrix4D(1.0f));
-        mesh -> draw();
-    }
+    _shader.setUniform("textureDiffuse", 0);
+    _shader.setUniform("model", modelMatrix);
+    _shader.setUniform("matNode", Matrix4D(1.0f));
+    model.draw();
     _shader.unbind();
 }
 
