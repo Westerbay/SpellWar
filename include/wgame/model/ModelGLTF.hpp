@@ -51,7 +51,7 @@ private:
     );
 
     void processSkeleton(const tinygltf::Model & model);
-    void processJoint(const tinygltf::Model & model, int joint, int parent=-1);
+    void processJoint(const tinygltf::Model & model, int joint, int parent);
     void processAnimation(const tinygltf::Model & model);
 
     float _scale;    
@@ -59,6 +59,7 @@ private:
 
     Skeleton _skeleton;
     std::vector<Animation> _animations;
+    std::unordered_map<std::string, int> _animationsName;
     UniformBufferObject * _ubo;
 };
 

@@ -48,29 +48,27 @@ ModelGLTF::ModelGLTF(const std::string & filename, float scale) : _scale(scale) 
         throw std::runtime_error("Cannot open model !");
     }
 
+    processSkeleton(model);
+    processAnimation(model);
+
     _modelMesh.bind();
     process(model);
     _modelMesh.unbind();
     
     
-    processSkeleton(model);
-    _ubo = new UniformBufferObject(_skeleton.size, 2);
-    processAnimation(model);
+    
+    _ubo = new UniformBufferObject(_skeleton.jointMatricesByteLength, 2);
     _skeleton.update();
-
     Animation & a = _animations.front();
-    std::cout << a.firstKeyFrameTime << std::endl;
-    std::cout << a.lastKeyFrameTime << std::endl;
+    a.setLoop(true);
 }
 
 void ModelGLTF::draw(const Shader & shader) {
-
     Animation & a = _animations.front();
-    a.update(_skeleton, 0.01f);    
-    _skeleton.update();
+    a.update(_skeleton);  
 
     _ubo -> bind();
-    _ubo -> setData(_skeleton.finalMatrixJoints.data(), _skeleton.size);
+    _ubo -> setData(_skeleton.jointMatrices.data(), _skeleton.jointMatricesByteLength);
     shader.bind();
     Matrix4D modelMatrix(1.0f);
     modelMatrix = glm::scale(modelMatrix, Vector3D(_scale, _scale, _scale));
@@ -192,7 +190,7 @@ void ModelGLTF::processMesh(
                     (GLuint) vboIndex,
                     (GLuint) size,
                     (GLenum) accessor.componentType,
-                    (GLboolean) accessor.normalized ? GL_TRUE : GL_FALSE,
+                    accessor.normalized ? GL_TRUE : GL_FALSE,
                     byteStride,
                     (char *)NULL + accessor.byteOffset
                 };
@@ -260,10 +258,11 @@ void ModelGLTF::processSkeleton(const tinygltf::Model & model) {
         return;
     }
 
-    _skeleton.joints.resize(skin.joints.size());
-    _skeleton.finalMatrixJoints.resize(skin.joints.size());
-    _skeleton.size = skin.joints.size() * sizeof(Matrix4D);
-
+    size_t size = skin.joints.size();
+    _skeleton.joints.resize(size);
+    _skeleton.jointMatrices.resize(size);
+    _skeleton.jointMatricesByteLength = size * sizeof(Matrix4D);
+    
     const Matrix4D * inverseBindMatrices;
     {
         loadAccessor<Matrix4D>(
@@ -273,8 +272,7 @@ void ModelGLTF::processSkeleton(const tinygltf::Model & model) {
         );
     }
 
-    for (int i = 0; i < skin.joints.size(); i ++) {
-
+    for (int i = 0; i < size; i ++) {
         Joint & joint = _skeleton.joints[i];
         joint.nodeIndex = skin.joints[i];
         joint.inverseBindMatrix = inverseBindMatrices[i];
@@ -283,11 +281,20 @@ void ModelGLTF::processSkeleton(const tinygltf::Model & model) {
         if (node.translation.size() == 3) {
             joint.translation = glm::make_vec3(node.translation.data());
         }
+        else {
+            joint.translation = Vector3D(0.0f);
+        }
         if (node.rotation.size() == 4) {
             joint.rotation = glm::make_quat(node.rotation.data());
         }
+        else {
+            joint.rotation = Quaternion(1.0f, 0.0f, 0.0f, 0.0f);
+        }
         if (node.scale.size() == 3) {
             joint.scale = glm::make_vec3(node.scale.data());
+        }
+        else {
+            joint.scale = Vector3D(1.0f);
         }
         if (node.matrix.size() == 16) {
             joint.undeformedMatrix = glm::make_mat4x4(node.matrix.data());
@@ -296,16 +303,14 @@ void ModelGLTF::processSkeleton(const tinygltf::Model & model) {
             joint.undeformedMatrix = Matrix4D(1.0f);
         }
         _skeleton.nodeToJoint[joint.nodeIndex] = i;
-        _skeleton.jointToNode[i] = joint.nodeIndex;
     }
-
-    processJoint(model, 0);
-
+   
+    processJoint(model, ROOT_JOINT, NO_PARENT);
 }
 
 void ModelGLTF::processJoint(const tinygltf::Model & model, int joint, int parent) {
     _skeleton.joints[joint].parent = parent;
-    const auto & nodes = model.nodes[_skeleton.jointToNode[joint]];
+    const auto & nodes = model.nodes[_skeleton.joints[joint].nodeIndex];
     for (int i = 0; i < nodes.children.size(); i ++) {
         if (nodes.children[i] >= 0 && nodes.children[i] < model.nodes.size()) {
             int child = _skeleton.nodeToJoint[nodes.children[i]];
@@ -317,79 +322,69 @@ void ModelGLTF::processJoint(const tinygltf::Model & model, int joint, int paren
 
 void ModelGLTF::processAnimation(const tinygltf::Model & model) {
     for (const auto & animModel : model.animations) {
-        Animation animation;
-        animation.name = animModel.name;
-        animation.samplers.resize(animModel.samplers.size());
+
+        std::vector<Animation::Sampler> samplers(animModel.samplers.size());
 
         for (int i = 0; i < animModel.samplers.size(); i ++) {
             const tinygltf::AnimationSampler & samplerModel = animModel.samplers[i];
-            Sampler & sampler = animation.samplers[i];
-            sampler.method = LINEAR;
+            Animation::Sampler & sampler = samplers[i];
+            sampler.interpolation = Animation::LINEAR;
             if (samplerModel.interpolation == "STEP") {
-                sampler.method = STEP;
+                sampler.interpolation = Animation::STEP;
             }
             else if (samplerModel.interpolation == "CUBICSPLINE") {
-                sampler.method = CUBICSPLINE;
+                sampler.interpolation = Animation::CUBICSPLINE;
             }
 
-            // Load inputs
             {
                 const float * timeStepBuffer;
                 const tinygltf::Accessor & accessor = model.accessors[samplerModel.input];
                 loadAccessor<float>(model, accessor, timeStepBuffer);
-                sampler.timeStep.resize(accessor.count);
+                sampler.elapsedTimes.resize(accessor.count);
                 for (int i = 0; i < accessor.count; i ++) {
-                    sampler.timeStep[i] = timeStepBuffer[i];
+                    sampler.elapsedTimes[i] = timeStepBuffer[i];
                 }
-            }   //END inputs
+            }   
             
-            // Load outputs 
             {
                 const tinygltf::Accessor & accessor = model.accessors[samplerModel.output];
-                sampler.outputValues.resize(accessor.count);
+                sampler.pathValues.resize(accessor.count);
                 if (accessor.type == TINYGLTF_TYPE_VEC3) {
                     const Vector3D * buffer;
                     loadAccessor<Vector3D>(model, accessor, buffer);
                     for (int i = 0; i < accessor.count; i ++) {
-                        sampler.outputValues[i] = Vector4D(buffer[i], 0.0f);
+                        sampler.pathValues[i] = Vector4D(buffer[i], 0.0f);
                     }
                 } else if (accessor.type == TINYGLTF_TYPE_VEC4) {
                     const Vector4D * buffer;
                     loadAccessor<Vector4D>(model, accessor, buffer);
                     for (int i = 0; i < accessor.count; i ++) {
-                        sampler.outputValues[i] = Vector4D(buffer[i]);
+                        sampler.pathValues[i] = Vector4D(buffer[i]);
                     }
                 }
             } //END outputs            
         }
 
-        if (animation.samplers.size()) {
-            Sampler & sampler = animation.samplers[0];
-            if (sampler.timeStep.size() >= 2) {
-                animation.firstKeyFrameTime = sampler.timeStep.front();
-                animation.lastKeyFrameTime = sampler.timeStep.back();
-            }
-        }
-
-        int numChannels = animModel.channels.size();
-        animation.channels.resize(numChannels);
+        size_t numChannels = animModel.channels.size();
+        std::vector<Animation::Channel> channels(numChannels);
         for (int i = 0; i < numChannels; i ++) {
             const tinygltf::AnimationChannel channelModel = animModel.channels[i];
-            Channel & channel = animation.channels[i];
+            Animation::Channel & channel = channels[i];
             channel.samplerIndex = channelModel.sampler;
-            channel.node = channelModel.target_node;
+            channel.nodeTarget = channelModel.target_node;
             if (channelModel.target_path == "translation") {
-                channel.path = TRANSLATION;
+                channel.path = Animation::TRANSLATION;
             } 
             else if (channelModel.target_path == "rotation") {
-                channel.path = ROTATION;
+                channel.path = Animation::ROTATION;
             }
             else if (channelModel.target_path == "scale") {
-                channel.path = SCALE;
+                channel.path = Animation::SCALE;
             }
         }
 
-        _animations.push_back(animation);
+        _animations.push_back(Animation(samplers, channels));
+        _animationsName[animModel.name] = _animations.size() - 1;
 
     }
 }
