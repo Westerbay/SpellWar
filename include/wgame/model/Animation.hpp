@@ -14,7 +14,7 @@
 
 #include <iostream>
 
-#define DEFAULT_ELAPSED_TIME 0.01f
+#define DEFAULT_ELAPSED_TIME 0.015f
  
  
 namespace wgame {
@@ -45,16 +45,18 @@ public:
     };
 public:
     Animation(
+        std::string name,
         std::vector<Sampler> samplers,
         std::vector<Channel> channels
     );    
+    std::string getName() const;
     void setLoop(bool repeat);
     bool isRunning() const;
     void start();
     void stop();
     void update(
         Skeleton & skeleton, 
-        float elapsedTime = DEFAULT_ELAPSED_TIME
+        float elapsedTime
     );
 private:
     int findElpasedTimeIndex(
@@ -72,6 +74,8 @@ private:
         Path path,
         const Vector4D & pathValue
     );
+
+    std::string _name;
     std::vector<Sampler> _samplers;
     std::vector<Channel> _channels;
     float _firstKeyFrameTime;

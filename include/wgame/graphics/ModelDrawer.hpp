@@ -14,8 +14,8 @@
 #include "../model/ModelGLTF.hpp"
 #include "../geometry/Geometry.hpp"
 
-#define MODEL_DRAWER_VERTEX_SHADER_PATH "shaders/modeldrawer.vert"
-#define MODEL_DRAWER_FRAGMENT_SHADER_PATH "shaders/modeldrawer.frag"
+#define MODEL_DRAWER_VERTEX_SHADER_PATH "shaders/modelDrawer.vert"
+#define MODEL_DRAWER_FRAGMENT_SHADER_PATH "shaders/modelDrawer.frag"
 
 
 namespace wgame {

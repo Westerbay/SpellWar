@@ -14,8 +14,8 @@
 #include "../opengl/Shader.hpp"
 #include "../geometry/Cuboid.hpp"
 
-#define COLOR_DRAWER_VERTEX_SHADER_PATH "shaders/colordrawer.vert"
-#define COLOR_DRAWER_FRAGMENT_SHADER_PATH "shaders/colordrawer.frag"
+#define COLOR_DRAWER_VERTEX_SHADER_PATH "shaders/colorDrawer.vert"
+#define COLOR_DRAWER_FRAGMENT_SHADER_PATH "shaders/colorDrawer.frag"
 
 
 namespace wgame {

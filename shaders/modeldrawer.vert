@@ -18,33 +18,33 @@ layout(std140, binding = 2) uniform JointsBlock {
 
 out vec2 texCoord0;
 
+uniform int isAnimated;
 uniform mat4 model;
-uniform mat4 matNode;
+
 
 void main() {
+    if (isAnimated == 1) {
+        vec4 animatedPosition = vec4(0.0f);
+        mat4 jointTransform = mat4(0.0f);
 
-    vec4 animatedPosition = vec4(0.0f);
-    mat4 jointTransform = mat4(0.0f);
-
-    for (int i = 0; i < 4; i ++) {
-        if (aWeight[i] == 0) {
-            continue;
+        for (int i = 0; i < 4; i ++) {
+            if (aWeight[i] == 0) {
+                continue;
+            }
+            if (aJoint[i] >= 1000) {
+                animatedPosition = vec4(aPos, 1.0f);
+                jointTransform = mat4(1.0f);
+                break;
+            }
+            mat4 jointMatrix = jointsMatrices[aJoint[i]];
+            vec4 localPosition = jointMatrix * vec4(aPos, 1.0f);
+            animatedPosition += localPosition * aWeight[i];
+            jointTransform += jointMatrix * aWeight[i];
         }
-        if (aJoint[i] >= 1000) {
-            animatedPosition = vec4(aPos, 1.0f);
-            jointTransform = mat4(1.0f);
-            break;
-        }
-        mat4 jointMatrix = jointsMatrices[aJoint[i]];
-        vec4 localPosition = jointMatrix * vec4(aPos, 1.0f);
-        animatedPosition += localPosition * aWeight[i];
-        jointTransform += jointMatrix * aWeight[i];
-    }
-
-    //vec3 currentPosition = vec3(model * matNode * vec4(aPos, 1.0f));
-    //gl_Position = cameraMatrix * vec4(currentPosition, 1.0);
-
-    gl_Position = model * cameraMatrix * animatedPosition;
+        gl_Position = cameraMatrix * model * animatedPosition;
+    } else {
+        gl_Position = cameraMatrix * model * vec4(aPos, 1.0);
+    }    
 
     texCoord0 = aTexCoord0;
 }

@@ -32,6 +32,10 @@
 #include "tools/Inputs.hpp"
 #include "tools/Keys.hpp"
 
+#include "model/Animation.hpp"
+#include "model/Skeleton.hpp"
+#include "model/AnimatedModelGLTF.hpp"
+#include "model/StaticModelGLTF.hpp"
 #include "model/ModelGLTF.hpp"
 #include "model/ModelMesh.hpp"
 

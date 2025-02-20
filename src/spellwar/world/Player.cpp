@@ -14,7 +14,8 @@
 Player::Player(const Hitbox & hitbox) : GameObject(hitbox) {
     _speed = 0.2f;
     _sensibility = 0.2f;
-    _model = new ModelGLTF("assets/model/player.glb");
+    _model = new AnimatedModelGLTF("assets/model/player.glb");
+    _model -> setLoop(true);
 }
 
 Player::~Player() {
@@ -48,8 +49,11 @@ void Player::update() {
     hitbox.rotateY(mouseMovement.x * _sensibility);
     _camera.increaseAngle(mouseMovement.y * _sensibility);
     _camera.updatePlayer(hitbox);
+
+    
 }
 
 void Player::render() {
+    _model -> update();
     _modelDrawer.draw(*_model);
 }

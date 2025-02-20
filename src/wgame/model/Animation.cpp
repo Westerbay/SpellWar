@@ -13,9 +13,10 @@
 namespace wgame {
 
 Animation::Animation(
+    std::string name,
     std::vector<Sampler> samplers,
     std::vector<Channel> channels
-) : _samplers(samplers), _channels(channels) {
+) : _name(name), _samplers(samplers), _channels(channels) {
     Sampler & sampler = samplers[0];
     if (sampler.elapsedTimes.size() >= 2) {
         _firstKeyFrameTime = sampler.elapsedTimes.front();
@@ -23,6 +24,10 @@ Animation::Animation(
     }
     _currentKeyFrameTime = 0.0f;
     _repeat = false;
+}
+
+std::string Animation::getName() const {
+    return _name;
 }
 
 void Animation::setLoop(bool repeat) {

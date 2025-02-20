@@ -15,8 +15,8 @@
 #include "../opengl/Texture2D.hpp"
 #include "../geometry/Cuboid.hpp"
  
-#define TEXTURE_DRAWER_VERTEX_SHADER_PATH "shaders/texturedrawer.vert"
-#define TEXTURE_DRAWER_FRAGMENT_SHADER_PATH "shaders/texturedrawer.frag"
+#define TEXTURE_DRAWER_VERTEX_SHADER_PATH "shaders/textureDrawer.vert"
+#define TEXTURE_DRAWER_FRAGMENT_SHADER_PATH "shaders/textureDrawer.frag"
  
  
 namespace wgame {

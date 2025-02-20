@@ -22,13 +22,6 @@
 
 namespace wgame {
 
-struct TransformNode {
-    Vector3D translation;
-    Vector3D scale;
-    Quaternion rotation;
-    Matrix4D matrix;
-};
-
 struct ElementBufferInfo {
     int eboIndex;
     GLsizei countElement;   
@@ -48,7 +41,6 @@ struct VertexBufferInfo {
 };
 
 struct ModelSubMeshInfo {
-    Matrix4D nodeTransform;
     int textureID;
     ElementBufferInfo elementsInfo;
     std::vector<VertexBufferInfo> vboInfo;
@@ -64,7 +56,7 @@ public:
     void addSubMesh(const ModelSubMeshInfo & modelSubMeshinfo);
     void bind() const;
     void unbind() const;
-    void draw(const Shader & shader) const;
+    void draw() const;
 private:
     GLuint _vao;    
     GLuint _ebos[MAX_NUMBER_OF_GPU_ARRAYS];

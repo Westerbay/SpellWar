@@ -14,10 +14,9 @@
 #include <glad/gl.h>
 
 #include "ModelMesh.hpp"
-#include "Animation.hpp"
-#include "../opengl/UniformBufferObject.hpp"
 
-#include <unordered_map>
+#include <iostream>
+
 
 #define GLTF_EXT "gltf"
 #define GLB_EXT "glb"
@@ -28,46 +27,41 @@
 #define JOINTS "JOINTS_0"
 #define WEIGHTS "WEIGHTS_0"
 
+#define BINDING_JOINT_MATRICES 2
+
 
 namespace wgame {
 
 
 class ModelGLTF {
 public:
-    ModelGLTF(const std::string & filename, float scale = 1.0f);    
-    void draw(const Shader & shader);
-private:
-    int getVBOIndex(const std::string & key) const;
-    void process(const tinygltf::Model & model);
-    Matrix4D getNodeTransform(const tinygltf::Node & node);
+    ModelGLTF();
+    virtual ~ModelGLTF() = default;
+    void drawModelMesh(const Shader & shader);
+    virtual void draw(const Shader & shader) = 0;
+protected:
+    static std::string getFilePathExtension(const std::string & fileName);
+    static int getVBOIndex(const std::string & key);
+    template<typename T>
+    void loadAccessor(const tinygltf::Model & model, const tinygltf::Accessor & accessor, const T*& pointer);
+    void process(const tinygltf::Model & model);  
     void processNodes(
         const tinygltf::Model & model, 
-        const tinygltf::Node & node, 
-        Matrix4D matrix = Matrix4D(1.0f)
+        const tinygltf::Node & node
     );
     void processMesh(
         const tinygltf::Model & model, 
-        const tinygltf::Mesh & mesh, Matrix4D matrix
-    );
-
-    void processSkeleton(const tinygltf::Model & model);
-    void processJoint(const tinygltf::Model & model, int joint, int parent);
-    void processAnimation(const tinygltf::Model & model);
+        const tinygltf::Mesh & mesh
+    );    
 
     float _scale;    
-    ModelMesh _modelMesh;
-
-    Skeleton _skeleton;
-    std::vector<Animation> _animations;
-    std::unordered_map<std::string, size_t> _animationsName;
-    UniformBufferObject * _ubo;
+    ModelMesh _modelMesh;    
 };
 
 template<typename T>
-int loadAccessor(const tinygltf::Model & model, const tinygltf::Accessor & accessor, const T*& pointer) {
+void ModelGLTF::loadAccessor(const tinygltf::Model & model, const tinygltf::Accessor & accessor, const T*& pointer) {
     const tinygltf::BufferView & view = model.bufferViews[accessor.bufferView];
     pointer = reinterpret_cast<const T *>(&(model.buffers[view.buffer].data[accessor.byteOffset + view.byteOffset]));
-    return accessor.componentType;
 }
 
 }

@@ -28,7 +28,7 @@ private:
     float _sensibility;
     Inputs _inputs;
     PlayerCamera _camera;
-    ModelGLTF * _model;
+    AnimatedModelGLTF * _model;
     ModelDrawer _modelDrawer;
 };
 

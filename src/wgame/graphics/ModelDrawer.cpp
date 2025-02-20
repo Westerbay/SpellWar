@@ -13,7 +13,9 @@
 namespace wgame {
 
 void ModelDrawer::draw(ModelGLTF & model) const {
+    _shader.bind();
     model.draw(_shader);
+    _shader.unbind();
 }
 
 ModelDrawer::ModelDrawerShader::ModelDrawerShader() : 
