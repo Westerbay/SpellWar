@@ -53,79 +53,108 @@ void Animation::update(Skeleton & skeleton, float elapsedTime) {
         Sampler & sampler = _samplers[channel.samplerIndex];
         int jointIndex = skeleton.nodeToJoint[channel.nodeTarget];
         Joint & joint = skeleton.joints[jointIndex];
-        for (int i = 0; i < sampler.elapsedTimes.size() - 1; i ++) {
-            if (_currentKeyFrameTime >= sampler.elapsedTimes[i] && _currentKeyFrameTime <= sampler.elapsedTimes[i + 1]) {
-                float linearFactor = _currentKeyFrameTime - sampler.elapsedTimes[i];
-                linearFactor /= sampler.elapsedTimes[i + 1] - sampler.elapsedTimes[i];
-                switch (sampler.interpolation) {
-                    case LINEAR:
-                    {
-                        switch (channel.path) {
-                            case TRANSLATION:
-                            {
-                                joint.translation = glm::mix(sampler.pathValues[i], sampler.pathValues[i + 1], linearFactor);
-                                break;
-                            }
-                            case ROTATION:
-                            {
-                                Quaternion quaternion1;
-                                quaternion1.x = sampler.pathValues[i].x;
-                                quaternion1.y = sampler.pathValues[i].y;
-                                quaternion1.z = sampler.pathValues[i].z;
-                                quaternion1.w = sampler.pathValues[i].w;
-
-                                Quaternion quaternion2;
-                                quaternion2.x = sampler.pathValues[i + 1].x;
-                                quaternion2.y = sampler.pathValues[i + 1].y;
-                                quaternion2.z = sampler.pathValues[i + 1].z;
-                                quaternion2.w = sampler.pathValues[i + 1].w;
-
-                                joint.rotation = glm::normalize(glm::slerp(quaternion1, quaternion2, linearFactor));
-                                break;
-                            }
-                            case SCALE:
-                            {
-                                joint.scale = glm::mix(sampler.pathValues[i], sampler.pathValues[i + 1], linearFactor);
-                                break;
-                            }
-                        }
-                        break;
-                    }
-                    case STEP:
-                    {
-                        switch (channel.path) {
-                            case TRANSLATION:
-                            {
-                                joint.translation = Vector3D(sampler.pathValues[i]);
-                                break;
-                            }
-                            case ROTATION:
-                            {
-                                joint.rotation.x = sampler.pathValues[i].x;
-                                joint.rotation.y = sampler.pathValues[i].y;
-                                joint.rotation.z = sampler.pathValues[i].z;
-                                joint.rotation.w = sampler.pathValues[i].w;
-                                break;
-                            }
-                            case SCALE:
-                            {
-                                joint.scale = Vector3D(sampler.pathValues[i]);
-                                break;
-                            }
-                        }
-                        break;
-                    }
-                    case CUBICSPLINE:
-                    {
-                        std::cerr << "CUBICSPLINE animation interpolation not supported" << std::endl;
-                        return;
-                    }
-                }
+        int i = findElpasedTimeIndex(sampler.elapsedTimes);
+        if (i == -1) {
+            skeleton.update();
+            return;
+        }
+        float linearFactor = _currentKeyFrameTime - sampler.elapsedTimes[i];
+        linearFactor /= sampler.elapsedTimes[i + 1] - sampler.elapsedTimes[i];
+        switch (sampler.interpolation) {
+            case LINEAR:
+                linearInterpolation(joint, channel.path, sampler.pathValues[i], sampler.pathValues[i + 1], linearFactor);
                 break;
-            }            
+            case STEP:
+                stepInterpolation(joint, channel.path, sampler.pathValues[i]);
+                break;
+            case CUBICSPLINE:
+                std::cerr << "CUBICSPLINE animation interpolation not supported" << std::endl;
+                return;
         }
     }
     skeleton.update();
+}
+
+int Animation::findElpasedTimeIndex(
+    const std::vector<float> & elapsedTimes
+) {
+    if (elapsedTimes.size() < 2) {
+        return -1;
+    }
+    if (_currentKeyFrameTime > elapsedTimes.back()) {
+        return -1;
+    }
+    if (_currentKeyFrameTime < elapsedTimes.front()) {
+        return -1;
+    }
+
+    int mid;
+    int left = 0;
+    int right = elapsedTimes.size() - 1;    
+    while (left <= right) {
+        mid = (left + right) / 2;
+        if (elapsedTimes[mid] <= _currentKeyFrameTime && _currentKeyFrameTime <= elapsedTimes[mid + 1]) {
+            return mid;
+        }
+        else if (_currentKeyFrameTime < elapsedTimes[mid]) {
+            right = mid - 1;
+        }
+        else {
+            left = mid + 1;
+        }
+    }
+    return -1;
+}
+
+void Animation::linearInterpolation(
+    Joint & joint,
+    Path path,
+    const Vector4D & pathValue,
+    const Vector4D & nextPathValue,
+    float linearFactor
+) {
+    Quaternion quaternion1;
+    Quaternion quaternion2;
+    switch (path) {        
+        case TRANSLATION:
+            joint.translation = glm::mix(pathValue, nextPathValue, linearFactor);
+            break;
+        case ROTATION:            
+            quaternion1.x = pathValue.x;
+            quaternion1.y = pathValue.y;
+            quaternion1.z = pathValue.z;
+            quaternion1.w = pathValue.w;
+            quaternion2.x = nextPathValue.x;
+            quaternion2.y = nextPathValue.y;
+            quaternion2.z = nextPathValue.z;
+            quaternion2.w = nextPathValue.w;
+            joint.rotation = glm::normalize(glm::slerp(quaternion1, quaternion2, linearFactor));
+            break;
+        case SCALE:
+            joint.scale = glm::mix(pathValue, nextPathValue, linearFactor);
+            break;
+    }
+}
+
+void Animation::stepInterpolation(
+    Joint & joint,
+    Path path,
+    const Vector4D & pathValue
+) {
+    switch(path) {
+        case TRANSLATION:
+            joint.translation = pathValue;
+            break;
+        case ROTATION:
+            joint.rotation.x = pathValue.x;
+            joint.rotation.y = pathValue.y;
+            joint.rotation.z = pathValue.z;
+            joint.rotation.w = pathValue.w;
+            break;
+        case SCALE:
+            joint.scale = pathValue;
+            break;
+    }
 }
 
 }

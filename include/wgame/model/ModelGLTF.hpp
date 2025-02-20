@@ -59,7 +59,7 @@ private:
 
     Skeleton _skeleton;
     std::vector<Animation> _animations;
-    std::unordered_map<std::string, int> _animationsName;
+    std::unordered_map<std::string, size_t> _animationsName;
     UniformBufferObject * _ubo;
 };
 

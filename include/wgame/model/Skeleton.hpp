@@ -39,7 +39,7 @@ struct Skeleton {
     std::map<int, int> nodeToJoint;
     std::vector<Joint> joints;    
     std::vector<Matrix4D> jointMatrices;
-    int jointMatricesByteLength;
+    size_t jointMatricesByteLength;
 
     void update();
     void updateJoint(int jointIndex);

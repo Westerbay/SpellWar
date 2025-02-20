@@ -42,7 +42,7 @@ struct VertexBufferInfo {
     GLuint vboLocation;
     GLuint size;
     GLenum type;   
-    GLboolean normalized;    
+    int normalized;    
     GLsizei stride;
     const void * pointer;
 };

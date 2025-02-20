@@ -57,6 +57,21 @@ public:
         float elapsedTime = DEFAULT_ELAPSED_TIME
     );
 private:
+    int findElpasedTimeIndex(
+        const std::vector<float> & elapsedTimes
+    );
+    void linearInterpolation(
+        Joint & joint,
+        Path path,
+        const Vector4D & pathValue,
+        const Vector4D & nextPathValue,
+        float linearFactor
+    );
+    void stepInterpolation(
+        Joint & joint,
+        Path path,
+        const Vector4D & pathValue
+    );
     std::vector<Sampler> _samplers;
     std::vector<Channel> _channels;
     float _firstKeyFrameTime;
