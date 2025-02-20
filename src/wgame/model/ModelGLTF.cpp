@@ -51,8 +51,35 @@ ModelGLTF::ModelGLTF(const std::string & filename, float scale) : _scale(scale) 
     _modelMesh.bind();
     process(model);
     _modelMesh.unbind();
-    std::cout << model.skins[0].joints.size() << std::endl;
+    
+    
+    processSkeleton(model);
+    _ubo = new UniformBufferObject(_skeleton.size, 2);
+    processAnimation(model);
+    _skeleton.update();
+
+    Animation & a = _animations.front();
+    std::cout << a.firstKeyFrameTime << std::endl;
+    std::cout << a.lastKeyFrameTime << std::endl;
 }
+
+void ModelGLTF::draw(const Shader & shader) {
+
+    Animation & a = _animations.front();
+    a.update(_skeleton, 0.01f);    
+    _skeleton.update();
+
+    _ubo -> bind();
+    _ubo -> setData(_skeleton.finalMatrixJoints.data(), _skeleton.size);
+    shader.bind();
+    Matrix4D modelMatrix(1.0f);
+    modelMatrix = glm::scale(modelMatrix, Vector3D(_scale, _scale, _scale));
+    shader.setUniform("textureDiffuse", 0);
+    shader.setUniform("model", modelMatrix);
+    _modelMesh.draw(shader);
+    shader.unbind();
+    _ubo -> unbind();
+}   
 
 int ModelGLTF::getVBOIndex(const std::string & key) const {
     if (key.compare(POSITION) == 0) {
@@ -158,7 +185,7 @@ void ModelGLTF::processMesh(
                 _modelMesh.setVBO(
                     accessor.bufferView, 
                     (GLsizei) bufferView.byteLength,
-                    &buffer.data.at(0) + bufferView.byteOffset
+                    buffer.data.data() + bufferView.byteOffset
                 );
                 VertexBufferInfo vboData = {
                     accessor.bufferView,
@@ -179,7 +206,7 @@ void ModelGLTF::processMesh(
         _modelMesh.setEBO(
             indexAccessor.bufferView,
             (GLsizei) bufferView.byteLength,
-            &buffer.data.at(0) + bufferView.byteOffset
+            buffer.data.data() + bufferView.byteOffset
         );
         ElementBufferInfo elementsInfo = {
             indexAccessor.bufferView,
@@ -219,14 +246,152 @@ void ModelGLTF::processMesh(
     }    
 }
 
-void ModelGLTF::draw(const Shader & shader) const {
-    shader.bind();
-    Matrix4D modelMatrix(1.0f);
-    modelMatrix = glm::scale(modelMatrix, Vector3D(_scale, _scale, _scale));
-    shader.setUniform("textureDiffuse", 0);
-    shader.setUniform("model", modelMatrix);
-    _modelMesh.draw(shader);
-    shader.unbind();
-}   
+void ModelGLTF::processSkeleton(const tinygltf::Model & model) {
+    if (model.skins.size() == 0) {
+        return;
+    }
+    if (model.skins.size() > 1) {
+        std::cerr << "Model have more than 1 skin!" << std::endl;
+        throw std::runtime_error("Cannot load model animations!");
+    }
+    
+    const tinygltf::Skin & skin = model.skins[0];
+    if (skin.inverseBindMatrices < 0) {
+        return;
+    }
+
+    _skeleton.joints.resize(skin.joints.size());
+    _skeleton.finalMatrixJoints.resize(skin.joints.size());
+    _skeleton.size = skin.joints.size() * sizeof(Matrix4D);
+
+    const Matrix4D * inverseBindMatrices;
+    {
+        loadAccessor<Matrix4D>(
+            model,
+            model.accessors[skin.inverseBindMatrices],
+            inverseBindMatrices
+        );
+    }
+
+    for (int i = 0; i < skin.joints.size(); i ++) {
+
+        Joint & joint = _skeleton.joints[i];
+        joint.nodeIndex = skin.joints[i];
+        joint.inverseBindMatrix = inverseBindMatrices[i];
+
+        const tinygltf::Node & node = model.nodes[joint.nodeIndex];
+        if (node.translation.size() == 3) {
+            joint.translation = glm::make_vec3(node.translation.data());
+        }
+        if (node.rotation.size() == 4) {
+            joint.rotation = glm::make_quat(node.rotation.data());
+        }
+        if (node.scale.size() == 3) {
+            joint.scale = glm::make_vec3(node.scale.data());
+        }
+        if (node.matrix.size() == 16) {
+            joint.undeformedMatrix = glm::make_mat4x4(node.matrix.data());
+        }
+        else {
+            joint.undeformedMatrix = Matrix4D(1.0f);
+        }
+        _skeleton.nodeToJoint[joint.nodeIndex] = i;
+        _skeleton.jointToNode[i] = joint.nodeIndex;
+    }
+
+    processJoint(model, 0);
+
+}
+
+void ModelGLTF::processJoint(const tinygltf::Model & model, int joint, int parent) {
+    _skeleton.joints[joint].parent = parent;
+    const auto & nodes = model.nodes[_skeleton.jointToNode[joint]];
+    for (int i = 0; i < nodes.children.size(); i ++) {
+        if (nodes.children[i] >= 0 && nodes.children[i] < model.nodes.size()) {
+            int child = _skeleton.nodeToJoint[nodes.children[i]];
+            _skeleton.joints[joint].children.push_back(child);
+            processJoint(model, child, joint);
+        }
+    }
+}
+
+void ModelGLTF::processAnimation(const tinygltf::Model & model) {
+    for (const auto & animModel : model.animations) {
+        Animation animation;
+        animation.name = animModel.name;
+        animation.samplers.resize(animModel.samplers.size());
+
+        for (int i = 0; i < animModel.samplers.size(); i ++) {
+            const tinygltf::AnimationSampler & samplerModel = animModel.samplers[i];
+            Sampler & sampler = animation.samplers[i];
+            sampler.method = LINEAR;
+            if (samplerModel.interpolation == "STEP") {
+                sampler.method = STEP;
+            }
+            else if (samplerModel.interpolation == "CUBICSPLINE") {
+                sampler.method = CUBICSPLINE;
+            }
+
+            // Load inputs
+            {
+                const float * timeStepBuffer;
+                const tinygltf::Accessor & accessor = model.accessors[samplerModel.input];
+                loadAccessor<float>(model, accessor, timeStepBuffer);
+                sampler.timeStep.resize(accessor.count);
+                for (int i = 0; i < accessor.count; i ++) {
+                    sampler.timeStep[i] = timeStepBuffer[i];
+                }
+            }   //END inputs
+            
+            // Load outputs 
+            {
+                const tinygltf::Accessor & accessor = model.accessors[samplerModel.output];
+                sampler.outputValues.resize(accessor.count);
+                if (accessor.type == TINYGLTF_TYPE_VEC3) {
+                    const Vector3D * buffer;
+                    loadAccessor<Vector3D>(model, accessor, buffer);
+                    for (int i = 0; i < accessor.count; i ++) {
+                        sampler.outputValues[i] = Vector4D(buffer[i], 0.0f);
+                    }
+                } else if (accessor.type == TINYGLTF_TYPE_VEC4) {
+                    const Vector4D * buffer;
+                    loadAccessor<Vector4D>(model, accessor, buffer);
+                    for (int i = 0; i < accessor.count; i ++) {
+                        sampler.outputValues[i] = Vector4D(buffer[i]);
+                    }
+                }
+            } //END outputs            
+        }
+
+        if (animation.samplers.size()) {
+            Sampler & sampler = animation.samplers[0];
+            if (sampler.timeStep.size() >= 2) {
+                animation.firstKeyFrameTime = sampler.timeStep.front();
+                animation.lastKeyFrameTime = sampler.timeStep.back();
+            }
+        }
+
+        int numChannels = animModel.channels.size();
+        animation.channels.resize(numChannels);
+        for (int i = 0; i < numChannels; i ++) {
+            const tinygltf::AnimationChannel channelModel = animModel.channels[i];
+            Channel & channel = animation.channels[i];
+            channel.samplerIndex = channelModel.sampler;
+            channel.node = channelModel.target_node;
+            if (channelModel.target_path == "translation") {
+                channel.path = TRANSLATION;
+            } 
+            else if (channelModel.target_path == "rotation") {
+                channel.path = ROTATION;
+            }
+            else if (channelModel.target_path == "scale") {
+                channel.path = SCALE;
+            }
+        }
+
+        _animations.push_back(animation);
+
+    }
+}
 
 }

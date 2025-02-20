@@ -12,14 +12,39 @@ layout(std140, binding = 0) uniform CameraBlock {
     mat4 cameraMatrix;
 };
 
+layout(std140, binding = 2) uniform JointsBlock {
+    mat4 jointsMatrices[1000];
+};
+
 out vec2 texCoord0;
 
 uniform mat4 model;
 uniform mat4 matNode;
 
 void main() {
-    vec3 currentPosition = vec3(model * matNode * vec4(aPos, 1.0f));
-    gl_Position = cameraMatrix * vec4(currentPosition, 1.0);
+
+    vec4 animatedPosition = vec4(0.0f);
+    mat4 jointTransform = mat4(0.0f);
+
+    for (int i = 0; i < 4; i ++) {
+        if (aWeight[i] == 0) {
+            continue;
+        }
+        if (aJoint[i] >= 1000) {
+            animatedPosition = vec4(aPos, 1.0f);
+            jointTransform = mat4(1.0f);
+            break;
+        }
+        mat4 jointMatrix = jointsMatrices[aJoint[i]];
+        vec4 localPosition = jointMatrix * vec4(aPos, 1.0f);
+        animatedPosition += localPosition * aWeight[i];
+        jointTransform += jointMatrix * aWeight[i];
+    }
+
+    //vec3 currentPosition = vec3(model * matNode * vec4(aPos, 1.0f));
+    //gl_Position = cameraMatrix * vec4(currentPosition, 1.0);
+
+    gl_Position = model * cameraMatrix * animatedPosition;
 
     texCoord0 = aTexCoord0;
 }

@@ -14,6 +14,8 @@
 #include <glad/gl.h>
 
 #include "ModelMesh.hpp"
+#include "Animation.hpp"
+#include "../opengl/UniformBufferObject.hpp"
 
 #include <unordered_map>
 
@@ -33,7 +35,7 @@ namespace wgame {
 class ModelGLTF {
 public:
     ModelGLTF(const std::string & filename, float scale = 1.0f);    
-    void draw(const Shader & shader) const;
+    void draw(const Shader & shader);
 private:
     int getVBOIndex(const std::string & key) const;
     void process(const tinygltf::Model & model);
@@ -47,9 +49,25 @@ private:
         const tinygltf::Model & model, 
         const tinygltf::Mesh & mesh, Matrix4D matrix
     );
+
+    void processSkeleton(const tinygltf::Model & model);
+    void processJoint(const tinygltf::Model & model, int joint, int parent=-1);
+    void processAnimation(const tinygltf::Model & model);
+
     float _scale;    
     ModelMesh _modelMesh;
+
+    Skeleton _skeleton;
+    std::vector<Animation> _animations;
+    UniformBufferObject * _ubo;
 };
+
+template<typename T>
+int loadAccessor(const tinygltf::Model & model, const tinygltf::Accessor & accessor, const T*& pointer) {
+    const tinygltf::BufferView & view = model.bufferViews[accessor.bufferView];
+    pointer = reinterpret_cast<const T *>(&(model.buffers[view.buffer].data[accessor.byteOffset + view.byteOffset]));
+    return accessor.componentType;
+}
 
 }
 
