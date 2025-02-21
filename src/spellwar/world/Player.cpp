@@ -16,6 +16,7 @@ Player::Player(const Hitbox & hitbox) : GameObject(hitbox) {
     _sensibility = 0.2f;
     _model = new AnimatedModelGLTF("assets/model/player.glb");
     _model -> setLoop(true);
+    _model -> setRotation(-90.0f, AXIS_X);
 }
 
 Player::~Player() {

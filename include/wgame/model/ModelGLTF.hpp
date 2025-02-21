@@ -36,6 +36,9 @@ class ModelGLTF {
 public:
     ModelGLTF();
     virtual ~ModelGLTF() = default;
+    void setTranslation(const Vector3D & translation);
+    void setScale(float scale);
+    void setRotation(float angleDeg, const Vector3D & axisRotation);
     void drawModelMesh(const Shader & shader);
     virtual void draw(const Shader & shader) = 0;
 protected:
@@ -52,8 +55,13 @@ protected:
         const tinygltf::Model & model, 
         const tinygltf::Mesh & mesh
     );    
-
+private:
+    void updateModel();    
     float _scale;    
+    float _angleDeg;
+    Vector3D _axisRotation;
+    Vector3D _translation;
+    Matrix4D _modelMatrix;
     ModelMesh _modelMesh;    
 };
 

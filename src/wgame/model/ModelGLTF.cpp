@@ -40,13 +40,40 @@ int ModelGLTF::getVBOIndex(const std::string & key) {
     return -1;
 }
 
-ModelGLTF::ModelGLTF() : _scale(1.0f) {}
+ModelGLTF::ModelGLTF() {
+    _scale = 1.0f;
+    _angleDeg = 0.0f;
+    _axisRotation = AXIS_X;
+    _translation = Vector3D(0.0f);
+    _modelMatrix = Matrix4D(1.0f);
+}
+
+void ModelGLTF::setTranslation(const Vector3D & translation) {
+    _translation = translation;
+    updateModel();
+}
+
+void ModelGLTF::setScale(float scale) {
+    _scale = scale;
+    updateModel();
+}
+
+void ModelGLTF::setRotation(float angleDeg, const Vector3D & axisRotation) {
+    _angleDeg = angleDeg;
+    _axisRotation = axisRotation;
+    updateModel();
+}
+
+void ModelGLTF::updateModel() {
+    Matrix4D M(1.0f);
+    _modelMatrix = glm::translate(M, _translation) *
+                   glm::rotate(M, glm::radians(_angleDeg), _axisRotation) *
+                   glm::scale(M, Vector3D(_scale));
+}
 
 void ModelGLTF::drawModelMesh(const Shader & shader) {
-    Matrix4D modelMatrix(1.0f);
-    modelMatrix = glm::scale(modelMatrix, Vector3D(_scale, _scale, _scale));
     shader.setUniform("textureDiffuse", 0);
-    shader.setUniform("model", modelMatrix);
+    shader.setUniform("model", _modelMatrix);
     _modelMesh.draw();
 }   
 
