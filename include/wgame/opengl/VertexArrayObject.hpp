@@ -7,11 +7,11 @@
  */
 
 
-#ifndef __VERTEX_ARRAY_H__
-#define __VERTEX_ARRAY_H__
+#ifndef __WG_VERTEX_ARRAY_H__
+#define __WG_VERTEX_ARRAY_H__
 
-#include <wgame/opengl/VertexBufferObject.hpp>
-#include <wgame/opengl/ElementBufferObject.hpp>
+#include "VertexBufferObject.hpp"
+#include "ElementBufferObject.hpp"
 
 #include <vector>
 

@@ -7,8 +7,8 @@
  */
 
 
-#ifndef __ATTRIBUTE_PROPERTIES_H__
-#define __ATTRIBUTE_PROPERTIES_H__
+#ifndef __WG_ATTRIBUTE_PROPERTIES_H__
+#define __WG_ATTRIBUTE_PROPERTIES_H__
 
 #include <glm/glm.hpp>
 

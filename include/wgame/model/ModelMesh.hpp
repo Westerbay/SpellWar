@@ -7,10 +7,10 @@
  */
 
 
-#ifndef __MODEL_MESH_H__
-#define __MODEL_MESH_H__
+#ifndef __WG_MODEL_MESH_H__
+#define __WG_MODEL_MESH_H__
 
-#include <glad/gl.h>
+#include <glad/glad.h>
 
 #include "../geometry/Geometry.hpp"
 #include "../opengl/VertexArrayObject.hpp"

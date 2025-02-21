@@ -7,8 +7,8 @@
  */
 
 
-#ifndef __TEXTURE_DRAWER_H__
-#define __TEXTURE_DRAWER_H__
+#ifndef __WG_TEXTURE_DRAWER_H__
+#define __WG_TEXTURE_DRAWER_H__
  
 #include "../opengl/VertexArrayObject.hpp"
 #include "../opengl/Shader.hpp"

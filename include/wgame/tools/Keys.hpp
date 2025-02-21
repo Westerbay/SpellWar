@@ -6,8 +6,8 @@
  * No warranties are provided, and any use of this code is at your own risk.
  */
 
-#ifndef GLFW_KEYS_H
-#define GLFW_KEYS_H
+#ifndef __WG_GLFW_KEYS_H__
+#define __WG_GLFW_KEYS_H__
 
 #include <GLFW/glfw3.h>
 

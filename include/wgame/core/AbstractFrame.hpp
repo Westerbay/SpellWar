@@ -7,17 +7,18 @@
  */
 
  
-#ifndef __ABSTRACT_FRAME_H__
-#define __ABSTRACT_FRAME_H__
+#ifndef __WG_ABSTRACT_FRAME_H__
+#define __WG_ABSTRACT_FRAME_H__
 
-#include <glad/gl.h>
+#include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include <wgame/geometry/Geometry.hpp>
-#include <wgame/opengl/Shader.hpp>
-#include <wgame/opengl/UniformBufferObject.hpp>
+
+#include "../tools/Inputs.hpp"
+#include "../geometry/Geometry.hpp"
+#include "../opengl/Shader.hpp"
+#include "../opengl/UniformBufferObject.hpp"
 #include "GameObjectGroup.hpp"
 #include "GameCamera.hpp"
-#include "../tools/Inputs.hpp"
 
 #include <string>
 #include <thread>

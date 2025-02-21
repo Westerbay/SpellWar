@@ -7,8 +7,8 @@
  */
 
 
-#ifndef __GAME_OBJECT_H__
-#define __GAME_OBJECT_H__
+#ifndef __WG_GAME_OBJECT_H__
+#define __WG_GAME_OBJECT_H__
 
 #include "../geometry/Cuboid.hpp"
 

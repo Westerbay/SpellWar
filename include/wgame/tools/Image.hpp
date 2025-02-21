@@ -7,8 +7,8 @@
  */
 
 
-#ifndef __IMAGE_H__
-#define __IMAGE_H__
+#ifndef __WG_IMAGE_H__
+#define __WG_IMAGE_H__
  
 #include <tinygltf/stb_image.h>
  

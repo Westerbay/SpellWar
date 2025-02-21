@@ -7,10 +7,10 @@
  */
 
 
-#ifndef __GAME_OBJECT_GROUP_H__
-#define __GAME_OBJECT_GROUP_H__
+#ifndef __WG_GAME_OBJECT_GROUP_H__
+#define __WG_GAME_OBJECT_GROUP_H__
 
-#include <wgame/core/GameObject.hpp>
+#include "GameObject.hpp"
 
 #include <unordered_set>
 

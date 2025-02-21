@@ -7,8 +7,8 @@
  */
 
 
-#ifndef __TEXTURE_2D_H__
-#define __TEXTURE_2D_H__
+#ifndef __WG_TEXTURE_2D_H__
+#define __WG_TEXTURE_2D_H__
 
 #include "IObjectGL.hpp"
 #include "../tools/Image.hpp"

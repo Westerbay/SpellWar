@@ -7,8 +7,8 @@
  */
 
 
-#ifndef __GEOMETRY_H__
-#define __GEOMETRY_H__
+#ifndef __WG_GEOMETRY_H__
+#define __WG_GEOMETRY_H__
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>

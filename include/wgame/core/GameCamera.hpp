@@ -7,13 +7,13 @@
  */
 
 
-#ifndef __GAME_CAMERA_H__
-#define __GAME_CAMERA_H__
+#ifndef __WG_GAME_CAMERA_H__
+#define __WG_GAME_CAMERA_H__
 
 #include "../geometry/Geometry.hpp"
 #include "../opengl/UniformBufferObject.hpp"
 #include "GameObject.hpp"
-#include <iostream>
+
 
 #define DEFAULT_FOV_DEG 45.0f
 #define DEFAULT_NEAR_PLANE 0.1f

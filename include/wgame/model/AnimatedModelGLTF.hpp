@@ -7,8 +7,8 @@
  */
 
 
-#ifndef __ANIMATED_MODEL_H__
-#define __ANIMATED_MODEL_H__
+#ifndef __WG_ANIMATED_MODEL_H__
+#define __WG_ANIMATED_MODEL_H__
  
 #include "ModelGLTF.hpp"
 #include "Animation.hpp"

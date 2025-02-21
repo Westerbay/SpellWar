@@ -7,8 +7,8 @@
  */
 
 
-#ifndef __STATIC_MODEL_H__
-#define __STATIC_MODEL_H__
+#ifndef __WG_STATIC_MODEL_H__
+#define __WG_STATIC_MODEL_H__
 
 #include "ModelGLTF.hpp"
 

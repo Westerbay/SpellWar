@@ -7,8 +7,8 @@
  */
 
 
-#ifndef __CUBOID_H__
-#define __CUBOID_H__
+#ifndef __WG_CUBOID_H__
+#define __WG_CUBOID_H__
 
 #include "Geometry.hpp"
 

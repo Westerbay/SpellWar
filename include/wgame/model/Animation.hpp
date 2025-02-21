@@ -7,8 +7,8 @@
  */
 
 
-#ifndef __ANIMATION_H__
-#define __ANIMATION_H__
+#ifndef __WG_ANIMATION_H__
+#define __WG_ANIMATION_H__
  
 #include "Skeleton.hpp"
 

@@ -7,8 +7,8 @@
  */
 
 
-#ifndef __COLOR_DRAWER_H__
-#define __COLOR_DRAWER_H__
+#ifndef __WG_COLOR_DRAWER_H__
+#define __WG_COLOR_DRAWER_H__
 
 #include "../opengl/VertexArrayObject.hpp"
 #include "../opengl/Shader.hpp"

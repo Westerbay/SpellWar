@@ -7,8 +7,8 @@
  */
 
 
-#ifndef __EBO_H__
-#define __EBO_H__
+#ifndef __WG_EBO_H__
+#define __WG_EBO_H__
 
 #include "BufferObject.hpp"
 

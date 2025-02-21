@@ -7,10 +7,10 @@
  */
 
 
-#ifndef __VBO_H__
-#define __VBO_H__
+#ifndef __WG_VBO_H__
+#define __WG_VBO_H__
 
-#include <wgame/opengl/BufferObject.hpp>
+#include "BufferObject.hpp"
 
 
 namespace wgame {

@@ -7,8 +7,8 @@
  */
 
 
-#ifndef __SHADER_GL_H__
-#define __SHADER_GL_H__
+#ifndef __WG_SHADER_GL_H__
+#define __WG_SHADER_GL_H__
 
 #include <wgame/opengl/IObjectGL.hpp>
 #include <glm/glm.hpp>

@@ -7,10 +7,11 @@
  */
 
 
-#ifndef __INPUTS_H__
-#define __INPUTS_H__
+#ifndef __WG_INPUTS_H__
+#define __WG_INPUTS_H__
 
 #include <GLFW/glfw3.h>
+
 #include "Keys.hpp"
 #include "../geometry/Geometry.hpp"
 

@@ -7,8 +7,8 @@
  */
 
 
-#ifndef __GAME_ENGINE_H__
-#define __GAME_ENGINE_H__
+#ifndef __WG_GAME_ENGINE_H__
+#define __WG_GAME_ENGINE_H__
 
 #include "AbstractGame.hpp"
 #include "AbstractFrame.hpp"

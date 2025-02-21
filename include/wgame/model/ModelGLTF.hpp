@@ -7,11 +7,10 @@
  */
 
 
-#ifndef __MODEL_H__
-#define __MODEL_H__
+#ifndef __WG_MODEL_H__
+#define __WG_MODEL_H__
 
 #include <tinygltf/tiny_gltf.h>
-#include <glad/gl.h>
 
 #include "ModelMesh.hpp"
 

@@ -7,11 +7,11 @@
  */
 
 
-#ifndef __BUFFER_OBJECT_GL_H__
-#define __BUFFER_OBJECT_GL_H__
+#ifndef __WG_BUFFER_OBJECT_GL_H__
+#define __WG_BUFFER_OBJECT_GL_H__
 
-#include <wgame/opengl/IObjectGL.hpp>
-#include <wgame/opengl/AttributeProperties.hpp>
+#include "IObjectGL.hpp"
+#include "AttributeProperties.hpp"
 
 #include <vector>
 

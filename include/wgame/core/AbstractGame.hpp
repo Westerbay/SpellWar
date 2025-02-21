@@ -7,8 +7,8 @@
  */
 
 
-#ifndef __ABSTRACT_GAME_H__
-#define __ABSTRACT_GAME_H__
+#ifndef __WG_ABSTRACT_GAME_H__
+#define __WG_ABSTRACT_GAME_H__
 
 #include "GameObjectGroup.hpp"
 #include "GameCamera.hpp"

@@ -7,8 +7,8 @@
  */
 
 
-#ifndef __SEKELETON_H__
-#define __SEKELETON_H__
+#ifndef __WG_SEKELETON_H__
+#define __WG_SEKELETON_H__
 
 #include "../geometry/Geometry.hpp"
 

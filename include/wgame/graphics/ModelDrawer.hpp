@@ -7,8 +7,8 @@
  */
 
 
-#ifndef __MODEL_DRAWER_H__
-#define __MODEL_DRAWER_H__
+#ifndef __WG_MODEL_DRAWER_H__
+#define __WG_MODEL_DRAWER_H__
 
 #include "../opengl/Shader.hpp"
 #include "../model/ModelGLTF.hpp"
