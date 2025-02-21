@@ -59,18 +59,18 @@ void AbstractFrame::setBackgroundColor(GLclampf red, GLclampf green, GLclampf bl
 	glClearColor(red, green, blue, 1.0f);
 }
 
-void AbstractFrame::initWorld(GameObjectGroup & world) {
+void AbstractFrame::initWorld(GameObjectGroup * world) {
 	if (_world != nullptr) {
 		throw std::runtime_error("World already initialized ! ");
 	}
-	_world = &world;
+	_world = world;
 }
 
-void AbstractFrame::initCamera(GameCamera & camera) {
+void AbstractFrame::initCamera(GameCamera * camera) {
 	if (_camera != nullptr) {
 		throw std::runtime_error("Camera already initialized ! ");
 	}
-	_camera = &camera;
+	_camera = camera;
 	_camera -> setSize(_size);
 }
 

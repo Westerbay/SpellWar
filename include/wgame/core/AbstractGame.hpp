@@ -28,8 +28,8 @@ public:
     virtual ~AbstractGame() = default;
     void setTPS(unsigned tps);
     GameCamera * getCamera();
-    void initWorld(GameObjectGroup & world);
-    void initCamera(GameCamera & camera);
+    void initWorld(GameObjectGroup * world);
+    void initCamera(GameCamera * camera);
     void start();
     void stop();    
     void addToWorld(GameObject * gameObject);

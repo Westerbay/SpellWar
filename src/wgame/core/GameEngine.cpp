@@ -15,14 +15,18 @@ namespace wgame {
 GameEngine::GameEngine(AbstractGame * game, AbstractFrame * frame) {
     _game = game;
     _frame = frame;
+    _camera = new GameCamera();
+    _world = new GameObjectGroup();
 }
 
 GameEngine::~GameEngine() {
+    delete _camera;
+    delete _world;
     delete _game;
     delete _frame;
 }
 
-static void gameLoop(AbstractGame * game) {
+void GameEngine::gameLoop(AbstractGame * game) {
     game -> start();
 }
 

@@ -38,8 +38,8 @@ public:
 	virtual ~AbstractFrame();
 	void setCursorActive(bool cursorActive);
 	void setBackgroundColor(GLclampf red, GLclampf green, GLclampf blue);
-	void initWorld(GameObjectGroup & world);
-	void initCamera(GameCamera & camera);
+	void initWorld(GameObjectGroup * world);
+	void initCamera(GameCamera * camera);
 	void start();
 	void stop();
 	virtual void renderHUD() = 0;

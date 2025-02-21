@@ -27,17 +27,17 @@ GameCamera * AbstractGame::getCamera() {
     return _camera;
 }
 
-void AbstractGame::initWorld(GameObjectGroup & world) {
+void AbstractGame::initWorld(GameObjectGroup * world) {
 	if (_world != nullptr) {
 		throw std::runtime_error("World already initialized ! ");
 	}
-	_world = &world;
+	_world = world;
 }
-void AbstractGame::initCamera(GameCamera & camera) {
+void AbstractGame::initCamera(GameCamera * camera) {
 	if (_camera != nullptr) {
 		throw std::runtime_error("Camera already initialized ! ");
 	}
-	_camera = &camera;
+	_camera = camera;
 }
 
 void AbstractGame::start() {

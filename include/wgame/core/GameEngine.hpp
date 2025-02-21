@@ -26,8 +26,9 @@ public:
     ~GameEngine();
     void start();
 private:
-    GameCamera _camera;
-    GameObjectGroup _world;   
+    static void gameLoop(AbstractGame * game);
+    GameCamera * _camera;
+    GameObjectGroup * _world;   
     AbstractGame * _game;
     AbstractFrame * _frame;     
 };
