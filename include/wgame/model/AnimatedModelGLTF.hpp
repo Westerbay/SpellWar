@@ -34,7 +34,11 @@ public:
     void draw(const Shader & shader) override;    
 private:
     void processSkeleton(const tinygltf::Model & model);
-    void processJoint(const tinygltf::Model & model, int joint, int parent);
+    void processJoint(
+        const tinygltf::Model & model, 
+        int joint, int parent,
+        const std::vector<int> & nodeIndices
+    );
     void processAnimation(const tinygltf::Model & model);
 
     UniformBufferObject * _ubo;

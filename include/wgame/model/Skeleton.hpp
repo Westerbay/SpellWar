@@ -22,24 +22,21 @@
 namespace wgame {
 
 struct Joint {
-    int nodeIndex;
-    int parent;
-    std::vector<int> children;
-
     Matrix4D undeformedMatrix;
-    Matrix4D inverseBindMatrix;
     Vector3D translation;
     Vector3D scale;
     Quaternion rotation;
-
     Matrix4D getTransformationMatrix() const;
 };
 
 struct Skeleton {
+    size_t jointMatricesByteLength;
+    std::map<int, std::vector<int>> jointChildren;
+    std::map<int, int> jointParents;
     std::map<int, int> nodeToJoint;
     std::vector<Joint> joints;    
-    std::vector<Matrix4D> jointMatrices;
-    size_t jointMatricesByteLength;
+    std::vector<Matrix4D> jointMatrices;    
+    std::vector<Matrix4D> jointInverseBindMatrices;
 
     void update();
     void updateJoint(int jointIndex);

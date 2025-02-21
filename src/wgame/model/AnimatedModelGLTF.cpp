@@ -117,6 +117,7 @@ void AnimatedModelGLTF::processSkeleton(const tinygltf::Model & model) {
     size_t size = skin.joints.size();
     _skeleton.joints.resize(size);
     _skeleton.jointMatrices.resize(size);
+    _skeleton.jointInverseBindMatrices.resize(size);
     _skeleton.jointMatricesByteLength = size * sizeof(Matrix4D);
     
     const Matrix4D * inverseBindMatrices;
@@ -128,12 +129,12 @@ void AnimatedModelGLTF::processSkeleton(const tinygltf::Model & model) {
         );
     }
 
+    std::vector<int> nodeIndices(size);
     for (int i = 0; i < size; i ++) {
         Joint & joint = _skeleton.joints[i];
-        joint.nodeIndex = skin.joints[i];
-        joint.inverseBindMatrix = inverseBindMatrices[i];
-
-        const tinygltf::Node & node = model.nodes[joint.nodeIndex];
+        nodeIndices[i] = skin.joints[i];
+        _skeleton.jointInverseBindMatrices[i] = inverseBindMatrices[i];
+        const tinygltf::Node & node = model.nodes[skin.joints[i]];
         if (node.translation.size() == 3) {
             joint.translation = glm::make_vec3(node.translation.data());
         }
@@ -158,20 +159,24 @@ void AnimatedModelGLTF::processSkeleton(const tinygltf::Model & model) {
         else {
             joint.undeformedMatrix = Matrix4D(1.0f);
         }
-        _skeleton.nodeToJoint[joint.nodeIndex] = i;
+        _skeleton.nodeToJoint[skin.joints[i]] = i;
     }
    
-    processJoint(model, ROOT_JOINT, NO_PARENT);
+    processJoint(model, ROOT_JOINT, NO_PARENT, nodeIndices);
 }
 
-void AnimatedModelGLTF::processJoint(const tinygltf::Model & model, int joint, int parent) {
-    _skeleton.joints[joint].parent = parent;
-    const auto & nodes = model.nodes[_skeleton.joints[joint].nodeIndex];
+void AnimatedModelGLTF::processJoint(
+    const tinygltf::Model & model, 
+    int joint, int parent, 
+    const std::vector<int> & nodeIndices
+) {
+    _skeleton.jointParents[joint] = parent;
+    const auto & nodes = model.nodes[nodeIndices[joint]];
     for (int i = 0; i < nodes.children.size(); i ++) {
         if (nodes.children[i] >= 0 && nodes.children[i] < model.nodes.size()) {
             int child = _skeleton.nodeToJoint[nodes.children[i]];
-            _skeleton.joints[joint].children.push_back(child);
-            processJoint(model, child, joint);
+            _skeleton.jointChildren[joint].push_back(child);
+            processJoint(model, child, joint, nodeIndices);
         }
     }
 }

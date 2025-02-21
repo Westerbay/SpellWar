@@ -25,17 +25,17 @@ void Skeleton::update() {
     }
     updateJoint(ROOT_JOINT);
     for (int i = 0; i < joints.size(); i ++) {
-        jointMatrices[i] = jointMatrices[i] * joints[i].inverseBindMatrix;
+        jointMatrices[i] = jointMatrices[i] * jointInverseBindMatrices[i];
     }
 }
 
 void Skeleton::updateJoint(int jointIndex) {
     Joint & joint = joints[jointIndex];
-    int parent = joint.parent;
+    int parent = jointParents[jointIndex];
     if (parent != NO_PARENT) {
         jointMatrices[jointIndex] = jointMatrices[parent] * jointMatrices[jointIndex];
     }
-    for (int child: joint.children) {
+    for (int child: jointChildren[jointIndex]) {
         updateJoint(child);
     }
 }
