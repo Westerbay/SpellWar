@@ -11,10 +11,20 @@
 
 
 namespace wgame {
+
+std::weak_ptr<TextureDrawer::TextureDrawerShader> TextureDrawer::_uniqueShader;
  
+TextureDrawer::TextureDrawer() {
+    _shader = _uniqueShader.lock();
+    if (!_shader) {
+        _shader = std::make_shared<TextureDrawerShader>();
+        _uniqueShader = _shader;
+    }
+}
+
 void TextureDrawer::setCuboidData(const Cuboid & cuboid) {
-    _shader.bind();
-    _shader.setUniform("colorSampler", 0);
+    _shader -> bind();
+    _shader -> setUniform("colorSampler", 0);
     std::vector<Point3D> vertices = cuboid.getVertices();
     std::vector<Point2D> texCoords = {
         {0, 0}, {1, 0}, {1, 1}, {0, 1}, 
@@ -36,7 +46,7 @@ void TextureDrawer::setCuboidData(const Cuboid & cuboid) {
     _vao.setEBO(elements);
     _vao.setVBO(VBO_VERTEX, vertices);
     _vao.setVBO(VBO_TEXCOORD_0, texCoords);
-    _shader.unbind();
+    _shader -> unbind();
 }
 
 void TextureDrawer::setTexCoordFixed(const Cuboid & cuboid, const Vector2D & size) {
@@ -78,11 +88,11 @@ void TextureDrawer::drawCuboid(const Cuboid & cuboid, const Texture2D & texture)
 }
 
 void TextureDrawer::draw(const Texture2D & texture) {
-    _shader.bind();
+    _shader -> bind();
     texture.bind();
     _vao.draw(DRAW_TRIANGLES);
     texture.unbind();
-    _shader.unbind();
+    _shader -> unbind();
 }
  
 TextureDrawer::TextureDrawerShader::TextureDrawerShader() : 

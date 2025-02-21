@@ -12,10 +12,20 @@
 
 namespace wgame {
 
+std::weak_ptr<ModelDrawer::ModelDrawerShader> ModelDrawer::_uniqueShader;
+
+ModelDrawer::ModelDrawer() {
+    _shader = _uniqueShader.lock();
+    if (!_shader) {
+        _shader = std::make_shared<ModelDrawerShader>();
+        _uniqueShader = _shader;
+    }
+}
+
 void ModelDrawer::draw(ModelGLTF & model) const {
-    _shader.bind();
-    model.draw(_shader);
-    _shader.unbind();
+    _shader -> bind();
+    model.draw(*_shader);
+    _shader -> unbind();
 }
 
 ModelDrawer::ModelDrawerShader::ModelDrawerShader() : 

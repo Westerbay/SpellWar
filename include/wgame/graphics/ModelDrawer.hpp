@@ -14,6 +14,8 @@
 #include "../model/ModelGLTF.hpp"
 #include "../geometry/Geometry.hpp"
 
+#include <memory>
+
 #define MODEL_DRAWER_VERTEX_SHADER_PATH "shaders/modelDrawer.vert"
 #define MODEL_DRAWER_FRAGMENT_SHADER_PATH "shaders/modelDrawer.frag"
 
@@ -22,6 +24,7 @@ namespace wgame {
 
 class ModelDrawer {
 public:
+    ModelDrawer();
     void draw(ModelGLTF & model) const;
 protected:
     class ModelDrawerShader : public Shader {
@@ -29,7 +32,8 @@ protected:
         ModelDrawerShader(); 
     };
 private:
-    ModelDrawerShader _shader;
+    static std::weak_ptr<ModelDrawerShader> _uniqueShader;
+    std::shared_ptr<ModelDrawerShader> _shader;
 };
 
 }

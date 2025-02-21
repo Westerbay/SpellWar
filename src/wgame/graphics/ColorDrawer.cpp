@@ -12,6 +12,16 @@
 
 namespace wgame {
 
+std::weak_ptr<ColorDrawer::ColorDrawerShader> ColorDrawer::_uniqueShader;
+
+ColorDrawer::ColorDrawer() {
+    _shader = _uniqueShader.lock();
+    if (!_shader) {
+        _shader = std::make_shared<ColorDrawerShader>();
+        _uniqueShader = _shader;
+    }
+}
+
 void ColorDrawer::setDrawCuboidData(const Cuboid & cuboid, const ColorRGB & color) {
     std::vector<Point3D> vertices = cuboid.getVertices();
     std::vector<ColorRGB> colors = {
@@ -58,15 +68,15 @@ void ColorDrawer::fillCuboid(const Cuboid & cuboid, const ColorRGB & color) {
 }
 
 void ColorDrawer::draw() {
-    _shader.bind();
+    _shader -> bind();
     _vao.draw(DRAW_LINES);
-    _shader.unbind();
+    _shader -> unbind();
 }
 
 void ColorDrawer::fill() {
-    _shader.bind();
+    _shader -> bind();
     _vao.draw(DRAW_TRIANGLES);
-    _shader.unbind();
+    _shader -> unbind();
 }
 
 ColorDrawer::ColorDrawerShader::ColorDrawerShader() : 

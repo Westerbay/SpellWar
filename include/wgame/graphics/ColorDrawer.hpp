@@ -14,6 +14,8 @@
 #include "../opengl/Shader.hpp"
 #include "../geometry/Cuboid.hpp"
 
+#include <memory>
+
 #define COLOR_DRAWER_VERTEX_SHADER_PATH "shaders/colorDrawer.vert"
 #define COLOR_DRAWER_FRAGMENT_SHADER_PATH "shaders/colorDrawer.frag"
 
@@ -22,6 +24,7 @@ namespace wgame {
 
 class ColorDrawer {
 public:
+    ColorDrawer();
     void setDrawCuboidData(const Cuboid & cuboid, const ColorRGB & color = ColorRGB(0.0f));
     void setFillCuboidData(const Cuboid & cuboid, const ColorRGB & color);
     void drawCuboid(const Cuboid & cuboid, const ColorRGB & color = ColorRGB(0.0f));
@@ -34,7 +37,8 @@ protected:
         ColorDrawerShader();
     };
 private:
-    ColorDrawerShader _shader;
+    static std::weak_ptr<ColorDrawerShader> _uniqueShader;
+    std::shared_ptr<ColorDrawerShader> _shader;
     VertexArrayObject _vao;
 };
 

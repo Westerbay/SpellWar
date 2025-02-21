@@ -14,6 +14,8 @@
 #include "../opengl/Shader.hpp"
 #include "../opengl/Texture2D.hpp"
 #include "../geometry/Cuboid.hpp"
+
+#include <memory>
  
 #define TEXTURE_DRAWER_VERTEX_SHADER_PATH "shaders/textureDrawer.vert"
 #define TEXTURE_DRAWER_FRAGMENT_SHADER_PATH "shaders/textureDrawer.frag"
@@ -23,6 +25,7 @@ namespace wgame {
  
 class TextureDrawer {
 public:
+    TextureDrawer();
     void setCuboidData(const Cuboid & cuboid);
     void setTexCoordFixed(const Cuboid & cuboid, const Vector2D & size);
     void setTexCoordFlex(const Vector2D & uvScale);
@@ -34,7 +37,8 @@ protected:
         TextureDrawerShader();
     };
 private:
-    TextureDrawerShader _shader;
+    static std::weak_ptr<TextureDrawerShader> _uniqueShader;
+    std::shared_ptr<TextureDrawerShader> _shader;
     VertexArrayObject _vao;
 };
  
