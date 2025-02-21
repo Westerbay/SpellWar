@@ -12,16 +12,16 @@
 
 namespace wgame {
 
-Matrix4D Joint::getTransformationMatrix() const {
-    return glm::translate(Matrix4D(1.0f), translation) *
-           glm::mat4(rotation) * 
-           glm::scale(Matrix4D(1.0f), scale) *
-           undeformedMatrix;
+Matrix4D Skeleton::getTransformationMatrix(Joint & joint) const {
+    return glm::translate(Matrix4D(1.0f), joint.translation) *
+           glm::mat4(joint.rotation) * 
+           glm::scale(Matrix4D(1.0f), joint.scale) *
+           joint.undeformedMatrix;
 }
 
 void Skeleton::update() {
     for (int i = 0; i < joints.size(); i ++) {
-        jointMatrices[i] = joints[i].getTransformationMatrix();
+        jointMatrices[i] = getTransformationMatrix(joints[i]);
     }
     updateJoint(ROOT_JOINT);
     for (int i = 0; i < joints.size(); i ++) {

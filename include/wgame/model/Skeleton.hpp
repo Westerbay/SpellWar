@@ -25,8 +25,7 @@ struct Joint {
     Matrix4D undeformedMatrix;
     Vector3D translation;
     Vector3D scale;
-    Quaternion rotation;
-    Matrix4D getTransformationMatrix() const;
+    Quaternion rotation;    
 };
 
 struct Skeleton {
@@ -38,6 +37,7 @@ struct Skeleton {
     std::vector<Matrix4D> jointMatrices;    
     std::vector<Matrix4D> jointInverseBindMatrices;
 
+    Matrix4D getTransformationMatrix(Joint & joint) const;
     void update();
     void updateJoint(int jointIndex);
 };
