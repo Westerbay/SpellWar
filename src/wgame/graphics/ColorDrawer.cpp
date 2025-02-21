@@ -31,7 +31,7 @@ void ColorDrawer::setDrawCuboidData(const Cuboid & cuboid, const ColorRGB & colo
 void ColorDrawer::setFillCuboidData(const Cuboid & cuboid, const ColorRGB & color) {
     std::vector<Point3D> vertices = cuboid.getVertices();
     std::vector<ColorRGB> colors;
-    for (int i = 0; i < vertices.size(); i ++) {
+    for (size_t i = 0; i < vertices.size(); i ++) {
         colors.push_back(color);
     }
     std::vector<unsigned> elements = {

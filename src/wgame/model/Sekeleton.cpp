@@ -20,17 +20,16 @@ Matrix4D Skeleton::getTransformationMatrix(Joint & joint) const {
 }
 
 void Skeleton::update() {
-    for (int i = 0; i < joints.size(); i ++) {
+    for (size_t i = 0; i < joints.size(); i ++) {
         jointMatrices[i] = getTransformationMatrix(joints[i]);
     }
     updateJoint(ROOT_JOINT);
-    for (int i = 0; i < joints.size(); i ++) {
+    for (size_t i = 0; i < joints.size(); i ++) {
         jointMatrices[i] = jointMatrices[i] * jointInverseBindMatrices[i];
     }
 }
 
 void Skeleton::updateJoint(int jointIndex) {
-    Joint & joint = joints[jointIndex];
     int parent = jointParents[jointIndex];
     if (parent != NO_PARENT) {
         jointMatrices[jointIndex] = jointMatrices[parent] * jointMatrices[jointIndex];

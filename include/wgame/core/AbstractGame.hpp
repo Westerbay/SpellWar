@@ -15,6 +15,7 @@
 
 #include <thread>
 #include <chrono>
+#include <stdexcept>
 
 
 #define DEFAULT_TPS 60

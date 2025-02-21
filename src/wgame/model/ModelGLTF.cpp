@@ -55,8 +55,8 @@ void ModelGLTF::drawModelMesh(const Shader & shader) {
 void ModelGLTF::process(const tinygltf::Model & model) {
     _modelMesh.bind();
     const tinygltf::Scene & scene = model.scenes[model.defaultScene];
-    for (int i = 0; i < scene.nodes.size(); ++ i) {
-        if (scene.nodes[i] >= 0 && scene.nodes[i] < model.nodes.size()) {
+    for (size_t i = 0; i < scene.nodes.size(); ++ i) {
+        if (scene.nodes[i] >= 0) {
             processNodes(model, model.nodes[scene.nodes[i]]);
         }
     }
@@ -67,11 +67,11 @@ void ModelGLTF::processNodes(
     const tinygltf::Model & model,
     const tinygltf::Node & node
 ) {
-    if (node.mesh >= 0 && node.mesh < model.meshes.size()) {
+    if (node.mesh >= 0) {
         processMesh(model, model.meshes[node.mesh]);
     }
-    for (int i = 0; i < node.children.size(); ++ i) {
-        if (node.children[i] >= 0 && node.children[i] < model.nodes.size()) {
+    for (size_t i = 0; i < node.children.size(); ++ i) {
+        if (node.children[i] >= 0) {
             processNodes(model, model.nodes[node.children[i]]);
         }
     }

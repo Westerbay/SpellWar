@@ -130,7 +130,7 @@ void AnimatedModelGLTF::processSkeleton(const tinygltf::Model & model) {
     }
 
     std::vector<int> nodeIndices(size);
-    for (int i = 0; i < size; i ++) {
+    for (size_t i = 0; i < size; i ++) {
         Joint & joint = _skeleton.joints[i];
         nodeIndices[i] = skin.joints[i];
         _skeleton.jointInverseBindMatrices[i] = inverseBindMatrices[i];
@@ -172,8 +172,8 @@ void AnimatedModelGLTF::processJoint(
 ) {
     _skeleton.jointParents[joint] = parent;
     const auto & nodes = model.nodes[nodeIndices[joint]];
-    for (int i = 0; i < nodes.children.size(); i ++) {
-        if (nodes.children[i] >= 0 && nodes.children[i] < model.nodes.size()) {
+    for (size_t i = 0; i < nodes.children.size(); i ++) {
+        if (nodes.children[i] >= 0) {
             int child = _skeleton.nodeToJoint[nodes.children[i]];
             _skeleton.jointChildren[joint].push_back(child);
             processJoint(model, child, joint, nodeIndices);
@@ -185,7 +185,7 @@ void AnimatedModelGLTF::processAnimation(const tinygltf::Model & model) {
     for (const auto & animModel : model.animations) {
         std::vector<Animation::Sampler> samplers(animModel.samplers.size());
 
-        for (int i = 0; i < animModel.samplers.size(); i ++) {
+        for (size_t i = 0; i < animModel.samplers.size(); i ++) {
             const tinygltf::AnimationSampler & samplerModel = animModel.samplers[i];
             Animation::Sampler & sampler = samplers[i];
             sampler.interpolation = Animation::LINEAR;
@@ -202,7 +202,7 @@ void AnimatedModelGLTF::processAnimation(const tinygltf::Model & model) {
                 const tinygltf::Accessor & accessor = model.accessors[samplerModel.input];
                 loadAccessor<float>(model, accessor, elapsedTimesBuffer);
                 sampler.elapsedTimes.resize(accessor.count);
-                for (int i = 0; i < accessor.count; i ++) {
+                for (size_t i = 0; i < accessor.count; i ++) {
                     sampler.elapsedTimes[i] = elapsedTimesBuffer[i];
                 }
             }   
@@ -214,13 +214,13 @@ void AnimatedModelGLTF::processAnimation(const tinygltf::Model & model) {
                 if (accessor.type == TINYGLTF_TYPE_VEC3) {
                     const Vector3D * buffer;
                     loadAccessor<Vector3D>(model, accessor, buffer);
-                    for (int i = 0; i < accessor.count; i ++) {
+                    for (size_t i = 0; i < accessor.count; i ++) {
                         sampler.pathValues[i] = Vector4D(buffer[i], 0.0f);
                     }
                 } else if (accessor.type == TINYGLTF_TYPE_VEC4) {
                     const Vector4D * buffer;
                     loadAccessor<Vector4D>(model, accessor, buffer);
-                    for (int i = 0; i < accessor.count; i ++) {
+                    for (size_t i = 0; i < accessor.count; i ++) {
                         sampler.pathValues[i] = Vector4D(buffer[i]);
                     }
                 }
@@ -229,7 +229,7 @@ void AnimatedModelGLTF::processAnimation(const tinygltf::Model & model) {
 
         size_t numChannels = animModel.channels.size();
         std::vector<Animation::Channel> channels(numChannels);
-        for (int i = 0; i < numChannels; i ++) {
+        for (size_t i = 0; i < numChannels; i ++) {
             const tinygltf::AnimationChannel channelModel = animModel.channels[i];
             Animation::Channel & channel = channels[i];
             channel.samplerIndex = channelModel.sampler;
