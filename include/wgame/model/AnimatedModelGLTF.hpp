@@ -25,12 +25,12 @@ public:
     ~AnimatedModelGLTF();
     std::vector<std::string> getAnimationNames() const;
     std::string getCurrentAnimation() const;
+    void setTimeAcceleration(float elapsedTime);
     void setLoop(bool loop);
     bool isRunning() const;
     void start();
     void stop();
     void switchAnimation(std::string name, bool loop = false);
-    void update(float elapsedTime = DEFAULT_ELAPSED_TIME);
     void draw(const Shader & shader) override;    
 private:
     void processSkeleton(const tinygltf::Model & model);
@@ -41,6 +41,7 @@ private:
     );
     void processAnimation(const tinygltf::Model & model);
 
+    float _timeAcceleration;
     UniformBufferObject * _ubo;
     Animation * _currentAnimation;
     Skeleton _skeleton;

@@ -24,6 +24,7 @@ Animation::Animation(
     }
     _currentKeyFrameTime = 0.0f;
     _repeat = false;
+    _lastFrame = Inputs::getTime();
 }
 
 std::string Animation::getName() const {
@@ -44,13 +45,18 @@ void Animation::start() {
 
 void Animation::stop() {
     _currentKeyFrameTime = _lastKeyFrameTime;
+    _repeat = false;
 }
 
 void Animation::update(Skeleton & skeleton, float elapsedTime) {
     if (!isRunning()) {
         return;
     }
-    _currentKeyFrameTime += elapsedTime;
+    if (Inputs::getTime() - _lastFrame < KEYFRAME_TIME_SECOND) {
+        return;
+    }
+    _lastFrame = Inputs::getTime();
+    _currentKeyFrameTime += KEYFRAME_TIME_SECOND * elapsedTime;
     if (_repeat && _currentKeyFrameTime > _lastKeyFrameTime) {
         _currentKeyFrameTime = _firstKeyFrameTime;
     }

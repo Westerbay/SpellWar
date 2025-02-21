@@ -30,15 +30,19 @@ void Inputs::record() {
     _mousePosition.y = (float) mouseY;
 }
 
-Point2D Inputs::getMousePosition() const {
+double Inputs::getTime() {
+    return glfwGetTime();
+}
+
+Point2D Inputs::getMousePosition() {
     return _mousePosition;
 }
 
-Vector2D Inputs::getMouseMovement() const {
+Vector2D Inputs::getMouseMovement() {
     return _lastMousePosition - _mousePosition;
 }
 
-bool Inputs::isKeyPressed(Key key) const {
+bool Inputs::isKeyPressed(Key key) {
     return glfwGetKey(_frame, key) == PRESS;
 }
 

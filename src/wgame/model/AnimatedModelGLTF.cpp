@@ -39,6 +39,8 @@ AnimatedModelGLTF::AnimatedModelGLTF(const std::string & filename) {
         throw std::runtime_error("Cannot open model !");
     }
 
+    _timeAcceleration = 1.0f;
+
     processSkeleton(model);
     processAnimation(model);
     process(model);
@@ -64,6 +66,10 @@ std::string AnimatedModelGLTF::getCurrentAnimation() const {
     return _currentAnimation -> getName();
 }
 
+void AnimatedModelGLTF::setTimeAcceleration(float timeAcceleration) {
+    _timeAcceleration = timeAcceleration;
+}
+
 void AnimatedModelGLTF::setLoop(bool loop) {
     _currentAnimation -> setLoop(loop);
 }
@@ -82,17 +88,13 @@ void AnimatedModelGLTF::stop() {
 
 void AnimatedModelGLTF::switchAnimation(std::string name, bool loop) {
     _currentAnimation -> stop();
-    _currentAnimation -> setLoop(false);
     _currentAnimation = &_animations[_nameToAnimation[name]];
     _currentAnimation -> setLoop(loop);
     _currentAnimation -> start();
 }
 
-void AnimatedModelGLTF::update(float elapsedTime) {
-    _currentAnimation -> update(_skeleton, elapsedTime);
-}
-
 void AnimatedModelGLTF::draw(const Shader & shader) {
+    _currentAnimation -> update(_skeleton, _timeAcceleration);
     _ubo -> bind();
     _ubo -> setData(_skeleton.jointMatrices.data(), _skeleton.jointMatricesByteLength);
     shader.setUniform("isAnimated", 1);

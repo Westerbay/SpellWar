@@ -26,9 +26,10 @@ class Inputs {
 public:
     static void initContext(GLFWwindow * frame);
     static void record();
-    Point2D getMousePosition() const;
-    Vector2D getMouseMovement() const;
-    bool isKeyPressed(Key key) const; 
+    static double getTime();
+    static Point2D getMousePosition();
+    static Vector2D getMouseMovement();
+    static bool isKeyPressed(Key key); 
 private:
     static GLFWwindow * _frame;
     static Point2D _mousePosition;

@@ -55,6 +55,5 @@ void Player::update() {
 }
 
 void Player::render() {
-    _model -> update();
     _modelDrawer.draw(*_model);
 }

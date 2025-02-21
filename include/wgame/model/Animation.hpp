@@ -11,10 +11,11 @@
 #define __WG_ANIMATION_H__
  
 #include "Skeleton.hpp"
+#include "../tools/Inputs.hpp"
 
 #include <iostream>
 
-#define DEFAULT_ELAPSED_TIME 0.015f
+#define KEYFRAME_TIME_SECOND 0.01
  
  
 namespace wgame {
@@ -78,6 +79,7 @@ private:
     std::string _name;
     std::vector<Sampler> _samplers;
     std::vector<Channel> _channels;
+    double _lastFrame;
     float _firstKeyFrameTime;
     float _lastKeyFrameTime;        
     float _currentKeyFrameTime;
