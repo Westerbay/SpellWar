@@ -56,7 +56,7 @@ void Animation::update(Skeleton & skeleton, float elapsedTime) {
         return;
     }
     _lastFrame = System::getTime();
-    _currentKeyFrameTime += KEYFRAME_TIME_SECOND * elapsedTime;
+    _currentKeyFrameTime += (float) KEYFRAME_TIME_SECOND * elapsedTime;
     if (_repeat && _currentKeyFrameTime > _lastKeyFrameTime) {
         _currentKeyFrameTime = _firstKeyFrameTime;
     }
@@ -101,7 +101,7 @@ int Animation::findElpasedTimeIndex(
 
     int mid;
     int left = 0;
-    int right = elapsedTimes.size() - 1;    
+    int right = (int) elapsedTimes.size() - 1;    
     while (left <= right) {
         mid = (left + right) / 2;
         if (elapsedTimes[mid] <= _currentKeyFrameTime && _currentKeyFrameTime <= elapsedTimes[mid + 1]) {

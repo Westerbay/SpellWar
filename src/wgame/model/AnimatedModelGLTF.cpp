@@ -158,7 +158,7 @@ void AnimatedModelGLTF::processSkeleton(const tinygltf::Model & model) {
         else {
             joint.undeformedMatrix = Matrix4D(1.0f);
         }
-        _skeleton.nodeToJoint[skin.joints[i]] = i;
+        _skeleton.nodeToJoint[skin.joints[i]] = (int) i;
     }
    
     processJoint(model, ROOT_JOINT, NO_PARENT, nodeIndices);
@@ -245,7 +245,7 @@ void AnimatedModelGLTF::processAnimation(const tinygltf::Model & model) {
         }
 
         _animations.push_back(Animation(animModel.name, samplers, channels));
-        _nameToAnimation[animModel.name] = _animations.size() - 1;
+        _nameToAnimation[animModel.name] = (unsigned) _animations.size() - 1;
     }
 }
 
