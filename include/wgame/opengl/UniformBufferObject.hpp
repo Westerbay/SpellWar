@@ -17,8 +17,10 @@ namespace wgame {
  
 class UniformBufferObject : public IObjectGL {
 public:
-    UniformBufferObject(GLsizeiptr size, GLuint bindingPoint, GLenum usage = GL_STATIC_DRAW);
+    UniformBufferObject();
     ~UniformBufferObject();
+    void configure(size_t size, GLenum usage = GL_STATIC_DRAW) const;
+    void setBindingPoint(GLuint bindingPoint) const;
     void setData(const void * data, GLsizeiptr size, GLintptr offset = 0) const;
     void bind() const override;
     void unbind() const override;

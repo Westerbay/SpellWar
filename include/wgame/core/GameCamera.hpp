@@ -34,13 +34,8 @@ public:
     void attachGameObject(GameObject * gameObject);
     void update() override;
     void render() override;
-protected:
-    class UniformCamera : public UniformBufferObject {
-    public:
-        UniformCamera();
-    };
 private:
-    UniformCamera _ubo;
+    UniformBufferObject _ubo;
     float _FOVDeg;    
     float _nearPlane;
     float _farPlane;

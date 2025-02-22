@@ -22,7 +22,6 @@ namespace wgame {
 class AnimatedModelGLTF : public ModelGLTF {
 public:
     AnimatedModelGLTF(const std::string & filename);
-    ~AnimatedModelGLTF();
     std::vector<std::string> getAnimationNames() const;
     std::string getCurrentAnimation() const;
     void setTimeAcceleration(float elapsedTime);
@@ -42,7 +41,7 @@ private:
     void processAnimation(const tinygltf::Model & model);
 
     float _timeAcceleration;
-    UniformBufferObject * _ubo;
+    UniformBufferObject _ubo;
     Animation * _currentAnimation;
     Skeleton _skeleton;
     std::vector<Animation> _animations;

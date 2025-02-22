@@ -46,12 +46,9 @@ AnimatedModelGLTF::AnimatedModelGLTF(const std::string & filename) {
     process(model);
 
     _currentAnimation = &_animations.front();
-    _ubo = new UniformBufferObject(_skeleton.jointMatricesByteLength, BINDING_JOINT_MATRICES);
+    _ubo.configure(_skeleton.jointMatricesByteLength);
+    _ubo.setBindingPoint(BINDING_JOINT_MATRICES);
     _skeleton.update();
-}
-
-AnimatedModelGLTF::~AnimatedModelGLTF() {
-    delete _ubo;
 }
 
 std::vector<std::string> AnimatedModelGLTF::getAnimationNames() const {
@@ -95,11 +92,11 @@ void AnimatedModelGLTF::switchAnimation(std::string name, bool loop) {
 
 void AnimatedModelGLTF::draw(const Shader & shader) {
     _currentAnimation -> update(_skeleton, _timeAcceleration);
-    _ubo -> bind();
-    _ubo -> setData(_skeleton.jointMatrices.data(), _skeleton.jointMatricesByteLength);
+    _ubo.bind();
+    _ubo.setData(_skeleton.jointMatrices.data(), _skeleton.jointMatricesByteLength);
     shader.setUniform("isAnimated", 1);
     drawModelMesh(shader);
-    _ubo -> unbind();
+    _ubo.unbind();
 }   
 
 void AnimatedModelGLTF::processSkeleton(const tinygltf::Model & model) {

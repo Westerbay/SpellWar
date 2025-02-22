@@ -18,6 +18,8 @@ GameCamera::GameCamera() {
     _farPlane = DEFAULT_FAR_PLANE;
     _attachedObject = nullptr;
     _cameraMatrix = Matrix4D(1.0f);
+    _ubo.configure(sizeof(Matrix4D));
+    _ubo.setBindingPoint(CAMERA_MATRIX_POINT);
 }
 
 void GameCamera::setSize(const Size & size) {
@@ -63,8 +65,5 @@ void GameCamera::update() {
 void GameCamera::render() {
     _ubo.setData(glm::value_ptr(_cameraMatrix), sizeof(Matrix4D));
 }
-
-GameCamera::UniformCamera::UniformCamera() :
-UniformBufferObject(sizeof(Matrix4D), CAMERA_MATRIX_POINT) {}
 
 }
