@@ -12,6 +12,8 @@
  
 #include <wgame/wgame.hpp>
 
+#define MAX_ANGLE_CAMERA 89.0f
+
  
 using namespace wgame;
  

@@ -16,6 +16,12 @@ PlayerCamera::PlayerCamera() {
 
 void PlayerCamera::increaseAngle(float delta) {
     _angle += delta;    
+    if (_angle > MAX_ANGLE_CAMERA) {
+        _angle = MAX_ANGLE_CAMERA;
+    }
+    else if (_angle < -MAX_ANGLE_CAMERA) {
+        _angle = -MAX_ANGLE_CAMERA;
+    }
 }
 
 void PlayerCamera::updatePlayer(const Hitbox & playerHitbox) {
