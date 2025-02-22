@@ -29,7 +29,7 @@
 #include "core/GameObjectGroup.hpp"
 #include "core/AbstractFrame.hpp"
 
-#include "tools/Inputs.hpp"
+#include "tools/System.hpp"
 #include "tools/Keys.hpp"
 
 #include "model/Animation.hpp"

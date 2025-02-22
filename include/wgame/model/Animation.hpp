@@ -11,7 +11,7 @@
 #define __WG_ANIMATION_H__
  
 #include "Skeleton.hpp"
-#include "../tools/Inputs.hpp"
+#include "../tools/System.hpp"
 
 #include <iostream>
 

@@ -7,21 +7,21 @@
  */
 
 
-#include <wgame/tools/Inputs.hpp>
+#include <wgame/tools/System.hpp>
 #include <iostream>
 
 
 namespace wgame {
 
-GLFWwindow * Inputs::_frame = nullptr;
-Point2D Inputs::_mousePosition = Point2D(0.0f);
-Point2D Inputs::_lastMousePosition = Point2D(0.0f);
+GLFWwindow * System::_frame = nullptr;
+Point2D System::_mousePosition = Point2D(0.0f);
+Point2D System::_lastMousePosition = Point2D(0.0f);
 
-void Inputs::initContext(GLFWwindow * frame) {
+void System::initContext(GLFWwindow * frame) {
     _frame = frame;
 }
 
-void Inputs::record() {
+void System::record() {
     double mouseX;
     double mouseY;
     _lastMousePosition = _mousePosition;
@@ -30,19 +30,19 @@ void Inputs::record() {
     _mousePosition.y = (float) mouseY;
 }
 
-double Inputs::getTime() {
+double System::getTime() {
     return glfwGetTime();
 }
 
-Point2D Inputs::getMousePosition() {
+Point2D System::getMousePosition() {
     return _mousePosition;
 }
 
-Vector2D Inputs::getMouseMovement() {
+Vector2D System::getMouseMovement() {
     return _lastMousePosition - _mousePosition;
 }
 
-bool Inputs::isKeyPressed(Key key) {
+bool System::isKeyPressed(Key key) {
     return glfwGetKey(_frame, key) == PRESS;
 }
 

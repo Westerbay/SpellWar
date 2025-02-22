@@ -37,7 +37,7 @@ AbstractFrame::AbstractFrame(const char * title, const Size & size) : _running(f
 	_size = size;
 	_world = nullptr;
 	_camera = nullptr;
-	Inputs::initContext(_frame);
+	System::initContext(_frame);
 }
 
 AbstractFrame::~AbstractFrame() {

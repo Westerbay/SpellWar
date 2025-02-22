@@ -28,25 +28,25 @@ GameObject * Player::getCameraObject() {
 }
 
 void Player::update() {
-    if (_inputs.isKeyPressed(KEY_W)) {
+    if (_system.isKeyPressed(KEY_W)) {
         hitbox.move(_speed, AXIS_Z);
     }
-    if (_inputs.isKeyPressed(KEY_S)) {
+    if (_system.isKeyPressed(KEY_S)) {
         hitbox.move(-_speed, AXIS_Z);
     }
-    if (_inputs.isKeyPressed(KEY_D)) {
+    if (_system.isKeyPressed(KEY_D)) {
         hitbox.move(_speed, AXIS_X);
     }
-    if (_inputs.isKeyPressed(KEY_A)) {
+    if (_system.isKeyPressed(KEY_A)) {
         hitbox.move(-_speed, AXIS_X);
     }
-    if (_inputs.isKeyPressed(KEY_SPACE)) {
+    if (_system.isKeyPressed(KEY_SPACE)) {
         hitbox.move(_speed, AXIS_Y);
     }
-    if (_inputs.isKeyPressed(KEY_LEFT_SHIFT)) {
+    if (_system.isKeyPressed(KEY_LEFT_SHIFT)) {
         hitbox.move(-_speed, AXIS_Y);
     }
-    Vector2D mouseMovement = _inputs.getMouseMovement();
+    Vector2D mouseMovement = _system.getMouseMovement();
     hitbox.rotateY(mouseMovement.x * _sensibility);
     _camera.increaseAngle(mouseMovement.y * _sensibility);
     _camera.updatePlayer(hitbox);

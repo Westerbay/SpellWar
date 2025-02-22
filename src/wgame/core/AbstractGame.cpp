@@ -8,7 +8,7 @@
 
 
 #include <wgame/core/AbstractGame.hpp>
-#include <wgame/tools/Inputs.hpp>
+#include <wgame/tools/System.hpp>
 
 
 namespace wgame {
@@ -46,7 +46,7 @@ void AbstractGame::start() {
     while (_running) {
         steady_clock::time_point updateStart = steady_clock::now();
         
-        Inputs::record();
+        System::record();
         updateWorld();
         _camera -> update();
         

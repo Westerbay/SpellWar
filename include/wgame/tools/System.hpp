@@ -7,8 +7,8 @@
  */
 
 
-#ifndef __WG_INPUTS_H__
-#define __WG_INPUTS_H__
+#ifndef __WG_SYSTEM_H__
+#define __WG_SYSTEM_H__
 
 #include <GLFW/glfw3.h>
 
@@ -22,7 +22,7 @@ namespace wgame {
 
 typedef int Key;
 
-class Inputs {
+class System {
 public:
     static void initContext(GLFWwindow * frame);
     static void record();

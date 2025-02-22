@@ -13,7 +13,7 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-#include "../tools/Inputs.hpp"
+#include "../tools/System.hpp"
 #include "../geometry/Geometry.hpp"
 #include "../opengl/Shader.hpp"
 #include "../opengl/UniformBufferObject.hpp"

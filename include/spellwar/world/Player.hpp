@@ -26,7 +26,7 @@ public:
 private: 
     float _speed;
     float _sensibility;
-    Inputs _inputs;
+    System _system;
     PlayerCamera _camera;
     AnimatedModelGLTF * _model;
     ModelDrawer _modelDrawer;
