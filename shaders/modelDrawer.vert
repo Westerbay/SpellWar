@@ -28,11 +28,12 @@ void main() {
         for (int i = 0; i < 4; i ++) {
             skinningMatrix += aWeight[i] * jointsMatrices[aJoint[i]];
         }
-        fragNormal = normalize(mat3(skinningMatrix) * aNormal);
+        fragNormal = transpose(inverse(mat3(skinningMatrix))) * aNormal;
+        fragNormal = mat3(transpose(inverse(model))) * fragNormal;
         currentPosition = vec3(model * skinningMatrix * vec4(aPos, 1.0));
         gl_Position = cameraMatrix * model * skinningMatrix * vec4(aPos, 1.0);
     } else {
-        fragNormal = normalize(aNormal);
+        fragNormal = transpose(inverse(mat3(model))) * aNormal;
         currentPosition = vec3(model * vec4(aPos, 1.0));
         gl_Position = cameraMatrix * model * vec4(aPos, 1.0);
     }    

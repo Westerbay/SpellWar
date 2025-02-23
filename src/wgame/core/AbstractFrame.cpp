@@ -107,7 +107,7 @@ void AbstractFrame::initOpenGLState() {
 void AbstractFrame::render() {
 	glEnable(GL_DEPTH_TEST);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	
-	_light -> apply();
+	_light -> apply(_camera -> getHitbox().position);
 
 	glDepthFunc(GL_LEQUAL);
 	glDisable(GL_CULL_FACE);

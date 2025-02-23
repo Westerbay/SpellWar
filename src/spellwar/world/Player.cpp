@@ -16,6 +16,8 @@ Player::Player(const Hitbox & hitbox) : GameObject(hitbox) {
     _sensibility = 0.2f;
     _modelStatic = new StaticModelGLTF("assets/model/fox.glb");
     _modelStatic -> setScale(0.05f);
+
+    //_model = new AnimatedModelGLTF("assets/model/witch.glb");
     //_model -> setLoop(true);
     //_model -> setRotation(-90.0f, AXIS_X);
 }
@@ -56,5 +58,6 @@ void Player::update() {
 }
 
 void Player::render() {
+    //_modelDrawer.draw(*_model);
     _modelDrawer.draw(*_modelStatic);
 }

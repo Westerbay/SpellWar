@@ -1,8 +1,13 @@
 #version 430 core
 
 struct LightInfo {
+    vec4 cameraPosition; 
     vec4 position;
     vec4 color;    
+    int display;
+    float ambient;
+    float specularFactor; 
+    int specularExponent;
 };
 
 layout(std140, binding = 1) uniform LightBlock {
@@ -17,18 +22,23 @@ out vec4 fragColor;
 
 uniform sampler2D textureDiffuse;
 
-void main() {
-    if (light.position.w > 0) {
+void main() {    
+    if (light.display != 0) {
+        vec3 normal = normalize(fragNormal);
         vec3 lightDirection = normalize(light.position.xyz - currentPosition);
-        float diffuse = max(dot(fragNormal, lightDirection), 0.0);
+        float diffuse = max(dot(normal, lightDirection), 0.0);
+        
+        vec3 viewDirection = normalize(light.cameraPosition.xyz - currentPosition);
+        vec3 reflectionDirection = reflect(-lightDirection, normal);
+        float specAmount = pow(max(dot(viewDirection, reflectionDirection), 0.0), light.specularExponent);
+        float specular = specAmount * light.specularFactor;
+
         vec4 color = texture(textureDiffuse, texCoord0);
-        color = color * vec4(light.color.xyz, 1.0) * (diffuse + light.color.w);
-        color.w = 1;
+        color.xyz = color.xyz * light.color.xyz * (diffuse + light.ambient + specular);
         fragColor = color;
     } 
     else {
         vec4 color = texture(textureDiffuse, texCoord0);
-        color.w = 1;
         fragColor = color;
     }    
 }

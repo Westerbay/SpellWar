@@ -19,8 +19,13 @@
 namespace wgame {
 
 struct LightInfo {
-    Point4D position; // w -> apply or not
-    Vector4D lightColor; // w -> ambient
+    Point4D cameraPosition; 
+    Point4D position; 
+    Vector4D color;
+    int display;
+    float ambient;
+    float specularFactor; 
+    int specularExponent;
 };
 
 class GameLight {
@@ -29,8 +34,10 @@ public:
     void setPosition(const Point3D & position);
     void setLightColor(const Vector3D & lightColor);
     void setDisplayLight(int displayLight);
-    void setAmbientLightning(float ambient);
-    void apply() const;
+    void setAmbientLighting(float ambient);
+    void setSpecularFactor(float specularFactor);
+    void setSpecularExponent(int specularExponent);
+    void apply(const Point3D & cameraPosition);
 private:
     LightInfo _lightInfo;
     UniformBufferObject _ubo;
