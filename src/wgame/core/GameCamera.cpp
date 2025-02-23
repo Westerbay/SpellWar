@@ -18,6 +18,7 @@ GameCamera::GameCamera() {
     _farPlane = DEFAULT_FAR_PLANE;
     _attachedObject = nullptr;
     _cameraMatrix = Matrix4D(1.0f);
+    _cameraMatrixStatic = Matrix4D(1.0f);
     _ubo.configure(sizeof(Matrix4D));
     _ubo.setBindingPoint(CAMERA_MATRIX_POINT);
 }
@@ -60,9 +61,14 @@ void GameCamera::update() {
     Matrix4D view = glm::lookAt(position, position + orientation[2], orientation[1]);
     
     _cameraMatrix = projection * view;
+    _cameraMatrixStatic = projection * Matrix4D(Matrix3D(view));
 }
 
-void GameCamera::render() {
+void GameCamera::applyToBackground() {
+    _ubo.setData(glm::value_ptr(_cameraMatrixStatic), sizeof(Matrix4D));
+}
+
+void GameCamera::applyToWorld() {
     _ubo.setData(glm::value_ptr(_cameraMatrix), sizeof(Matrix4D));
 }
 

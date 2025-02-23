@@ -17,7 +17,7 @@ namespace wgame {
 
 class Image {
 public:    
-    Image(const char * filename);
+    Image(const char * filename, bool flipVertical = true);
     ~Image();
     int getWidth() const;
     int getHeight() const;

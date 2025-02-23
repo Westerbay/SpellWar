@@ -12,16 +12,23 @@
 
 namespace wgame {
 
-Texture2D::Texture2D() {
+Texture2D::Texture2D(GLenum type) {
     glGenTextures(1, &_texture);
+    _type = type;
 }
 
 Texture2D::~Texture2D() {
     glDeleteTextures(1, &_texture);
 }
 
+void Texture2D::setType(GLenum type) {
+    _type = type;
+}
+
 void Texture2D::setParameter(GLenum paramName, GLint value) const {
-    glTexParameteri(GL_TEXTURE_2D, paramName, value);
+    bind();
+    glTexParameteri(_type, paramName, value);
+    unbind();
 }
 
 void Texture2D::setInterpolationMode(InterpolationMode interpolation) const {
@@ -34,7 +41,7 @@ void Texture2D::setRepeatMode(RepeatMode repeat) const {
     setParameter(GL_TEXTURE_WRAP_T, repeat);
 }
 
-void Texture2D::setData(const Image & image) const {
+void Texture2D::setData(const Image & image, GLenum type, bool generateMipmap) const {
     bind();
     GLint internalFormat;
     switch(image.getNumberOfChannels()) {
@@ -48,27 +55,31 @@ void Texture2D::setData(const Image & image) const {
             throw std::runtime_error("Texture2D : Unknown channel format");
     }
     glTexImage2D(
-        GL_TEXTURE_2D, 0, internalFormat, 
+        type, 0, internalFormat, 
         image.getWidth(), image.getHeight(),
         0, internalFormat, 
         GL_UNSIGNED_BYTE, image.getData()
     );
-    glGenerateMipmap(GL_TEXTURE_2D);
+    if (generateMipmap) {
+        glGenerateMipmap(GL_TEXTURE_2D);
+    }
     unbind();
 }
 
 void Texture2D::enableAnisotropicFiltering() const {
+    bind();
     GLfloat maxAniso = 1.0f;
     glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &maxAniso);
-    setParameter(GL_TEXTURE_MAX_ANISOTROPY_EXT, maxAniso);   
+    setParameter(GL_TEXTURE_MAX_ANISOTROPY_EXT, maxAniso);  
+    unbind(); 
 }
 
 void Texture2D::bind() const {
-    glBindTexture(GL_TEXTURE_2D, _texture);
+    glBindTexture(_type, _texture);
 }
 
 void Texture2D::unbind() const {
-    glBindTexture(GL_TEXTURE_2D, 0);
+    glBindTexture(_type, 0);
 }
 
 }

@@ -42,6 +42,7 @@ public:
 	void initCamera(GameCamera * camera);
 	void start();
 	void stop();
+	virtual void renderBackground() = 0;
 	virtual void renderHUD() = 0;
 private:
 	void initOpenGLState();

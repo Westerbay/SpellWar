@@ -18,7 +18,10 @@ using namespace wgame;
 class MainFrame : public AbstractFrame {
 public: 
     MainFrame(const char * title, const Size & size);
+    void renderBackground() override;
     void renderHUD() override;
+private:
+    CubeMapDrawer _cubeMap;
 };
 
 #endif

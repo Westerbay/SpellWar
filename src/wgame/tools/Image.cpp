@@ -11,8 +11,10 @@
 
 namespace wgame {
 
-Image::Image(const char * filename) {
-    stbi_set_flip_vertically_on_load(true);
+Image::Image(const char * filename, bool flipVertical) {
+    if (flipVertical) {
+        stbi_set_flip_vertically_on_load(true);
+    }
     _data = stbi_load(filename, &_width, &_height, &_numberOfChannels, 0);
     stbi_set_flip_vertically_on_load(false);
 }

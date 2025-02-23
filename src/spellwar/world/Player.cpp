@@ -14,9 +14,10 @@
 Player::Player(const Hitbox & hitbox) : GameObject(hitbox) {
     _speed = 0.2f;
     _sensibility = 0.2f;
-    _model = new AnimatedModelGLTF("assets/model/player.glb");
-    _model -> setLoop(true);
-    _model -> setRotation(-90.0f, AXIS_X);
+    _modelStatic = new StaticModelGLTF("assets/model/fox.glb");
+    _modelStatic -> setScale(0.05f);
+    //_model -> setLoop(true);
+    //_model -> setRotation(-90.0f, AXIS_X);
 }
 
 Player::~Player() {
@@ -55,5 +56,5 @@ void Player::update() {
 }
 
 void Player::render() {
-    _modelDrawer.draw(*_model);
+    _modelDrawer.draw(*_modelStatic);
 }

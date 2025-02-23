@@ -15,6 +15,7 @@
 #include "graphics/ColorDrawer.hpp"
 #include "graphics/TextureDrawer.hpp"
 #include "graphics/ModelDrawer.hpp"
+#include "graphics/CubeMapDrawer.hpp"
 
 #include "opengl/AttributeProperties.hpp"
 #include "opengl/BufferObject.hpp"

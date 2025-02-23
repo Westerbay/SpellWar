@@ -33,7 +33,8 @@ public:
     void setFarPlane(float farPlane);
     void attachGameObject(GameObject * gameObject);
     void update() override;
-    void render() override;
+    void applyToBackground();
+    void applyToWorld();
 private:
     UniformBufferObject _ubo;
     float _FOVDeg;    
@@ -41,6 +42,7 @@ private:
     float _farPlane;
     GameObject * _attachedObject;
     Matrix4D _cameraMatrix;
+    Matrix4D _cameraMatrixStatic;
 };
 
 }
