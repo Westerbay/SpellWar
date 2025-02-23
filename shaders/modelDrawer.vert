@@ -14,6 +14,7 @@ layout(std140, binding = 2) uniform JointsBlock {
     mat4 jointsMatrices[1000];
 };
 
+out vec3 currentPosition;
 out vec3 fragNormal;
 out vec2 texCoord0;
 
@@ -28,9 +29,11 @@ void main() {
             skinningMatrix += aWeight[i] * jointsMatrices[aJoint[i]];
         }
         fragNormal = normalize(mat3(skinningMatrix) * aNormal);
+        currentPosition = vec3(model * skinningMatrix * vec4(aPos, 1.0));
         gl_Position = cameraMatrix * model * skinningMatrix * vec4(aPos, 1.0);
     } else {
         fragNormal = normalize(aNormal);
+        currentPosition = vec3(model * vec4(aPos, 1.0));
         gl_Position = cameraMatrix * model * vec4(aPos, 1.0);
     }    
 

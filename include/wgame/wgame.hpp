@@ -29,6 +29,7 @@
 #include "core/GameObject.hpp"
 #include "core/GameObjectGroup.hpp"
 #include "core/AbstractFrame.hpp"
+#include "core/GameLight.hpp"
 
 #include "tools/System.hpp"
 #include "tools/Keys.hpp"

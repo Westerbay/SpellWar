@@ -19,6 +19,7 @@
 #include "../opengl/UniformBufferObject.hpp"
 #include "GameObjectGroup.hpp"
 #include "GameCamera.hpp"
+#include "GameLight.hpp"
 
 #include <string>
 #include <thread>
@@ -40,6 +41,7 @@ public:
 	void setBackgroundColor(GLclampf red, GLclampf green, GLclampf blue);
 	void initWorld(GameObjectGroup * world);
 	void initCamera(GameCamera * camera);
+	void initLight(GameLight * light);
 	void start();
 	void stop();
 	virtual void renderBackground() = 0;
@@ -50,6 +52,7 @@ private:
 	GLFWwindow * _frame;
 	GameObjectGroup * _world;
 	GameCamera * _camera;
+	GameLight * _light;
 	Size _size;
 	bool _running;
 	bool _cursorActive;

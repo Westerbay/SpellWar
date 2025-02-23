@@ -12,6 +12,7 @@
 
 #include "GameObjectGroup.hpp"
 #include "GameCamera.hpp"
+#include "GameLight.hpp"
 
 #include <thread>
 #include <chrono>
@@ -28,8 +29,10 @@ public:
     virtual ~AbstractGame() = default;
     void setTPS(unsigned tps);
     GameCamera * getCamera();
+    GameLight * getLight();
     void initWorld(GameObjectGroup * world);
     void initCamera(GameCamera * camera);
+    void initLight(GameLight * light);
     void start();
     void stop();    
     void addToWorld(GameObject * gameObject);
@@ -39,6 +42,7 @@ public:
 private:
     GameObjectGroup * _world;
     GameCamera * _camera;
+    GameLight * _light;
     unsigned _updateDelay;
     bool _running;
 };

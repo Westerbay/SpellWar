@@ -13,6 +13,10 @@
 Game::Game(unsigned tps) : AbstractGame(tps) {}
 
 void Game::init() {
+    getLight() -> setDisplayLight(1);
+    getLight() -> setPosition(Point3D(5.0f, 0.0f, -1.0f));
+    getLight() -> setAmbientLightning(0.2f);
+
     Cuboid cuboid(Point3D(0.0f, -20.0f, -2.0f), Vector3D(1.0f, 1.0f, 1.0f));
     addToWorld(new Platform(cuboid));
 

@@ -17,9 +17,11 @@ GameEngine::GameEngine(AbstractGame * game, AbstractFrame * frame) {
     _frame = frame;
     _camera = new GameCamera();
     _world = new GameObjectGroup();
+    _light = new GameLight();
 }
 
 GameEngine::~GameEngine() {
+    delete _light;
     delete _camera;
     delete _world;
     delete _game;
@@ -36,6 +38,9 @@ void GameEngine::start() {
 
     _game -> initCamera(_camera);
     _frame -> initCamera(_camera);
+
+    _game -> initLight(_light);
+    _frame -> initLight(_light);
 
     _game -> init();
     _game -> updateWorld();

@@ -14,6 +14,7 @@
 #include "AbstractFrame.hpp"
 #include "GameObjectGroup.hpp"
 #include "GameCamera.hpp"
+#include "GameLight.hpp"
 
 #include <atomic>
 
@@ -27,6 +28,7 @@ public:
     void start();
 private:
     static void gameLoop(AbstractGame * game);
+    GameLight * _light;
     GameCamera * _camera;
     GameObjectGroup * _world;   
     AbstractGame * _game;

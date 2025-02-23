@@ -37,6 +37,7 @@ AbstractFrame::AbstractFrame(const char * title, const Size & size) : _running(f
 	_size = size;
 	_world = nullptr;
 	_camera = nullptr;
+	_light = nullptr;
 	System::initContext(_frame);
 }
 
@@ -74,6 +75,13 @@ void AbstractFrame::initCamera(GameCamera * camera) {
 	_camera -> setSize(_size);
 }
 
+void AbstractFrame::initLight(GameLight * light) {
+	if (_light != nullptr) {
+		throw std::runtime_error("Light already initialized ! ");
+	}
+	_light = light;
+}
+
 void AbstractFrame::start() {
 	initOpenGLState();
 	_running = true;
@@ -99,6 +107,7 @@ void AbstractFrame::initOpenGLState() {
 void AbstractFrame::render() {
 	glEnable(GL_DEPTH_TEST);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	
+	_light -> apply();
 
 	glDepthFunc(GL_LEQUAL);
 	glDisable(GL_CULL_FACE);
