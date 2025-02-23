@@ -24,6 +24,7 @@ public:
     ~BufferObject();
     template <typename T> 
     void setData(const std::vector<T> & values);
+    void setData(const void * data, GLsizei size, GLenum componentType, GLuint numberOfComponent, GLuint count);
     GLenum getComponentTypeOfAttribute() const;
     GLuint getNumberOfComponentsOfAttribute() const;
     GLsizei getNumberOfAttributes() const;

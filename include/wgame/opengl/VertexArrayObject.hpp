@@ -36,14 +36,23 @@ public:
     VertexArrayObject();
     ~VertexArrayObject();
     template <typename T> 
-    void setVBO(unsigned vboIndex, const std::vector<T> & values);
+    void setVBO(unsigned vboIndex, const std::vector<T> & values, GLboolean normalized = GL_FALSE);
+    void setVBO(
+        unsigned vboIndex,
+        const void * data, 
+        GLsizei size, 
+        GLenum componentType, 
+        GLuint numberOfComponent, 
+        GLuint count,
+        GLboolean normalized = GL_FALSE
+    );
     template <typename T> 
     void setEBO(const std::vector<T> & values);
     void draw(GLenum mode) const;
     void bind() const override;
     void unbind() const override;
 private:
-    void encapsulateVBO(unsigned vboIndex);
+    void encapsulateVBO(unsigned vboIndex, GLboolean normalized);
     GLuint _array;
     ElementBufferObject _ebo;
     VertexBufferObject _vbos[NUMBER_OF_VBOS];
@@ -51,10 +60,10 @@ private:
 
 
 template <typename T> 
-void VertexArrayObject::setVBO(unsigned vboIndex, const std::vector<T> & values) {
+void VertexArrayObject::setVBO(unsigned vboIndex, const std::vector<T> & values, GLboolean normalized) {
     bind();
     _vbos[vboIndex].setData(values);
-    encapsulateVBO(vboIndex);
+    encapsulateVBO(vboIndex, normalized);
     unbind();
 }
 

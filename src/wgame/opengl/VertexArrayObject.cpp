@@ -41,18 +41,46 @@ void VertexArrayObject::unbind() const {
     glBindVertexArray(0);
 }
 
-void VertexArrayObject::encapsulateVBO(unsigned vboIndex) {
+void VertexArrayObject::setVBO(
+    unsigned vboIndex,
+    const void * data, 
+    GLsizei size, 
+    GLenum componentType, 
+    GLuint numberOfComponent, 
+    GLuint count,
+    GLboolean normalized
+) {
+    bind();
+    _vbos[vboIndex].setData(data, size, componentType, numberOfComponent, count);
+    encapsulateVBO(vboIndex, normalized);
+    unbind();
+}
+
+void VertexArrayObject::encapsulateVBO(unsigned vboIndex, GLboolean normalized) {
     VertexBufferObject * vbo = _vbos + vboIndex;
     vbo -> bind();
     glEnableVertexAttribArray(vboIndex);
-    glVertexAttribPointer(
-        vboIndex,
-        vbo -> getNumberOfComponentsOfAttribute(),
-        vbo -> getComponentTypeOfAttribute(),
-        GL_FALSE,
-        0,
-        nullptr
-    );
+    GLuint numberOfComponent = vbo -> getNumberOfComponentsOfAttribute();
+    GLenum type = vbo -> getComponentTypeOfAttribute();
+    if (type == GL_DOUBLE || type == GL_FLOAT) {
+        glVertexAttribPointer(
+            vboIndex,
+            numberOfComponent,
+            type,
+            normalized,
+            0,
+            nullptr
+        );
+    }
+    else {
+        glVertexAttribIPointer(
+            vboIndex,
+            numberOfComponent,
+            type,
+            0,
+            nullptr
+        );
+    }    
     vbo -> unbind();
 }
 

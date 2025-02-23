@@ -20,6 +20,15 @@ BufferObject::~BufferObject() {
     glDeleteBuffers(1, &_buffer);
 }
 
+void BufferObject::setData(const void * data, GLsizei size, GLenum componentType, GLuint numberOfComponent, GLuint count) {
+    _componentTypeOfAttribute = componentType;
+    _numberOfComponentsOfAttribute = numberOfComponent;
+    _numberOfAttributes = count;
+    bind();
+    glBufferData(_target, size, data, GL_STATIC_DRAW);
+    unbind();
+}
+
 GLenum BufferObject::getComponentTypeOfAttribute() const {
     return _componentTypeOfAttribute;
 }
