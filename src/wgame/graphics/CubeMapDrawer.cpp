@@ -12,7 +12,16 @@
 
 namespace wgame {
 
+std::weak_ptr<CubeMapDrawer::CubeMapDrawerShader> CubeMapDrawer::_uniqueShader;
+
 CubeMapDrawer::CubeMapDrawer() {
+
+    _shader = _uniqueShader.lock();
+    if (!_shader) {
+        _shader = std::make_shared<CubeMapDrawerShader>();
+        _uniqueShader = _shader;
+    }
+
     _cube = Cuboid(Point3D(0.0f), Vector3D(2.0f, 2.0f, 2.0f));
     _texture.setType(TEXTURE_CUBE_MAP);
     _texture.setInterpolationMode(INTERPOLATION_LINEAR);
@@ -49,13 +58,13 @@ void CubeMapDrawer::setFaces(
 }
 
 void CubeMapDrawer::draw() const {
-    _shader.bind();
+    _shader -> bind();
     glActiveTexture(GL_TEXTURE0);
     _texture.bind();
-    _shader.setUniform("skybox", 0);
+    _shader -> setUniform("skybox", 0);
     _vao.draw(DRAW_TRIANGLES);
     _texture.unbind();
-    _shader.unbind();
+    _shader -> unbind();
 }
 
 CubeMapDrawer::CubeMapDrawerShader::CubeMapDrawerShader() 

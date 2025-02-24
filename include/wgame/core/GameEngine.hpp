@@ -28,6 +28,7 @@ public:
     void start();
 private:
     static void gameLoop(AbstractGame * game);
+private:
     GameLight * _light;
     GameCamera * _camera;
     GameObjectGroup * _world;   

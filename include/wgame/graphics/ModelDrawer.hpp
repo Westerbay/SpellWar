@@ -26,7 +26,7 @@ class ModelDrawer {
 public:
     ModelDrawer();
     void draw(ModelGLTF & model) const;
-protected:
+public:
     class ModelDrawerShader : public Shader {
     public:
         ModelDrawerShader(); 

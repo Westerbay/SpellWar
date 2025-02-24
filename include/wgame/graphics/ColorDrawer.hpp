@@ -31,7 +31,7 @@ public:
     void fillCuboid(const Cuboid & cuboid, const ColorRGB & color);
     void draw();
     void fill();
-protected:
+public:
     class ColorDrawerShader : public Shader {
     public:
         ColorDrawerShader();

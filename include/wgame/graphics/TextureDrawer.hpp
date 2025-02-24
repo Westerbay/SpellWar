@@ -31,7 +31,7 @@ public:
     void setTexCoordFlex(const Vector2D & uvScale);
     void drawCuboid(const Cuboid & cuboid, const Texture2D & texture);
     void draw(const Texture2D & texture);
-protected:
+public:
     class TextureDrawerShader : public Shader {
     public:
         TextureDrawerShader();

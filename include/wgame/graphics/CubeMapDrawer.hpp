@@ -15,6 +15,8 @@
 #include "../opengl/Shader.hpp"
 #include "../geometry/Cuboid.hpp"
 
+#include <memory>
+
 #define CUBEMAP_VERTEX_SHADER "shaders/cubeMapDrawer.vert"
 #define CUBEMAP_FRAGMENT_SHADER "shaders/cubeMapDrawer.frag"
 
@@ -33,16 +35,17 @@ public:
         const Image & imageNegativeZ
     );
     void draw() const;
-protected:
+public:
     class CubeMapDrawerShader : public Shader {
     public:
         CubeMapDrawerShader();
     };
 private:
+    static std::weak_ptr<CubeMapDrawerShader> _uniqueShader;
+    std::shared_ptr<CubeMapDrawerShader> _shader;
     Cuboid _cube;
     VertexArrayObject _vao;
-    Texture2D _texture;
-    CubeMapDrawerShader _shader;
+    Texture2D _texture;    
 };
 
 }

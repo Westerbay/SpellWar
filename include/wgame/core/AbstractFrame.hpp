@@ -49,6 +49,7 @@ public:
 private:
 	void initOpenGLState();
 	void render();
+private:
 	GLFWwindow * _frame;
 	GameObjectGroup * _world;
 	GameCamera * _camera;
