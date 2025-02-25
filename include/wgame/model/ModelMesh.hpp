@@ -17,8 +17,7 @@
 #include "../opengl/Texture2D.hpp"
 #include "../opengl/Shader.hpp"
 
-#define MAX_NUMBER_OF_GPU_ARRAYS 10
-
+#include <unordered_map>
 
 namespace wgame {
 
@@ -52,16 +51,21 @@ public:
     ~ModelMesh();
     void setVBO(int vboIndex, GLsizei byteLength, const void * data);
     void setEBO(int eboIndex, GLsizei byteLength, const void * data);
-    void setTexture0(int textureIndex, int width, int height, int numChannels, const void * data);
+    void setTexture0(
+        int textureIndex, int width, int height, 
+        int numChannels, const void * data,
+        GLenum minFilter, GLenum magFilter,
+        GLenum wrapS, GLenum wrapT, GLenum pixelType
+    );
     void addSubMesh(const ModelSubMeshInfo & modelSubMeshinfo);
     void bind() const;
     void unbind() const;
-    void draw() const;
+    void draw();
 private:
-    GLuint _vao;    
-    GLuint _ebos[MAX_NUMBER_OF_GPU_ARRAYS];
-    GLuint _vbos[MAX_NUMBER_OF_GPU_ARRAYS]; 
-    GLuint _textures[MAX_NUMBER_OF_GPU_ARRAYS]; 
+    GLuint _vao; 
+    std::unordered_map<int, GLuint> _ebos;
+    std::unordered_map<int, GLuint> _vbos; 
+    std::unordered_map<int, GLuint> _textures; 
     std::vector<ModelSubMeshInfo> _subMeshesInfo;
 };
 

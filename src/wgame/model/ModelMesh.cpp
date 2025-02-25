@@ -14,53 +14,54 @@ namespace wgame {
 
 ModelMesh::ModelMesh() {
     glGenVertexArrays(1, &_vao);
-    for (int i = 0; i < MAX_NUMBER_OF_GPU_ARRAYS; i ++) {
-        _ebos[i] = 0;
-        _vbos[i] = 0;
-        _textures[i] = 0;
-    }
 }
 
 ModelMesh::~ModelMesh() {
-    for (int i = 0; i < MAX_NUMBER_OF_GPU_ARRAYS; i ++) {
-        if (_ebos[i] > 0) {
-            glDeleteBuffers(1, _ebos + i);
-        }
-        if (_vbos[i] > 0) {
-            glDeleteBuffers(1, _vbos + i);
-        }
-        if (_textures[i] > 0) {
-            glDeleteTextures(1, _textures + i);
-        }
+    for (const auto & index: _ebos) {
+        glDeleteBuffers(1, &index.second);
+    }
+    for (const auto & index: _vbos) {
+        glDeleteBuffers(1, &index.second);
+    }
+    for (const auto & index: _textures) {
+        glDeleteTextures(1, &index.second);
     }
     glDeleteVertexArrays(1, &_vao);
 }
 
 void ModelMesh::setVBO(int vboIndex, GLsizei byteLength, const void * data) {
-    if (_vbos[vboIndex] > 0) {
+    if (_vbos.find(vboIndex) != _vbos.end()) {
         return;
     }
-    glGenBuffers(1, _vbos + vboIndex);
+    _vbos[vboIndex] = 0;
+    glGenBuffers(1, &_vbos[vboIndex]);
     glBindBuffer(GL_ARRAY_BUFFER, _vbos[vboIndex]);
     glBufferData(GL_ARRAY_BUFFER, byteLength, data, GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
 void ModelMesh::setEBO(int eboIndex, GLsizei byteLength, const void * data) {
-    if (_ebos[eboIndex] > 0) {
+    if (_ebos.find(eboIndex) != _ebos.end()) {
         return;
     }
-    glGenBuffers(1, _ebos + eboIndex);
+    _ebos[eboIndex] = 0;
+    glGenBuffers(1, &_ebos[eboIndex]);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ebos[eboIndex]);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, byteLength, data, GL_STATIC_DRAW);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
-void ModelMesh::setTexture0(int textureIndex, int width, int height, int numChannels, const void * data) {
-    if (_textures[textureIndex] > 0) {
+void ModelMesh::setTexture0(
+    int textureIndex, int width, int height, 
+    int numChannels, const void * data,
+    GLenum minFilter, GLenum magFilter,
+    GLenum wrapS, GLenum wrapT, GLenum pixelType
+) {
+    if (_textures.find(textureIndex) != _textures.end()) {
         return;
     }
-    glGenTextures(1, _textures + textureIndex);
+    _textures[textureIndex] = 0;
+    glGenTextures(1, &_textures[textureIndex]);
     glBindTexture(GL_TEXTURE_2D, _textures[textureIndex]);
     GLint internalFormat;
     switch(numChannels) {
@@ -77,14 +78,14 @@ void ModelMesh::setTexture0(int textureIndex, int width, int height, int numChan
         GL_TEXTURE_2D, 0, internalFormat, 
         width, height,
         0, internalFormat, 
-        GL_UNSIGNED_BYTE, data
+        pixelType, data
     );
     glGenerateMipmap(GL_TEXTURE_2D);
 
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrapS);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrapT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, minFilter);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, magFilter);
     
     glBindTexture(GL_TEXTURE_2D, 0);
 }
@@ -101,7 +102,7 @@ void ModelMesh::unbind() const {
     glBindVertexArray(0);
 }
 
-void ModelMesh::draw() const {
+void ModelMesh::draw() {
     bind();
     glActiveTexture(GL_TEXTURE0);
     for (const ModelSubMeshInfo & subMesh : _subMeshesInfo) {
@@ -121,9 +122,8 @@ void ModelMesh::draw() const {
                     vboInfo.stride, vboInfo.pointer
                 );   
             }
-                     
-        }
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
+            glBindBuffer(GL_ARRAY_BUFFER, 0);        
+        }        
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ebos[subMesh.elementsInfo.eboIndex]);
         glDrawElements(
             subMesh.elementsInfo.drawMode, 
@@ -131,9 +131,9 @@ void ModelMesh::draw() const {
             subMesh.elementsInfo.componentType, 
             subMesh.elementsInfo.offsetElement
         );
-    }
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-    glBindTexture(GL_TEXTURE_2D, 0);    
+        glBindTexture(GL_TEXTURE_2D, 0);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    }    
     unbind();
 }
 

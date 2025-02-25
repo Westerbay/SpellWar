@@ -170,12 +170,15 @@ void ModelGLTF::processMesh(
             }
             if (textureIndex >= 0) {
                 const tinygltf::Texture & texture = model.textures[textureIndex];
+                const tinygltf::Sampler & sampler = model.samplers[texture.sampler];
                 int imageIndex = texture.source;
-                if (textureIndex >= 0) {
+                if (imageIndex >= 0) {
                     const tinygltf::Image & image = model.images[imageIndex];
                     _modelMesh.setTexture0(
                         imageIndex, image.width, image.height, 
-                        image.component, image.image.data()
+                        image.component, image.image.data(),
+                        sampler.minFilter, sampler.magFilter, 
+                        sampler.wrapS, sampler.wrapT, image.pixel_type
                     );
                     textureID = imageIndex;
                 }
