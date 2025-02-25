@@ -38,4 +38,16 @@ void GameObjectGroup::render() {
     }
 }
 
+void GameObjectGroup::renderBackground() {
+    for (GameObject * gameObject : _objects) {
+        gameObject -> renderBackground();
+    }
+}
+
+void GameObjectGroup::renderHUD() {
+    for (GameObject * gameObject : _objects) {
+        gameObject -> renderHUD();
+    }
+}
+
 };

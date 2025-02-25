@@ -24,6 +24,8 @@ public:
     void remove(GameObject * gameObject);
     void update() override;
     void render() override;
+    void renderBackground() override;
+    void renderHUD() override;
 private:
     std::unordered_set<GameObject *> _objects;
 };

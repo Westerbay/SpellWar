@@ -101,27 +101,27 @@ void AbstractFrame::initOpenGLState() {
 	glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glEnable(GL_MULTISAMPLE);	
-	glCullFace(GL_BACK);
-	glFrontFace(GL_CCW);
+	glEnable(GL_MULTISAMPLE);		
 }
 
 void AbstractFrame::render() {
 	glEnable(GL_DEPTH_TEST);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	
 	_light -> apply(_camera -> getHitbox().position);
+	_camera -> apply();
 
 	glDepthFunc(GL_LEQUAL);
-	glDisable(GL_CULL_FACE);
-	_camera -> apply();
-	renderBackground();
+	glDisable(GL_CULL_FACE);	
+	_world -> renderBackground();	
 
 	glDepthFunc(GL_LESS);
 	glEnable(GL_CULL_FACE);	
+	glCullFace(GL_BACK);
+	glFrontFace(GL_CCW);
 	_world -> render();	
 
 	glDisable(GL_DEPTH_TEST);
-	renderHUD();
+	_world -> renderHUD();	
 }
 
 };

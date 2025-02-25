@@ -12,6 +12,7 @@
 
 #include "Platform.hpp"
 #include "Player.hpp"
+#include "Background.hpp"
 
 #include <wgame/wgame.hpp>
 

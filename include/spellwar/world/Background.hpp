@@ -7,18 +7,21 @@
  */
 
 
-#ifndef __MAIN_FRAME__
-#define __MAIN_FRAME__
-
+#ifndef __BACKGROUND__
+#define __BACKGROUND__
+ 
 #include <wgame/wgame.hpp>
-
-
+ 
+ 
 using namespace wgame;
-
-class MainFrame : public AbstractFrame {
-public: 
-    MainFrame(const char * title, const Size & size);
+ 
+class Background : public GameObject {
+public:
+    Background();
+    void renderBackground() override;
+private:
+    CubeMapDrawer _cubeMap;
 };
-
+ 
 #endif
-
+ 

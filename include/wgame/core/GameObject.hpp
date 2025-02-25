@@ -18,10 +18,12 @@ namespace wgame {
 class GameObject {
 public:
     GameObject(const Hitbox & hitbox = Hitbox());
-    virtual void update() = 0;
-    virtual void render() {};
-    virtual ~GameObject() = default;
     Hitbox getHitbox() const;
+    virtual void update() {};
+    virtual void render() {};
+    virtual void renderBackground() {};
+    virtual void renderHUD() {};
+    virtual ~GameObject() = default;    
 protected:
     Hitbox hitbox;
 };

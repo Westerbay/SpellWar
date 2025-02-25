@@ -11,6 +11,8 @@
 
 
 World::World(GameCamera * camera) : GameObjectGroup() {
+    add(new Background());
+
     Cuboid cuboid(Point3D(0.0f, -20.0f, -2.0f), Vector3D(1.0f, 1.0f, 1.0f));
     add(new Platform(cuboid));
 
