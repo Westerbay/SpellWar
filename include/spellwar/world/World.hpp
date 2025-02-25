@@ -7,21 +7,20 @@
  */
 
 
-#ifndef __GAME__
-#define __GAME__
+#ifndef __WORLD__
+#define __WORLD__
 
-#include "../world/World.hpp"
+#include "Platform.hpp"
+#include "Player.hpp"
+
 #include <wgame/wgame.hpp>
 
 
 using namespace wgame;
 
-class Game : public AbstractGame {
+class World : public GameObjectGroup {
 public:
-    Game(unsigned tps = DEFAULT_TPS);
-    void init() override;
+    World(GameCamera * camera);
 };
 
-
 #endif
-
