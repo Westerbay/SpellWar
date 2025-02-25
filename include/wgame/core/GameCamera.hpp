@@ -19,10 +19,15 @@
 #define DEFAULT_NEAR_PLANE 0.1f
 #define DEFAULT_FAR_PLANE 100.0f
 
-#define CAMERA_MATRIX_POINT 0
+#define CAMERA_MATRICES_POINT 0
 
 
 namespace wgame {
+
+struct CameraMatrices {
+    Matrix4D cameraMatrixStatic;
+    Matrix4D cameraMatrixDynamic;    
+};
 
 class GameCamera : public GameObject {
 public:
@@ -32,17 +37,15 @@ public:
     void setNearPlane(float nearPlane);
     void setFarPlane(float farPlane);
     void attachGameObject(GameObject * gameObject);
-    void update() override;
-    void applyToBackground();
-    void applyToWorld();
+    void apply() const;
+    void update() override;    
 private:
     UniformBufferObject _ubo;
     float _FOVDeg;    
     float _nearPlane;
     float _farPlane;
     GameObject * _attachedObject;
-    Matrix4D _cameraMatrix;
-    Matrix4D _cameraMatrixStatic;
+    CameraMatrices _matrices;
 };
 
 }

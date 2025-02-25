@@ -6,8 +6,9 @@ layout(location = 3) in vec2 aTexCoord0;
 layout(location = 5) in ivec4 aJoint;
 layout(location = 6) in vec4 aWeight;
 
-layout(std140, binding = 0) uniform CameraBlock {
-    mat4 cameraMatrix;
+layout(std140, binding = 0) uniform CameraMatrices {
+    mat4 cameraMatrixStatic;
+    mat4 cameraMatrixDynamic;
 };
 
 layout(std140, binding = 2) uniform JointsBlock {
@@ -31,11 +32,11 @@ void main() {
         fragNormal = transpose(inverse(mat3(skinningMatrix))) * aNormal;
         fragNormal = mat3(transpose(inverse(model))) * fragNormal;
         currentPosition = vec3(model * skinningMatrix * vec4(aPos, 1.0));
-        gl_Position = cameraMatrix * model * skinningMatrix * vec4(aPos, 1.0);
+        gl_Position = cameraMatrixDynamic * model * skinningMatrix * vec4(aPos, 1.0);
     } else {
         fragNormal = transpose(inverse(mat3(model))) * aNormal;
         currentPosition = vec3(model * vec4(aPos, 1.0));
-        gl_Position = cameraMatrix * model * vec4(aPos, 1.0);
+        gl_Position = cameraMatrixDynamic * model * vec4(aPos, 1.0);
     }    
 
     texCoord0 = aTexCoord0;

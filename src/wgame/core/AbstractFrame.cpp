@@ -102,6 +102,8 @@ void AbstractFrame::initOpenGLState() {
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_MULTISAMPLE);	
+	glCullFace(GL_BACK);
+	glFrontFace(GL_CCW);
 }
 
 void AbstractFrame::render() {
@@ -111,14 +113,11 @@ void AbstractFrame::render() {
 
 	glDepthFunc(GL_LEQUAL);
 	glDisable(GL_CULL_FACE);
-	_camera -> applyToBackground();
+	_camera -> apply();
 	renderBackground();
 
 	glDepthFunc(GL_LESS);
-	glEnable(GL_CULL_FACE);
-	glCullFace(GL_BACK);
-	glFrontFace(GL_CCW);
-	_camera -> applyToWorld();
+	glEnable(GL_CULL_FACE);	
 	_world -> render();	
 
 	glDisable(GL_DEPTH_TEST);
