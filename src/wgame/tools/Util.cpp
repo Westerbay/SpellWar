@@ -19,13 +19,13 @@ unsigned nextInt(unsigned threshold) {
     return rand() % threshold;
 }
 
-float random() {
+float randomProbability() {
     return (float) rand() / RAND_MAX;
 }
 
 float randomFloat(float min, float max) {
     if (min > max) std::swap(min, max);
-    return random() * (max - min) + min;
+    return randomProbability() * (max - min) + min;
 }
 
 int randomInt(int min, int max) {
@@ -34,7 +34,7 @@ int randomInt(int min, int max) {
 }
 
 bool P(float probability) {
-    return random() < probability;
+    return randomProbability() < probability;
 }
 
 

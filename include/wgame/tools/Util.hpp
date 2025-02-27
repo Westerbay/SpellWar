@@ -16,7 +16,7 @@ std::string getFilePathExtension(const std::string & fileName);
 
 unsigned nextInt(unsigned threshold);
 
-float random();
+float randomProbability();
 
 float randomFloat(float min, float max);
 
