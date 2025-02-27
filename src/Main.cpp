@@ -15,7 +15,7 @@
 #include <wgame/wgame.hpp>
  
 int main() {
-	srand((unsigned int) time(NULL));
+	srand((unsigned int) time(nullptr));
 	MainFrame * mainFrame = new MainFrame("Application", {1280, 720});
 	Game * game = new Game();
 	GameEngine gameEngine(game, mainFrame);

@@ -62,5 +62,5 @@ void Player::update() {
 
 void Player::render() {
     //_modelDrawer.draw(*_model);
-    _modelDrawer.draw(*_modelStatic);
+    //_modelDrawer.draw(*_modelStatic);
 }

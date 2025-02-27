@@ -27,8 +27,10 @@ struct Cuboid {
         Matrix3D orientation = Matrix3D(1.0f)
     );
     std::vector<Point3D> getVertices() const;
+    std::vector<Point3D> getNormals() const;
     bool contains(const Point3D & point) const;
     bool collidesWith(const Cuboid & other) const;
+    bool collidesList(const std::vector<Cuboid> & cuboids) const;
     void translate(float delta, const Vector3D & axis);
     void move(float delta, const Vector3D & axis);
     void rotateX(float angle);

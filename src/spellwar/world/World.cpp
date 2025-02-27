@@ -11,14 +11,21 @@
 
 
 World::World(GameCamera * camera) : GameObjectGroup() {
-    add(new Background());
+    //add(new Background());
 
-    Cuboid cuboid(Point3D(0.0f, -20.0f, -2.0f), Vector3D(1.0f, 1.0f, 1.0f));
-    add(new Platform(cuboid));
+    Hitbox mapHitbox(Point3D(0.0f), Vector3D(150.0f, 30.0f, 150.0f));
+    Map * map = new Map(mapHitbox);
+    map -> generatePlatform(
+        20, 
+        Vector3D(5.0f, 1.0f, 5.0f), 
+        Vector3D(50.0f, 3.0f, 50.0f)
+    );
+    add(map);
 
     Hitbox hitbox(Point3D(0.0f), Vector3D(0.0f));
     Player * player = new Player(hitbox);
     add(player);
     
+    camera -> setFarPlane(1000.0f);
     camera -> attachGameObject(player -> getCameraObject());
 }

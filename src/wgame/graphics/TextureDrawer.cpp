@@ -46,6 +46,7 @@ void TextureDrawer::setCuboidData(const Cuboid & cuboid) {
     _vao.setEBO(elements);
     _vao.setVBO(VBO_VERTEX, vertices);
     _vao.setVBO(VBO_TEXCOORD_0, texCoords);
+    _vao.setVBO(VBO_NORMAL, cuboid.getNormals());
     _shader -> unbind();
 }
 

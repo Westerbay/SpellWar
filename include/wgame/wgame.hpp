@@ -33,6 +33,7 @@
 
 #include "tools/System.hpp"
 #include "tools/Keys.hpp"
+#include "tools/Util.hpp"
 
 #include "model/Animation.hpp"
 #include "model/Skeleton.hpp"

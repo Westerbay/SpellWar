@@ -14,7 +14,7 @@ Game::Game(unsigned tps) : AbstractGame(tps) {}
 
 void Game::init() {
     getLight() -> setDisplayLight(1);
-    getLight() -> setPosition(Point3D(5.0f, 0.0f, -1.0f));
+    getLight() -> setPosition(Point3D(0.0f, 500.0f, 0.0f));
     getLight() -> setAmbientLighting(0.2f);
     getLight() -> setSpecularFactor(0.5f);
     getLight() -> setSpecularExponent(8);

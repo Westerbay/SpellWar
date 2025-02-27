@@ -12,6 +12,7 @@
 
 #include <tinygltf/tiny_gltf.h>
 
+#include "../tools/Util.hpp"
 #include "ModelMesh.hpp"
 
 #include <iostream>
@@ -42,8 +43,7 @@ public:
     void drawModelMesh(const Shader & shader);
     virtual void draw(const Shader & shader) = 0;
 protected:
-    static std::string getFilePathExtension(const std::string & fileName);
-    static int getVBOIndex(const std::string & key);
+    int getVBOIndex(const std::string & key);
     template<typename T>
     void loadAccessor(const tinygltf::Model & model, const tinygltf::Accessor & accessor, const T*& pointer);
     void process(const tinygltf::Model & model);  

@@ -15,12 +15,6 @@
 
 namespace wgame {
 
-std::string ModelGLTF::getFilePathExtension(const std::string & fileName) {
-    if (fileName.find_last_of(".") != std::string::npos)
-        return fileName.substr(fileName.find_last_of(".") + 1);
-    return "";
-}
-
 int ModelGLTF::getVBOIndex(const std::string & key) {
     if (key.compare(POSITION) == 0) {
         return VBO_VERTEX;

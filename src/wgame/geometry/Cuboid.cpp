@@ -20,6 +20,32 @@ Cuboid::Cuboid(
     Cuboid::orientation[2] *= -1;
 }
 
+std::vector<Point3D> Cuboid::getNormals() const {
+    std::vector<Vector3D> normals;
+
+    Vector3D normalFront  = Vector3D(0, 0, 1);
+    Vector3D normalBack   = Vector3D(0, 0, -1);
+    Vector3D normalLeft   = Vector3D(-1, 0, 0);
+    Vector3D normalRight  = Vector3D(1, 0, 0);
+    Vector3D normalTop    = Vector3D(0, 1, 0);
+    Vector3D normalBottom = Vector3D(0, -1, 0);
+
+    std::vector<Vector3D> localNormals = {
+        normalFront, normalFront, normalFront, normalFront,  
+        normalBack, normalBack, normalBack, normalBack,      
+        normalLeft, normalLeft, normalLeft, normalLeft,      
+        normalRight, normalRight, normalRight, normalRight,  
+        normalTop, normalTop, normalTop, normalTop,         
+        normalBottom, normalBottom, normalBottom, normalBottom 
+    };
+
+    for (const auto& localNormal : localNormals) {
+        normals.push_back(orientation * localNormal);
+    }
+
+    return normals;
+}
+
 std::vector<Point3D> Cuboid::getVertices() const {
     std::vector<Point3D> vertices;
     Vector3D halfSize = size * 0.5f;
@@ -83,6 +109,15 @@ bool Cuboid::collidesWith(const Cuboid & other) const {
         }
     }
     return true;
+}
+
+bool Cuboid::collidesList(const std::vector<Cuboid> & cuboids) const {
+    for (const Cuboid & cuboid: cuboids) {
+        if (collidesWith(cuboid)) {
+            return true;
+        }
+    }
+    return false;
 }
 
 void Cuboid::translate(float delta, const Vector3D & axis) {
