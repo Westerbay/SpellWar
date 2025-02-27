@@ -36,7 +36,6 @@ void ColorDrawer::setDrawCuboidData(const Cuboid & cuboid, const ColorRGB & colo
     _vao.setEBO(elements);
     _vao.setVBO(VBO_VERTEX, vertices);
     _vao.setVBO(VBO_COLOR, colors);
-    _vao.setVBO(VBO_NORMAL, cuboid.getNormals());
 }
 
 void ColorDrawer::setFillCuboidData(const Cuboid & cuboid, const ColorRGB & color) {

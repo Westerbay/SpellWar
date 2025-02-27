@@ -33,4 +33,8 @@ int randomInt(int min, int max) {
     return nextInt(max - min + 1) + min;
 }
 
+bool P(float probability) {
+    return random() < probability;
+}
+
 
