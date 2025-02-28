@@ -12,6 +12,11 @@
 
 Map::Map(const Hitbox & hitbox) : GameObject() {
     _hitbox = hitbox;
+    _model = new StaticModelGLTF("assets/model/stalagmite/scene.gltf");
+}
+
+Map::~Map() {
+    delete _model;
 }
 
 void Map::generatePlatform(
@@ -49,7 +54,6 @@ void Map::generatePlatform(
                 platform.rotateY(randomFloat(0.0f, MAX_ANGLE_ROTATION));
                 platform.rotateZ(randomFloat(0.0f, MAX_ANGLE_ROTATION));
             }            
-
             hitbox = platform;            
             hitbox.size.x += X_Z_GAP;
             hitbox.size.y += Y_GAP;
@@ -62,11 +66,25 @@ void Map::generatePlatform(
             }         
         }
     }
-
+    generateStalagmite();
 }
 
 void Map::render() {
     for (ColorDrawer & drawer: _drawers) {
         drawer.fill();
-    }    
+    }   
+    glFrontFace(GL_CW); 
+    _modelDrawer.draw(*_model);
+    glFrontFace(GL_CCW); 
+}
+
+void Map::generateStalagmite() {
+    const Cuboid & platform = _platforms.front();
+    Matrix4D transform = platform.getTransformWithoutScale();
+    
+    transform = glm::translate(transform, platform.orientation[1] * platform.size.y * -0.5f);
+    transform = glm::rotate(transform, glm::radians(180.0f), AXIS_X);
+    transform = glm::scale(transform, Vector3D(3.0f, 3.0f, 3.0f));
+
+    _model -> setTransform(transform);
 }

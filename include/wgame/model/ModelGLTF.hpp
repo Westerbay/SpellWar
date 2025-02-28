@@ -37,9 +37,7 @@ class ModelGLTF {
 public:
     ModelGLTF();
     virtual ~ModelGLTF() = default;
-    void setTranslation(const Vector3D & translation);
-    void setScale(float scale);
-    void setRotation(float angleDeg, const Vector3D & axisRotation);
+    void setTransform(const Matrix4D & transform);
     void drawModelMesh(const Shader & shader);
     virtual void draw(const Shader & shader) = 0;
 protected:
@@ -49,19 +47,15 @@ protected:
     void process(const tinygltf::Model & model);  
     void processNodes(
         const tinygltf::Model & model, 
-        const tinygltf::Node & node
+        const tinygltf::Node & node, Matrix4D transformParent
     );
     void processMesh(
         const tinygltf::Model & model, 
-        const tinygltf::Mesh & mesh
+        const tinygltf::Mesh & mesh, Matrix4D transform
     );    
-private:
-    void updateModel();    
-    float _scale;    
-    float _angleDeg;
-    Vector3D _axisRotation;
-    Vector3D _translation;
-    Matrix4D _modelMatrix;
+    Matrix4D getTransformNode(const tinygltf::Node & node) const;
+private: 
+    Matrix4D _transform;
     ModelMesh _modelMesh;    
 };
 

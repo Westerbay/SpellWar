@@ -26,6 +26,6 @@ World::World(GameCamera * camera) : GameObjectGroup() {
     Player * player = new Player(hitbox);
     add(player);
     
-    camera -> setFarPlane(1000.0f);
+    camera -> setFarPlane(600.0f);
     camera -> attachGameObject(player -> getCameraObject());
 }

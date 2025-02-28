@@ -15,7 +15,7 @@ Player::Player(const Hitbox & hitbox) : GameObject(hitbox) {
     _speed = 0.2f;
     _sensibility = 0.2f;
     _modelStatic = new StaticModelGLTF("assets/model/fox.glb");
-    _modelStatic -> setScale(0.05f);
+    //_modelStatic -> setScale(0.05f);
     _model = nullptr;
 
     //_model = new AnimatedModelGLTF("assets/model/witch.glb");

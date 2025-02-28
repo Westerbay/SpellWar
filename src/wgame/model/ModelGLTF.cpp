@@ -35,50 +35,50 @@ int ModelGLTF::getVBOIndex(const std::string & key) {
 }
 
 ModelGLTF::ModelGLTF() {
-    _scale = 1.0f;
-    _angleDeg = 0.0f;
-    _axisRotation = AXIS_X;
-    _translation = Vector3D(0.0f);
-    _modelMatrix = Matrix4D(1.0f);
+    _transform = Matrix4D(1.0f);
 }
 
-void ModelGLTF::setTranslation(const Vector3D & translation) {
-    _translation = translation;
-    updateModel();
-}
-
-void ModelGLTF::setScale(float scale) {
-    _scale = scale;
-    updateModel();
-}
-
-void ModelGLTF::setRotation(float angleDeg, const Vector3D & axisRotation) {
-    _angleDeg = angleDeg;
-    _axisRotation = axisRotation;
-    updateModel();
-}
-
-void ModelGLTF::updateModel() {
-    Matrix4D M(1.0f);
-    _modelMatrix = glm::translate(M, _translation) *
-                   glm::rotate(M, glm::radians(_angleDeg), _axisRotation) *
-                   glm::scale(M, Vector3D(_scale));
+void ModelGLTF::setTransform(const Matrix4D & transform) {
+    _transform = transform;
 }
 
 void ModelGLTF::drawModelMesh(const Shader & shader) {
     shader.setUniform("textureDiffuse", 0);
-    shader.setUniform("model", _modelMatrix);
-    _modelMesh.draw();
-}   
+    _modelMesh.draw(shader, _transform);
+}  
 
+Matrix4D ModelGLTF::getTransformNode(const tinygltf::Node & node) const {
+    
+    Vector3D translation(0.0f);
+    Quaternion rotation(1.0f, 0.0f, 0.0f, 0.0f);
+    Vector3D scale(1.0f);
+    Matrix4D undeformedMatrix(1.0f);
 
+    if (node.translation.size() == 3) {
+        translation = glm::make_vec3(node.translation.data());
+    }
+    if (node.rotation.size() == 4) {
+        rotation = glm::make_quat(node.rotation.data());
+    }
+    if (node.scale.size() == 3) {
+        scale = glm::make_vec3(node.scale.data());
+    }
+    if (node.matrix.size() == 16) {
+        undeformedMatrix = glm::make_mat4x4(node.matrix.data());
+    }
+
+    return glm::translate(Matrix4D(1.0f), translation) *
+           glm::mat4(rotation) * 
+           glm::scale(Matrix4D(1.0f), scale) *
+           undeformedMatrix;
+}
 
 void ModelGLTF::process(const tinygltf::Model & model) {
     _modelMesh.bind();
     const tinygltf::Scene & scene = model.scenes[model.defaultScene];
     for (size_t i = 0; i < scene.nodes.size(); ++ i) {
         if (scene.nodes[i] >= 0) {
-            processNodes(model, model.nodes[scene.nodes[i]]);
+            processNodes(model, model.nodes[scene.nodes[i]], Matrix4D(1.0f));
         }
     }
     _modelMesh.unbind();  
@@ -86,21 +86,23 @@ void ModelGLTF::process(const tinygltf::Model & model) {
 
 void ModelGLTF::processNodes(
     const tinygltf::Model & model,
-    const tinygltf::Node & node
+    const tinygltf::Node & node,
+    Matrix4D transformParent
 ) {
+    Matrix4D transform = transformParent * getTransformNode(node); 
     if (node.mesh >= 0) {
-        processMesh(model, model.meshes[node.mesh]);
+        processMesh(model, model.meshes[node.mesh], transform);
     }
     for (size_t i = 0; i < node.children.size(); ++ i) {
         if (node.children[i] >= 0) {
-            processNodes(model, model.nodes[node.children[i]]);
+            processNodes(model, model.nodes[node.children[i]], transform);
         }
     }
 }
 
 void ModelGLTF::processMesh(
     const tinygltf::Model & model,
-    const tinygltf::Mesh & mesh
+    const tinygltf::Mesh & mesh, Matrix4D transform
 ) {
     for (size_t i = 0; i < mesh.primitives.size(); ++ i) {
         const tinygltf::Primitive primitive = mesh.primitives[i];
@@ -152,7 +154,7 @@ void ModelGLTF::processMesh(
             (GLsizei) indexAccessor.count,
             (GLenum) primitive.mode,
             (GLenum) indexAccessor.componentType,
-            (char *)NULL + indexAccessor.byteOffset
+            (char *) NULL + indexAccessor.byteOffset
         };
 
         int textureID = -1;
@@ -180,6 +182,7 @@ void ModelGLTF::processMesh(
         } 
         ModelSubMeshInfo subMesh = {
             textureID,
+            transform,
             elementsInfo,
             vboInfo
         };

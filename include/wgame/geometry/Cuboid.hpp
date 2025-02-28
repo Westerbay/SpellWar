@@ -11,6 +11,7 @@
 #define __WG_CUBOID_H__
 
 #include "Geometry.hpp"
+#include <iostream>
 
 #include <vector>
 
@@ -26,6 +27,8 @@ struct Cuboid {
         const Vector3D & size = Vector3D(0.0f),
         Matrix3D orientation = Matrix3D(1.0f)
     );
+    Matrix4D getTransform() const;
+    Matrix4D getTransformWithoutScale() const;
     std::vector<Point3D> getVertices() const;
     std::vector<Point3D> getNormals() const;
     bool contains(const Point3D & point) const;

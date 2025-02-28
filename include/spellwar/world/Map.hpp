@@ -24,15 +24,20 @@ using namespace wgame;
 class Map : public GameObject {
 public:
     Map(const Hitbox & hitbox);
+    ~Map();
     void generatePlatform(
         size_t maxNumberOfPlatforms,
         const Vector3D & minSize,
         const Vector3D & maxSize,
         unsigned maxAttempts = MAX_ATTEMPTS
-    );
+    );    
     void render() override;
 private:
+    void generateStalagmite();
+private:
     Hitbox _hitbox;
+    StaticModelGLTF * _model;
+    ModelDrawer _modelDrawer;
     std::vector<Cuboid> _platforms;
     std::vector<ColorDrawer> _drawers;
 };

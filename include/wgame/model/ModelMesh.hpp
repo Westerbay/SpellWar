@@ -41,6 +41,7 @@ struct VertexBufferInfo {
 
 struct ModelSubMeshInfo {
     int textureID;
+    Matrix4D transform;
     ElementBufferInfo elementsInfo;
     std::vector<VertexBufferInfo> vboInfo;
 };
@@ -60,7 +61,7 @@ public:
     void addSubMesh(const ModelSubMeshInfo & modelSubMeshinfo);
     void bind() const;
     void unbind() const;
-    void draw();
+    void draw(const Shader & shader, const Matrix4D & transform);
 private:
     GLuint _vao; 
     std::unordered_map<int, GLuint> _ebos;

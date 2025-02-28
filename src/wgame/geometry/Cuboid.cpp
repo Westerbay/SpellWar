@@ -20,6 +20,17 @@ Cuboid::Cuboid(
     Cuboid::orientation[2] *= -1;
 }
 
+Matrix4D Cuboid::getTransform() const {
+    Matrix4D scale = glm::scale(Matrix4D(1.0f), size);
+    return getTransformWithoutScale() * scale;
+}
+
+Matrix4D Cuboid::getTransformWithoutScale() const {
+    Matrix4D translate = glm::translate(Matrix4D(1.0f), position);
+    Matrix4D rotate = Matrix4D(orientation);
+    return translate * rotate;
+}
+
 std::vector<Point3D> Cuboid::getNormals() const {
     std::vector<Vector3D> normals;
 
