@@ -19,6 +19,7 @@ class StaticModelGLTF : public ModelGLTF {
 public:
     StaticModelGLTF(const std::string & filename);
     void draw(const Shader & shader) override;
+    void drawInstanced(const Shader & shader, size_t numberOfInstance) override;
 };
 
 }

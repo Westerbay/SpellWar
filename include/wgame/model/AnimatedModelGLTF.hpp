@@ -31,6 +31,7 @@ public:
     void stop();
     void switchAnimation(std::string name, bool loop = false);
     void draw(const Shader & shader) override;    
+    void drawInstanced(const Shader & shader, size_t numberOfInstance) override;
 private:
     void processSkeleton(const tinygltf::Model & model);
     void processJoint(

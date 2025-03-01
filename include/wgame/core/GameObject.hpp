@@ -10,6 +10,8 @@
 #ifndef __WG_GAME_OBJECT_H__
 #define __WG_GAME_OBJECT_H__
 
+#include <glad/glad.h>
+
 #include "../geometry/Cuboid.hpp"
 
 
@@ -19,6 +21,8 @@ class GameObject {
 public:
     GameObject(const Hitbox & hitbox = Hitbox());
     Hitbox getHitbox() const;
+    void cullClockwise() const;
+    void cullCounterClockwise() const;
     virtual void update() {};
     virtual void render() {};
     virtual void renderBackground() {};

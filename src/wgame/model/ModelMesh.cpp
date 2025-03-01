@@ -102,35 +102,65 @@ void ModelMesh::unbind() const {
     glBindVertexArray(0);
 }
 
+void ModelMesh::configureBuffers(const ModelSubMeshInfo & subMesh) {
+    for (const VertexBufferInfo & vboInfo : subMesh.vboInfo) {
+        glBindBuffer(GL_ARRAY_BUFFER, _vbos[vboInfo.vboIndex]);
+        glEnableVertexAttribArray(vboInfo.vboLocation);
+        if (vboInfo.vboLocation == VBO_JOINTS) {
+            glVertexAttribIPointer(
+                vboInfo.vboLocation, vboInfo.size, 
+                vboInfo.type, vboInfo.stride, vboInfo.pointer
+            ); 
+        } else {
+            glVertexAttribPointer(
+                vboInfo.vboLocation, vboInfo.size, 
+                vboInfo.type, vboInfo.normalized, 
+                vboInfo.stride, vboInfo.pointer
+            );   
+        }
+        glBindBuffer(GL_ARRAY_BUFFER, 0);        
+    } 
+}
+
 void ModelMesh::draw(const Shader & shader, const Matrix4D & transform) {
     bind();
     glActiveTexture(GL_TEXTURE0);
     for (const ModelSubMeshInfo & subMesh : _subMeshesInfo) {
         shader.setUniform("model", transform * subMesh.transform);
         glBindTexture(GL_TEXTURE_2D, subMesh.textureID == -1 ? 0 : _textures[subMesh.textureID]);
-        for (const VertexBufferInfo & vboInfo : subMesh.vboInfo) {
-            glBindBuffer(GL_ARRAY_BUFFER, _vbos[vboInfo.vboIndex]);
-            glEnableVertexAttribArray(vboInfo.vboLocation);
-            if (vboInfo.vboLocation == VBO_JOINTS) {
-                glVertexAttribIPointer(
-                    vboInfo.vboLocation, vboInfo.size, 
-                    vboInfo.type, vboInfo.stride, vboInfo.pointer
-                ); 
-            } else {
-                glVertexAttribPointer(
-                    vboInfo.vboLocation, vboInfo.size, 
-                    vboInfo.type, vboInfo.normalized, 
-                    vboInfo.stride, vboInfo.pointer
-                );   
-            }
-            glBindBuffer(GL_ARRAY_BUFFER, 0);        
-        }        
+        configureBuffers(subMesh);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ebos[subMesh.elementsInfo.eboIndex]);
         glDrawElements(
             subMesh.elementsInfo.drawMode, 
             subMesh.elementsInfo.countElement, 
             subMesh.elementsInfo.componentType, 
             subMesh.elementsInfo.offsetElement
+        );
+        glBindTexture(GL_TEXTURE_2D, 0);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    }    
+    unbind();
+}
+
+void ModelMesh::draw(const Shader & shader, size_t numberOfInstance) {
+    
+    if (numberOfInstance > MAX_INSTANCED) {
+        throw std::runtime_error(std::string("Max instances allowed : ") + std::string(MAX_INSTANCED + ""));
+    }
+    
+    bind();
+    glActiveTexture(GL_TEXTURE0);
+    for (const ModelSubMeshInfo & subMesh : _subMeshesInfo) {
+        shader.setUniform("model", subMesh.transform);
+        glBindTexture(GL_TEXTURE_2D, subMesh.textureID == -1 ? 0 : _textures[subMesh.textureID]);
+        configureBuffers(subMesh);  
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ebos[subMesh.elementsInfo.eboIndex]);
+        glDrawElementsInstanced(
+            subMesh.elementsInfo.drawMode, 
+            subMesh.elementsInfo.countElement, 
+            subMesh.elementsInfo.componentType, 
+            subMesh.elementsInfo.offsetElement,
+            numberOfInstance
         );
         glBindTexture(GL_TEXTURE_2D, 0);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);

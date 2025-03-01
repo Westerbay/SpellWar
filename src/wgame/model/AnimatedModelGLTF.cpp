@@ -97,7 +97,16 @@ void AnimatedModelGLTF::draw(const Shader & shader) {
     shader.setUniform("isAnimated", 1);
     drawModelMesh(shader);
     _ubo.unbind();
-}   
+}  
+
+void AnimatedModelGLTF::drawInstanced(const Shader & shader, size_t numberOfInstance) {
+    _currentAnimation -> update(_skeleton, _timeAcceleration);
+    _ubo.bind();
+    _ubo.setData(_skeleton.jointMatrices.data(), _skeleton.jointMatricesByteLength);
+    shader.setUniform("isAnimated", 1);
+    drawModelMeshInstanced(shader, numberOfInstance);
+    _ubo.unbind();
+}
 
 void AnimatedModelGLTF::processSkeleton(const tinygltf::Model & model) {
     if (model.skins.size() == 0) {

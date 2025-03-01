@@ -39,7 +39,9 @@ public:
     virtual ~ModelGLTF() = default;
     void setTransform(const Matrix4D & transform);
     void drawModelMesh(const Shader & shader);
+    void drawModelMeshInstanced(const Shader & shader, size_t numberOfInstance);
     virtual void draw(const Shader & shader) = 0;
+    virtual void drawInstanced(const Shader & shader, size_t numberOfInstance) = 0;
 protected:
     int getVBOIndex(const std::string & key);
     template<typename T>

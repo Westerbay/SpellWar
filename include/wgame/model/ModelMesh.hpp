@@ -18,6 +18,10 @@
 #include "../opengl/Shader.hpp"
 
 #include <unordered_map>
+#include <stdexcept>
+
+#define MAX_INSTANCED 1000
+
 
 namespace wgame {
 
@@ -62,6 +66,9 @@ public:
     void bind() const;
     void unbind() const;
     void draw(const Shader & shader, const Matrix4D & transform);
+    void draw(const Shader & shader, size_t numberOfInstance);
+protected:
+    void configureBuffers(const ModelSubMeshInfo & subMesh);
 private:
     GLuint _vao; 
     std::unordered_map<int, GLuint> _ebos;

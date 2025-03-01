@@ -18,4 +18,12 @@ Hitbox GameObject::getHitbox() const {
     return hitbox;
 }
 
+void GameObject::cullClockwise() const {
+    glFrontFace(GL_CW); 
+}
+
+void GameObject::cullCounterClockwise() const {
+    glFrontFace(GL_CCW); 
+}
+
 }

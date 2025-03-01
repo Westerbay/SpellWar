@@ -18,13 +18,14 @@
 #define X_Z_GAP 5
 #define Y_GAP 20
 
+#define STALAGMITE_MODEL "assets/model/stalagmite/scene.gltf"
+
 
 using namespace wgame;
 
 class Map : public GameObject {
 public:
     Map(const Hitbox & hitbox);
-    ~Map();
     void generatePlatform(
         size_t maxNumberOfPlatforms,
         const Vector3D & minSize,
@@ -32,12 +33,16 @@ public:
         unsigned maxAttempts = MAX_ATTEMPTS
     );    
     void render() override;
+protected:
+    class Stalagmite : public StaticModelGLTF {
+    public:
+        Stalagmite();
+    };
 private:
     void generateStalagmite();
 private:
-    Hitbox _hitbox;
-    StaticModelGLTF * _model;
     ModelDrawer _modelDrawer;
+    Stalagmite _stalagmite;
     std::vector<Cuboid> _platforms;
     std::vector<ColorDrawer> _drawers;
 };

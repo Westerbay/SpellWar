@@ -20,11 +20,36 @@ ModelDrawer::ModelDrawer() {
         _shader = std::make_shared<ModelDrawerShader>();
         _uniqueShader = _shader;
     }
+    _instanced = nullptr;
+    _numberOfInstances = 0;
+}
+
+void ModelDrawer::configureInstances(const std::vector<Matrix4D> & transforms) {
+    if (!_instanced) {
+        _instanced = std::make_unique<UniformBufferObject>();
+        _instanced -> setBindingPoint(BINDING_POINT_TRANSFORMS_MODEL);
+    }
+    _instanced -> configure(transforms.size() * sizeof(Matrix4D));
+    _instanced -> setData(transforms.data(), transforms.size() * sizeof(Matrix4D));
+    _numberOfInstances = transforms.size();
 }
 
 void ModelDrawer::draw(ModelGLTF & model) const {
     _shader -> bind();
+    _shader -> setUniform("drawInstanced", 0);
     model.draw(*_shader);
+    _shader -> unbind();
+}
+
+void ModelDrawer::drawInstanced(ModelGLTF & model) const {
+    if (!_instanced) {
+        return;
+    }
+    _shader -> bind();
+    _instanced -> bind();
+    _shader -> setUniform("drawInstanced", 1);
+    model.drawInstanced(*_shader, _numberOfInstances);
+    _instanced -> unbind();
     _shader -> unbind();
 }
 

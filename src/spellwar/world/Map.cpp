@@ -10,14 +10,7 @@
 #include <spellwar/world/Map.hpp>
 
 
-Map::Map(const Hitbox & hitbox) : GameObject() {
-    _hitbox = hitbox;
-    _model = new StaticModelGLTF("assets/model/stalagmite/scene.gltf");
-}
-
-Map::~Map() {
-    delete _model;
-}
+Map::Map(const Hitbox & hitbox) : GameObject(hitbox) {}
 
 void Map::generatePlatform(
     size_t maxNumberOfPlatforms,
@@ -25,8 +18,8 @@ void Map::generatePlatform(
     const Vector3D & maxSize,
     unsigned maxAttempts
 ) {
-    Point3D position = _hitbox.position;
-    Vector3D size = _hitbox.size;
+    Point3D position = hitbox.position;
+    Vector3D size = hitbox.size;
 
     unsigned tries = 0;
     _drawers.resize(maxNumberOfPlatforms);
@@ -73,18 +66,21 @@ void Map::render() {
     for (ColorDrawer & drawer: _drawers) {
         drawer.fill();
     }   
-    glFrontFace(GL_CW); 
-    _modelDrawer.draw(*_model);
-    glFrontFace(GL_CCW); 
+    cullClockwise();
+    _modelDrawer.drawInstanced(_stalagmite);
+    cullCounterClockwise();
 }
 
 void Map::generateStalagmite() {
-    const Cuboid & platform = _platforms.front();
-    Matrix4D transform = platform.getTransformWithoutScale();
-    
-    transform = glm::translate(transform, platform.orientation[1] * platform.size.y * -0.5f);
-    transform = glm::rotate(transform, glm::radians(180.0f), AXIS_X);
-    transform = glm::scale(transform, Vector3D(3.0f, 3.0f, 3.0f));
-
-    _model -> setTransform(transform);
+    std::vector<Matrix4D> stalagmiteTransform;
+    for (const Cuboid & platform: _platforms) {
+        Matrix4D transform = platform.getTransformWithoutScale();
+        transform = glm::translate(transform, platform.orientation[1] * platform.size.y * -0.5f);
+        transform = glm::rotate(transform, glm::radians(180.0f), AXIS_X);
+        transform = glm::scale(transform, Vector3D(1.0f, 1.0f, 1.0f));
+        stalagmiteTransform.push_back(transform);
+    }    
+    _modelDrawer.configureInstances(stalagmiteTransform);
 }
+
+Map::Stalagmite::Stalagmite() : StaticModelGLTF(STALAGMITE_MODEL) {}

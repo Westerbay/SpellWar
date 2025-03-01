@@ -47,6 +47,11 @@ void ModelGLTF::drawModelMesh(const Shader & shader) {
     _modelMesh.draw(shader, _transform);
 }  
 
+void ModelGLTF::drawModelMeshInstanced(const Shader & shader, size_t numberOfInstance) {
+    shader.setUniform("textureDiffuse", 0);
+    _modelMesh.draw(shader, numberOfInstance);
+}  
+
 Matrix4D ModelGLTF::getTransformNode(const tinygltf::Node & node) const {
     
     Vector3D translation(0.0f);

@@ -47,4 +47,9 @@ void StaticModelGLTF::draw(const Shader & shader) {
     drawModelMesh(shader);
 }
 
+void StaticModelGLTF::drawInstanced(const Shader & shader, size_t numberOfInstance) {
+    shader.setUniform("isAnimated", 0);
+    drawModelMeshInstanced(shader, numberOfInstance);
+}
+
 }
