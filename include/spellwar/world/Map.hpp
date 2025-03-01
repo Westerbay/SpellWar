@@ -18,6 +18,8 @@
 #define X_Z_GAP 5
 #define Y_GAP 40
 
+#define TEX_SCALE 10.0f
+
 #define STALAGMITE_MODEL "assets/model/stalagmite/scene.gltf"
 
 

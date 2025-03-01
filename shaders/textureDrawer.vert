@@ -14,14 +14,9 @@ out vec3 fragNormal;
 out vec2 texCoord;
 
 uniform bool hasHeight;
-uniform sampler2D heightSampler;
 
 void main() {
     vec3 position = aPos;
-    if (hasHeight) {
-        float height = texture(heightSampler, aTexCoord).r;
-        position += aNormal * height;
-    }
     gl_Position = cameraMatrixDynamic * vec4(position, 1.0);
     texCoord = aTexCoord;
     fragNormal = aNormal;

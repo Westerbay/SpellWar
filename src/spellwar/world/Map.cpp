@@ -68,14 +68,14 @@ void Map::generatePlatform(
             if (!hitbox.collidesList(_platforms)) {
                 _platforms.push_back(platform);   
 
-                _drawers[i].setCuboidDataWithSplit(platform, {
-                    {{0.0f, 0.0f}, {0.0f, 1.0f}, {1.0f, 1.0f}, {1.0f, 0.0f}},
-                    {{0.0f, 0.0f}, {0.0f, 1.0f}, {1.0f, 1.0f}, {1.0f, 0.0f}},
-                    {{0.0f, 0.0f}, {0.0f, 1.0f}, {1.0f, 1.0f}, {1.0f, 0.0f}},
-                    {{0.0f, 0.0f}, {0.0f, 1.0f}, {1.0f, 1.0f}, {1.0f, 0.0f}},
-                    {{0.0f, 0.0f}, {0.0f, 1.0f}, {1.0f, 1.0f}, {1.0f, 0.0f}},
-                    {{0.0f, 0.0f}, {0.0f, 1.0f}, {1.0f, 1.0f}, {1.0f, 0.0f}}
-                }, {10, 10});
+                _drawers[i].setCuboidData(platform, {
+                    {{0.0f, 0.0f}, {0.0f, platform.size.x / TEX_SCALE}, {platform.size.y / TEX_SCALE, platform.size.x / TEX_SCALE}, {platform.size.y / TEX_SCALE, 0.0f}},
+                    {{0.0f, 0.0f}, {0.0f, platform.size.x / TEX_SCALE}, {platform.size.y / TEX_SCALE, platform.size.x / TEX_SCALE}, {platform.size.y / TEX_SCALE, 0.0f}},
+                    {{0.0f, 0.0f}, {0.0f, platform.size.x / TEX_SCALE}, {platform.size.z / TEX_SCALE, platform.size.x / TEX_SCALE}, {platform.size.z / TEX_SCALE, 0.0f}},
+                    {{0.0f, 0.0f}, {0.0f, platform.size.z / TEX_SCALE}, {platform.size.y / TEX_SCALE, platform.size.z / TEX_SCALE}, {platform.size.y / TEX_SCALE, 0.0f}},
+                    {{0.0f, 0.0f}, {0.0f, platform.size.x / TEX_SCALE}, {platform.size.z / TEX_SCALE, platform.size.x / TEX_SCALE}, {platform.size.z / TEX_SCALE, 0.0f}},
+                    {{0.0f, 0.0f}, {0.0f, platform.size.z / TEX_SCALE}, {platform.size.y / TEX_SCALE, platform.size.z / TEX_SCALE}, {platform.size.y / TEX_SCALE, 0.0f}}
+                });
 
                 tries = 0;
                 break;
@@ -154,5 +154,5 @@ void Map::generateStalagmite() {
 Map::Stalagmite::Stalagmite() : StaticModelGLTF(STALAGMITE_MODEL) {}
 
 Vector3D Map::Stalagmite::getSize() const {
-    return Vector3D(1.8f, 5.0f, 1.8f);
+    return Vector3D(2.0f, 5.0f, 2.0f);
 }

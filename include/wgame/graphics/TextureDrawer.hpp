@@ -30,16 +30,7 @@ public:
         const Cuboid & cuboid, 
         const std::vector<std::vector<Vector2D>> & texCoords
     );
-    void setCuboidDataWithSplit(
-        const Cuboid & cuboid, 
-        const std::vector<std::vector<Vector2D>> & texCoords,
-        const Size & split
-    );
     void draw(const std::vector<Texture2D *> & textures);
-    void drawHeight(
-        const std::vector<Texture2D *> & textures, 
-        const std::vector<Texture2D *> & heights
-    );
 public:
     class TextureDrawerShader : public Shader {
     public:
