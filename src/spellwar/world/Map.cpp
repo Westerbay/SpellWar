@@ -68,14 +68,14 @@ void Map::generatePlatform(
             if (!hitbox.collidesList(_platforms)) {
                 _platforms.push_back(platform);   
 
-                _drawers[i].setCuboidData(platform, {
+                _drawers[i].setCuboidDataWithSplit(platform, {
                     {{0.0f, 0.0f}, {0.0f, 1.0f}, {1.0f, 1.0f}, {1.0f, 0.0f}},
                     {{0.0f, 0.0f}, {0.0f, 1.0f}, {1.0f, 1.0f}, {1.0f, 0.0f}},
                     {{0.0f, 0.0f}, {0.0f, 1.0f}, {1.0f, 1.0f}, {1.0f, 0.0f}},
                     {{0.0f, 0.0f}, {0.0f, 1.0f}, {1.0f, 1.0f}, {1.0f, 0.0f}},
                     {{0.0f, 0.0f}, {0.0f, 1.0f}, {1.0f, 1.0f}, {1.0f, 0.0f}},
                     {{0.0f, 0.0f}, {0.0f, 1.0f}, {1.0f, 1.0f}, {1.0f, 0.0f}}
-                });
+                }, {10, 10});
 
                 tries = 0;
                 break;
