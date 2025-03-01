@@ -30,7 +30,9 @@ struct Cuboid {
     Matrix4D getTransform() const;
     Matrix4D getTransformWithoutScale() const;
     std::vector<Point3D> getVertices() const;
-    std::vector<Point3D> getNormals() const;
+    std::vector<std::vector<Point3D>> getVerticesPerFace() const;
+    std::vector<std::vector<Vector3D>> getNormalsPerFace() const;
+    std::vector<std::vector<unsigned>> getElementsPerFace() const;
     bool contains(const Point3D & point) const;
     bool collidesWith(const Cuboid & other) const;
     bool collidesList(const std::vector<Cuboid> & cuboids) const;

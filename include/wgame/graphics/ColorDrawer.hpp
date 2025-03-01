@@ -25,10 +25,14 @@ namespace wgame {
 class ColorDrawer {
 public:
     ColorDrawer();
-    void setDrawCuboidData(const Cuboid & cuboid, const ColorRGB & color = ColorRGB(0.0f));
-    void setFillCuboidData(const Cuboid & cuboid, const ColorRGB & color);
-    void drawCuboid(const Cuboid & cuboid, const ColorRGB & color = ColorRGB(0.0f));
-    void fillCuboid(const Cuboid & cuboid, const ColorRGB & color);
+    void setDrawCuboidData(
+        const Cuboid & cuboid, 
+        const ColorRGB & colors
+    );
+    void setFillCuboidData(
+        const Cuboid & cuboid, 
+        const std::vector<ColorRGB> & colors
+    );
     void draw();
     void fill();
 public:
@@ -39,7 +43,7 @@ public:
 private:
     static std::weak_ptr<ColorDrawerShader> _uniqueShader;
     std::shared_ptr<ColorDrawerShader> _shader;
-    VertexArrayObject _vao;
+    VertexArrayObject _vaos[6];
 };
 
 }

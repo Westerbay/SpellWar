@@ -10,7 +10,6 @@
 #ifndef __WORLD__
 #define __WORLD__
 
-#include "Platform.hpp"
 #include "Player.hpp"
 #include "Background.hpp"
 #include "Map.hpp"

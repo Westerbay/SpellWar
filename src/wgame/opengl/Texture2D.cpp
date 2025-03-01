@@ -51,6 +51,9 @@ void Texture2D::setData(const Image & image, GLenum type, bool generateMipmap) c
         case RGB_CHANNELS:
             internalFormat = GL_RGB;
             break;
+        case RED_CHANNELS:
+            internalFormat = GL_RED;
+            break;
         default:
             throw std::runtime_error("Texture2D : Unknown channel format");
     }

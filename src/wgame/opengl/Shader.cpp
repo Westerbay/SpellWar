@@ -85,6 +85,10 @@ bool Shader::getUniformLocation(const std::string & name, GLuint & location) con
 	return true;
 }
 
+template <> void Shader::uniformDispatcher(GLuint location, const bool & val) {
+	glUniform1i(location, val);
+}
+
 template <> void Shader::uniformDispatcher(GLuint location, const int & val) {
 	glUniform1i(location, val);
 }

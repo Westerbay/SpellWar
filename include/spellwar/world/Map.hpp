@@ -47,6 +47,7 @@ private:
     std::vector<Cuboid> _platforms;
     std::vector<TextureDrawer> _drawers;
     Texture2D _texture;
+    Texture2D _textureHeight;
 };
 
 #endif

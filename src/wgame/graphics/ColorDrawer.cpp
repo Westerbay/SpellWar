@@ -33,50 +33,38 @@ void ColorDrawer::setDrawCuboidData(const Cuboid & cuboid, const ColorRGB & colo
         4, 5, 5, 6, 6, 7, 7, 4, 
         1, 5, 2, 6, 0, 4, 3, 7        
     };
-    _vao.setEBO(elements);
-    _vao.setVBO(VBO_VERTEX, vertices);
-    _vao.setVBO(VBO_COLOR, colors);
+    _vaos[0].setEBO(elements);
+    _vaos[0].setVBO(VBO_VERTEX, vertices);
+    _vaos[0].setVBO(VBO_COLOR, colors);
 }
 
-void ColorDrawer::setFillCuboidData(const Cuboid & cuboid, const ColorRGB & color) {
-    std::vector<Point3D> vertices = cuboid.getVertices();
-    std::vector<ColorRGB> colors;
-    for (size_t i = 0; i < vertices.size(); i ++) {
-        colors.push_back(color);
+void ColorDrawer::setFillCuboidData(
+    const Cuboid & cuboid, 
+    const std::vector<ColorRGB> & colors
+) {
+    std::vector<std::vector<Point3D>> vertices = cuboid.getVerticesPerFace();
+    std::vector<std::vector<Vector3D>> normals = cuboid.getNormalsPerFace();
+    std::vector<std::vector<unsigned>> elements = cuboid.getElementsPerFace();    
+    for (int i = 0; i < 6; i ++) {
+        std::vector<Vector3D> vboColors = {colors[i], colors[i], colors[i], colors[i]};
+        _vaos[i].setVBO(VBO_VERTEX, vertices[i]);
+        _vaos[i].setVBO(VBO_NORMAL, normals[i]);
+        _vaos[i].setVBO(VBO_COLOR, vboColors);
+        _vaos[i].setEBO(elements[i]);
     }
-    std::vector<unsigned> elements = {
-        0, 2, 1, 0, 3, 2,  
-        4, 5, 6, 4, 6, 7,  
-        8, 9, 10, 8, 10, 11,  
-        12, 14, 13, 12, 15, 14,  
-        16, 18, 17, 16, 19, 18,  
-        20, 21, 22, 20, 22, 23   
-    };
-    _vao.setEBO(elements);
-    _vao.setVBO(VBO_VERTEX, vertices);
-    _vao.setVBO(VBO_COLOR, colors);
-    _vao.setVBO(VBO_NORMAL, cuboid.getNormals());
-}
-
-void ColorDrawer::drawCuboid(const Cuboid & cuboid, const ColorRGB & color) {
-    setDrawCuboidData(cuboid, color);
-    draw();
-}
-
-void ColorDrawer::fillCuboid(const Cuboid & cuboid, const ColorRGB & color) {
-    setFillCuboidData(cuboid, color);
-    fill();
 }
 
 void ColorDrawer::draw() {
     _shader -> bind();
-    _vao.draw(DRAW_LINES);
+    _vaos[0].draw(DRAW_LINES);
     _shader -> unbind();
 }
 
 void ColorDrawer::fill() {
     _shader -> bind();
-    _vao.draw(DRAW_TRIANGLES);
+    for (VertexArrayObject & vao: _vaos) {
+        vao.draw(DRAW_TRIANGLES);
+    }  
     _shader -> unbind();
 }
 

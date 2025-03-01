@@ -26,11 +26,15 @@ namespace wgame {
 class TextureDrawer {
 public:
     TextureDrawer();
-    void setCuboidData(const Cuboid & cuboid);
-    void setTexCoordFixed(const Cuboid & cuboid, const Vector2D & size);
-    void setTexCoordFlex(const Vector2D & uvScale);
-    void drawCuboid(const Cuboid & cuboid, const Texture2D & texture);
-    void draw(const Texture2D & texture);
+    void setCuboidData(
+        const Cuboid & cuboid, 
+        const std::vector<std::vector<Vector2D>> & texcoords
+    );
+    void draw(const std::vector<Texture2D *> & textures);
+    void drawHeight(
+        const std::vector<Texture2D *> & textures, 
+        const std::vector<Texture2D *> & heights
+    );
 public:
     class TextureDrawerShader : public Shader {
     public:
@@ -39,7 +43,7 @@ public:
 private:
     static std::weak_ptr<TextureDrawerShader> _uniqueShader;
     std::shared_ptr<TextureDrawerShader> _shader;
-    VertexArrayObject _vao;
+    VertexArrayObject _vaos[6];
 };
  
 }

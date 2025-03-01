@@ -38,6 +38,7 @@
 
 #define RGBA_CHANNELS 4
 #define RGB_CHANNELS 3
+#define RED_CHANNELS 1
 
 
 namespace wgame {

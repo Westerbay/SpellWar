@@ -10,7 +10,21 @@
 #include <spellwar/world/Map.hpp>
 
 
-Map::Map(const Hitbox & hitbox) : GameObject(hitbox) {}
+Map::Map(const Hitbox & hitbox) : GameObject(hitbox) {
+    Image image("assets/textures/4/4_diffuseOriginal.bmp");
+    _texture.setType(TEXTURE_2D);
+    _texture.setInterpolationMode(GL_LINEAR);
+    _texture.setRepeatMode(GL_REPEAT);
+    _texture.setData(image);
+    _texture.enableAnisotropicFiltering();
+
+    Image imageHeight("assets/textures/4/4_height.bmp");
+    _textureHeight.setType(TEXTURE_2D);
+    _textureHeight.setInterpolationMode(GL_LINEAR);
+    _textureHeight.setRepeatMode(GL_REPEAT);
+    _textureHeight.setData(imageHeight);
+    _textureHeight.enableAnisotropicFiltering();
+}
 
 void Map::generatePlatform(
     size_t maxNumberOfPlatforms,
@@ -20,13 +34,6 @@ void Map::generatePlatform(
 ) {
     Point3D position = hitbox.position;
     Vector3D size = hitbox.size;
-
-    Image image("assets/textures/4/4_diffuseOriginal.bmp");
-    _texture.setType(TEXTURE_2D);
-    _texture.setInterpolationMode(GL_LINEAR);
-    _texture.setRepeatMode(GL_REPEAT);
-    _texture.setData(image);
-    _texture.enableAnisotropicFiltering();
 
     unsigned tries = 0;
     _drawers.resize(maxNumberOfPlatforms);
@@ -59,9 +66,17 @@ void Map::generatePlatform(
             hitbox.size.y += Y_GAP;
             hitbox.size.z += X_Z_GAP;
             if (!hitbox.collidesList(_platforms)) {
-                _platforms.push_back(platform);                            
-                _drawers[i].setCuboidData(platform);
-                _drawers[i].setTexCoordFixed(platform, {10.0f, 10.0f});
+                _platforms.push_back(platform);   
+
+                _drawers[i].setCuboidData(platform, {
+                    {{0.0f, 0.0f}, {0.0f, 1.0f}, {1.0f, 1.0f}, {1.0f, 0.0f}},
+                    {{0.0f, 0.0f}, {0.0f, 1.0f}, {1.0f, 1.0f}, {1.0f, 0.0f}},
+                    {{0.0f, 0.0f}, {0.0f, 1.0f}, {1.0f, 1.0f}, {1.0f, 0.0f}},
+                    {{0.0f, 0.0f}, {0.0f, 1.0f}, {1.0f, 1.0f}, {1.0f, 0.0f}},
+                    {{0.0f, 0.0f}, {0.0f, 1.0f}, {1.0f, 1.0f}, {1.0f, 0.0f}},
+                    {{0.0f, 0.0f}, {0.0f, 1.0f}, {1.0f, 1.0f}, {1.0f, 0.0f}}
+                });
+
                 tries = 0;
                 break;
             }         
@@ -72,7 +87,14 @@ void Map::generatePlatform(
 
 void Map::render() {
     for (TextureDrawer & drawer: _drawers) {
-        drawer.draw(_texture);
+        drawer.draw({
+            &_texture,
+            &_texture,
+            &_texture,
+            &_texture,
+            &_texture,
+            &_texture
+        });
     }   
     cullClockwise();
     _modelDrawer.drawInstanced(_stalagmite);
