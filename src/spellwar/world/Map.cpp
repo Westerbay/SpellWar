@@ -21,6 +21,13 @@ void Map::generatePlatform(
     Point3D position = hitbox.position;
     Vector3D size = hitbox.size;
 
+    Image image("assets/textures/4/4_diffuseOriginal.bmp");
+    _texture.setType(TEXTURE_2D);
+    _texture.setInterpolationMode(GL_LINEAR);
+    _texture.setRepeatMode(GL_REPEAT);
+    _texture.setData(image);
+    _texture.enableAnisotropicFiltering();
+
     unsigned tries = 0;
     _drawers.resize(maxNumberOfPlatforms);
     for (size_t i = 0; i < maxNumberOfPlatforms; i ++) {
@@ -53,7 +60,8 @@ void Map::generatePlatform(
             hitbox.size.z += X_Z_GAP;
             if (!hitbox.collidesList(_platforms)) {
                 _platforms.push_back(platform);                            
-                _drawers[i].setFillCuboidData(platform, ColorRGB(0.0f, 0.0f, 1.0f));
+                _drawers[i].setCuboidData(platform);
+                _drawers[i].setTexCoordFixed(platform, {10.0f, 10.0f});
                 tries = 0;
                 break;
             }         
@@ -63,8 +71,8 @@ void Map::generatePlatform(
 }
 
 void Map::render() {
-    for (ColorDrawer & drawer: _drawers) {
-        drawer.fill();
+    for (TextureDrawer & drawer: _drawers) {
+        drawer.draw(_texture);
     }   
     cullClockwise();
     _modelDrawer.drawInstanced(_stalagmite);
@@ -72,15 +80,57 @@ void Map::render() {
 }
 
 void Map::generateStalagmite() {
+
     std::vector<Matrix4D> stalagmiteTransform;
-    for (const Cuboid & platform: _platforms) {
-        Matrix4D transform = platform.getTransformWithoutScale();
-        transform = glm::translate(transform, platform.orientation[1] * platform.size.y * -0.5f);
-        transform = glm::rotate(transform, glm::radians(180.0f), AXIS_X);
-        transform = glm::scale(transform, Vector3D(1.0f, 1.0f, 1.0f));
-        stalagmiteTransform.push_back(transform);
+    Vector3D stalagmiteSize = _stalagmite.getSize();
+
+    for (const Cuboid & platform: _platforms) {        
+        std::vector<Cuboid> stalagmiteHitbox;
+        unsigned limit = (unsigned)(platform.size.x * platform.size.z) / 100;
+        unsigned tries = 0;
+        unsigned nb = 0;
+        while (nb < limit && tries < MAX_ATTEMPTS) {
+            tries ++;
+            Matrix4D transform = platform.getTransformWithoutScale();
+            float scale = randomFloat(2.0f, 4.5f);
+            Vector3D translate = {
+                (platform.size.x * 0.5f - scale * stalagmiteSize.x) * randomFloat(-1.0f, 1.0f),
+                -platform.size.y * 0.5f,
+                (platform.size.z * 0.5f - scale * stalagmiteSize.z) * randomFloat(-1.0f, 1.0f),
+            };
+            transform = glm::translate(transform, translate);
+            transform = glm::rotate(transform, glm::radians(180.0f), AXIS_X);
+            transform = glm::scale(transform, Vector3D(scale, scale, scale));            
+
+            Hitbox hitbox(Point3D(0.0f), stalagmiteSize);
+            Vector3D offset(0.5f, 0.0f, 0.5f);
+            offset *= scale;
+            hitbox.orientation = platform.orientation;            
+            hitbox.position += platform.position;
+            hitbox.position += translate.x * platform.orientation[0];
+            hitbox.position += translate.y * platform.orientation[1];
+            hitbox.position += translate.z * platform.orientation[2]; 
+
+            hitbox.position += offset.x * platform.orientation[0];
+            hitbox.position += offset.y * platform.orientation[1];
+            hitbox.position += offset.z * platform.orientation[2]; 
+            hitbox.size *= scale;   
+
+            if (!hitbox.collidesList(stalagmiteHitbox)) {
+                nb ++;
+                tries = 0;
+                stalagmiteHitbox.push_back(hitbox);
+                stalagmiteTransform.push_back(transform); 
+            }
+                    
+        }        
     }    
+
     _modelDrawer.configureInstances(stalagmiteTransform);
 }
 
 Map::Stalagmite::Stalagmite() : StaticModelGLTF(STALAGMITE_MODEL) {}
+
+Vector3D Map::Stalagmite::getSize() const {
+    return Vector3D(1.8f, 5.0f, 1.8f);
+}

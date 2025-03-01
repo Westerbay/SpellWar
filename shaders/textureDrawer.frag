@@ -33,12 +33,12 @@ void main() {
         float specAmount = pow(max(dot(viewDirection, reflectionDirection), 0.0), light.specularExponent);
         float specular = specAmount * light.specularFactor;
 
-        vec4 color = texture(textureDiffuse, texCoord);
+        vec4 color = texture(colorSampler, texCoord);
         color.xyz = color.xyz * light.color.xyz * (diffuse + light.ambient + specular);
         fragColor = color;
     } 
     else {
-        vec4 color = texture(textureDiffuse, texCoord);
+        vec4 color = texture(colorSampler, texCoord);
         fragColor = color;
     }
 }

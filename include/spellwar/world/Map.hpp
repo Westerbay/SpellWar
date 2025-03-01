@@ -16,7 +16,7 @@
 #define MAX_ANGLE_ROTATION 45.0f
 #define PROBABILITY_ROTATE 0.5f
 #define X_Z_GAP 5
-#define Y_GAP 20
+#define Y_GAP 40
 
 #define STALAGMITE_MODEL "assets/model/stalagmite/scene.gltf"
 
@@ -37,6 +37,7 @@ protected:
     class Stalagmite : public StaticModelGLTF {
     public:
         Stalagmite();
+        Vector3D getSize() const;
     };
 private:
     void generateStalagmite();
@@ -44,7 +45,8 @@ private:
     ModelDrawer _modelDrawer;
     Stalagmite _stalagmite;
     std::vector<Cuboid> _platforms;
-    std::vector<ColorDrawer> _drawers;
+    std::vector<TextureDrawer> _drawers;
+    Texture2D _texture;
 };
 
 #endif

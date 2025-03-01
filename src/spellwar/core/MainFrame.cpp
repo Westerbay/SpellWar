@@ -11,6 +11,6 @@
 
 MainFrame::MainFrame(const char * title, const Size & size) :
     AbstractFrame(title, size) {
-    setBackgroundColor(255, 255, 255);    
+    setBackgroundColor(0.7f, 0.7f, 1.0f);    
     setCursorActive(false);
 }

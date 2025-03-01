@@ -17,7 +17,7 @@ World::World(GameCamera * camera) : GameObjectGroup() {
     Map * map = new Map(mapHitbox);
     map -> generatePlatform(
         30, 
-        Vector3D(10.0f, 2.0f, 10.0f), 
+        Vector3D(20.0f, 2.0f, 20.0f), 
         Vector3D(80.0f, 5.0f, 80.0f)
     );
     add(map);
