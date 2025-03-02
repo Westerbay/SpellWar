@@ -11,7 +11,7 @@
 
 
 Map::Map(const Hitbox & hitbox) : GameObject(hitbox) {
-    Image image("assets/textures/4/4_diffuseOriginal.bmp");
+    Image image("assets/textures/3/3_diffuseOriginal.bmp");
     _texture.setType(TEXTURE_2D);
     _texture.setInterpolationMode(GL_LINEAR);
     _texture.setRepeatMode(GL_REPEAT);

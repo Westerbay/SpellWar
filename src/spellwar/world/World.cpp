@@ -13,10 +13,10 @@
 World::World(GameCamera * camera) : GameObjectGroup() {
     //add(new Background());
 
-    Hitbox mapHitbox(Point3D(0.0f), Vector3D(200.0f, 100.0f, 200.0f));
+    Hitbox mapHitbox(Point3D(0.0f), Vector3D(300.0f, 100.0f, 300.0f));
     Map * map = new Map(mapHitbox);
     map -> generatePlatform(
-        30, 
+        25, 
         Vector3D(20.0f, 2.0f, 20.0f), 
         Vector3D(80.0f, 5.0f, 80.0f)
     );
@@ -26,6 +26,6 @@ World::World(GameCamera * camera) : GameObjectGroup() {
     Player * player = new Player(hitbox);
     add(player);
     
-    camera -> setFarPlane(600.0f);
+    camera -> setFarPlane(800.0f);
     camera -> attachGameObject(player -> getCameraObject());
 }

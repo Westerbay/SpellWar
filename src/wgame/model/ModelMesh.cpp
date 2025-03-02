@@ -145,7 +145,7 @@ void ModelMesh::draw(const Shader & shader, const Matrix4D & transform) {
 void ModelMesh::draw(const Shader & shader, size_t numberOfInstance) {
     
     if (numberOfInstance > MAX_INSTANCED) {
-        throw std::runtime_error(std::string("Max instances allowed : ") + std::string(MAX_INSTANCED + ""));
+        throw std::runtime_error(std::string("Max instances allowed : ") + (MAX_INSTANCED + ""));
     }
     
     bind();
@@ -160,7 +160,7 @@ void ModelMesh::draw(const Shader & shader, size_t numberOfInstance) {
             subMesh.elementsInfo.countElement, 
             subMesh.elementsInfo.componentType, 
             subMesh.elementsInfo.offsetElement,
-            numberOfInstance
+            (GLsizei) numberOfInstance
         );
         glBindTexture(GL_TEXTURE_2D, 0);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);

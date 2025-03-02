@@ -14,14 +14,15 @@
 Player::Player(const Hitbox & hitbox) : GameObject(hitbox) {
     _speed = 0.2f;
     _sensibility = 0.2f;
-    _modelStatic = new StaticModelGLTF("assets/model/fox.glb");
-    //_modelStatic -> setScale(0.05f);
-    _model = nullptr;
+    //_modelStatic = new StaticModelGLTF("assets/model/player/gai/scene.gltf");
+    Matrix4D transform = glm::scale(Matrix4D(1.0f), Vector3D(0.05f));
+    //_modelStatic -> setTransform(transform);
+    //_model = nullptr;
 
-    //_model = new AnimatedModelGLTF("assets/model/witch.glb");
-    //_model -> setLoop(true);
-    //_model -> setRotation(-90.0f, AXIS_X);
-    // _modelStatic = nullptr;
+    _model = new AnimatedModelGLTF("assets/model/brenda.glb");
+    _model -> setLoop(true);
+    //_model -> setTransform(transform);
+    _modelStatic = nullptr;
 }
 
 Player::~Player() {
