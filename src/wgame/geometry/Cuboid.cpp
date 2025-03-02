@@ -125,6 +125,45 @@ std::vector<std::vector<Vector3D>> Cuboid::getNormalsPerFace() const {
     return normalsPerFace;
 }
 
+std::vector<std::vector<Vector3D>> Cuboid::getTangentsPerFace() const {
+    std::vector<std::vector<Vector3D>> tangentsPerFace;
+    Vector3D halfSize = size * 0.5f;
+
+    std::vector<Vector3D> localVertices = {
+        {-halfSize.x, -halfSize.y, halfSize.z}, // 0
+        { halfSize.x, -halfSize.y, halfSize.z}, // 1
+        { halfSize.x,  halfSize.y, halfSize.z}, // 2
+        {-halfSize.x,  halfSize.y, halfSize.z}, // 3
+        {-halfSize.x, -halfSize.y, -halfSize.z}, // 4
+        { halfSize.x, -halfSize.y, -halfSize.z}, // 5
+        { halfSize.x,  halfSize.y, -halfSize.z}, // 6
+        {-halfSize.x,  halfSize.y, -halfSize.z}  // 7
+    };
+
+    std::vector<std::vector<int>> faceIndices = {
+        {0, 1, 2, 3}, 
+        {4, 5, 6, 7}, 
+        {0, 1, 5, 4}, 
+        {1, 5, 6, 2}, 
+        {3, 2, 6, 7}, 
+        {0, 4, 7, 3}  
+    };
+
+    for (const auto& indices : faceIndices) {
+        std::vector<Vector3D> tangents;
+        
+        Vector3D tangent = glm::normalize(localVertices[indices[1]] - localVertices[indices[0]]);
+        
+        for (int i = 0; i < 4; i++) {
+            tangents.push_back(glm::normalize(orientation * tangent));
+        }
+        
+        tangentsPerFace.push_back(tangents);
+    }
+
+    return tangentsPerFace;
+}
+
 std::vector<std::vector<unsigned>> Cuboid::getElementsPerFace() const {
     return {
         {0, 2, 1, 0, 3, 2},

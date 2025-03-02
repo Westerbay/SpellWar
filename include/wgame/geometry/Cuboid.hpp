@@ -32,6 +32,7 @@ struct Cuboid {
     std::vector<Point3D> getVertices() const;
     std::vector<std::vector<Point3D>> getVerticesPerFace() const;
     std::vector<std::vector<Vector3D>> getNormalsPerFace() const;
+    std::vector<std::vector<Vector3D>> getTangentsPerFace() const;
     std::vector<std::vector<unsigned>> getElementsPerFace() const;
     bool contains(const Point3D & point) const;
     bool collidesWith(const Cuboid & other) const;

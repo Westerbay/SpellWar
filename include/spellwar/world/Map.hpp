@@ -18,7 +18,7 @@
 #define X_Z_GAP 5
 #define Y_GAP 40
 
-#define TEX_SCALE 10.0f
+#define TEX_SCALE 20.0f
 
 #define STALAGMITE_MODEL "assets/model/stalagmite/scene.gltf"
 
@@ -49,7 +49,6 @@ private:
     std::vector<Cuboid> _platforms;
     std::vector<TextureDrawer> _drawers;
     Texture2D _texture;
-    Texture2D _textureHeight;
 };
 
 #endif

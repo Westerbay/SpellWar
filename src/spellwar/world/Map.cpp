@@ -16,14 +16,6 @@ Map::Map(const Hitbox & hitbox) : GameObject(hitbox) {
     _texture.setInterpolationMode(GL_LINEAR);
     _texture.setRepeatMode(GL_REPEAT);
     _texture.setData(image);
-    _texture.enableAnisotropicFiltering();
-
-    Image imageHeight("assets/textures/4/4_height.bmp");
-    _textureHeight.setType(TEXTURE_2D);
-    _textureHeight.setInterpolationMode(GL_LINEAR);
-    _textureHeight.setRepeatMode(GL_REPEAT);
-    _textureHeight.setData(imageHeight);
-    _textureHeight.enableAnisotropicFiltering();
 }
 
 void Map::generatePlatform(
