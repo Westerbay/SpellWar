@@ -11,7 +11,7 @@
 
 
 Map::Map(const Hitbox & hitbox) : GameObject(hitbox) {
-    Image image("assets/textures/3/3_diffuseOriginal.bmp");
+    Image image("assets/moon.bmp");
     _texture.setType(TEXTURE_2D);
     _texture.setInterpolationMode(GL_LINEAR);
     _texture.setRepeatMode(GL_REPEAT);
@@ -43,8 +43,8 @@ void Map::generatePlatform(
                     position[i] - size[i] / 2,
                     position[i] + size[i] / 2
                 );
-                platform.size[i] = randomFloat(
-                    minSize[i], maxSize[i]
+                platform.size[i] = (float) randomInt(
+                    (int)minSize[i], (int)maxSize[i]
                 );
             }  
 
@@ -61,12 +61,12 @@ void Map::generatePlatform(
                 _platforms.push_back(platform);   
 
                 _drawers[i].setCuboidData(platform, {
-                    {{0.0f, 0.0f}, {0.0f, platform.size.x / TEX_SCALE}, {platform.size.y / TEX_SCALE, platform.size.x / TEX_SCALE}, {platform.size.y / TEX_SCALE, 0.0f}},
-                    {{0.0f, 0.0f}, {0.0f, platform.size.x / TEX_SCALE}, {platform.size.y / TEX_SCALE, platform.size.x / TEX_SCALE}, {platform.size.y / TEX_SCALE, 0.0f}},
-                    {{0.0f, 0.0f}, {0.0f, platform.size.x / TEX_SCALE}, {platform.size.z / TEX_SCALE, platform.size.x / TEX_SCALE}, {platform.size.z / TEX_SCALE, 0.0f}},
-                    {{0.0f, 0.0f}, {0.0f, platform.size.z / TEX_SCALE}, {platform.size.y / TEX_SCALE, platform.size.z / TEX_SCALE}, {platform.size.y / TEX_SCALE, 0.0f}},
-                    {{0.0f, 0.0f}, {0.0f, platform.size.x / TEX_SCALE}, {platform.size.z / TEX_SCALE, platform.size.x / TEX_SCALE}, {platform.size.z / TEX_SCALE, 0.0f}},
-                    {{0.0f, 0.0f}, {0.0f, platform.size.z / TEX_SCALE}, {platform.size.y / TEX_SCALE, platform.size.z / TEX_SCALE}, {platform.size.y / TEX_SCALE, 0.0f}}
+                    {{0.0f, 0.0f}, {platform.size.x / TEXT_SCALE, 0.0f}, {platform.size.x / TEXT_SCALE, platform.size.y / TEXT_SCALE}, {0.0f, platform.size.y / TEXT_SCALE}},
+                    {{0.0f, 0.0f}, {platform.size.x / TEXT_SCALE, 0.0f}, {platform.size.x / TEXT_SCALE, platform.size.y / TEXT_SCALE}, {0.0f, platform.size.y / TEXT_SCALE}},
+                    {{0.0f, 0.0f}, {platform.size.x / TEXT_SCALE, 0.0f}, {platform.size.x / TEXT_SCALE, platform.size.z / TEXT_SCALE}, {0.0f, platform.size.z / TEXT_SCALE}},
+                    {{0.0f, 0.0f}, {platform.size.z / TEXT_SCALE, 0.0f}, {platform.size.z / TEXT_SCALE, platform.size.y / TEXT_SCALE}, {0.0f, platform.size.y / TEXT_SCALE}},
+                    {{0.0f, 0.0f}, {platform.size.x / TEXT_SCALE, 0.0f}, {platform.size.x / TEXT_SCALE, platform.size.z / TEXT_SCALE}, {0.0f, platform.size.z / TEXT_SCALE}},
+                    {{0.0f, 0.0f}, {platform.size.z / TEXT_SCALE, 0.0f}, {platform.size.z / TEXT_SCALE, platform.size.y / TEXT_SCALE}, {0.0f, platform.size.y / TEXT_SCALE}}
                 });
 
                 tries = 0;
@@ -100,13 +100,13 @@ void Map::generateStalagmite() {
 
     for (const Cuboid & platform: _platforms) {        
         std::vector<Cuboid> stalagmiteHitbox;
-        unsigned limit = (unsigned)(platform.size.x * platform.size.z) / 100;
+        unsigned limit = (unsigned)(platform.size.x * platform.size.z);
         unsigned tries = 0;
         unsigned nb = 0;
         while (nb < limit && tries < MAX_ATTEMPTS) {
             tries ++;
             Matrix4D transform = platform.getTransformWithoutScale();
-            float scale = randomFloat(2.0f, 4.5f);
+            float scale = randomFloat(0.8f, 1.5f);
             Vector3D translate = {
                 (platform.size.x * 0.5f - scale * stalagmiteSize.x) * randomFloat(-1.0f, 1.0f),
                 -platform.size.y * 0.5f,

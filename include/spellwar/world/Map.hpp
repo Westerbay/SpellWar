@@ -12,15 +12,15 @@
 
 #include <wgame/wgame.hpp>
 
-#define MAX_ATTEMPTS 100
+#define MAX_ATTEMPTS 50
 #define MAX_ANGLE_ROTATION 45.0f
 #define PROBABILITY_ROTATE 0.5f
 #define X_Z_GAP 5
-#define Y_GAP 40
-
-#define TEX_SCALE 20.0f
+#define Y_GAP 15
 
 #define STALAGMITE_MODEL "assets/model/stalagmite/scene.gltf"
+
+#define TEXT_SCALE 10.0f
 
 
 using namespace wgame;

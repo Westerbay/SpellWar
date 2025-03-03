@@ -12,12 +12,12 @@
 
 Background::Background() : GameObject() {
     _cubeMap.setFaces(
-        Image("assets/cubemap/px.png", false),
-        Image("assets/cubemap/nx.png", false),
-        Image("assets/cubemap/py.png", false),
-        Image("assets/cubemap/ny.png", false),
-        Image("assets/cubemap/pz.png", false),
-        Image("assets/cubemap/nz.png", false)
+        Image("assets/background/px.png", false),
+        Image("assets/background/nx.png", false),
+        Image("assets/background/py.png", false),
+        Image("assets/background/ny.png", false),
+        Image("assets/background/pz.png", false),
+        Image("assets/background/nz.png", false)
     );
 }
 
