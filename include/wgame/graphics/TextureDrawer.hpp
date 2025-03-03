@@ -19,6 +19,11 @@
  
 #define TEXTURE_DRAWER_VERTEX_SHADER_PATH "shaders/textureDrawer.vert"
 #define TEXTURE_DRAWER_FRAGMENT_SHADER_PATH "shaders/textureDrawer.frag"
+
+#define PARALLAX_DRAWER_VERTEX_SHADER_PATH "shaders/parallaxMapping.vert"
+#define PARALLAX_DRAWER_FRAGMENT_SHADER_PATH "shaders/parallaxMapping.frag"
+
+#define DEFAULT_HEIGHT_SCALE_PARALLAX 0.1f
  
  
 namespace wgame {
@@ -31,14 +36,26 @@ public:
         const std::vector<std::vector<Vector2D>> & texCoords
     );
     void draw(const std::vector<Texture2D *> & textures);
+    void draw(
+        const std::vector<Texture2D *> & diffuses,
+        const std::vector<Texture2D *> & normals,
+        const std::vector<Texture2D *> & heights,
+        float heightScale = DEFAULT_HEIGHT_SCALE_PARALLAX
+    );
 public:
     class TextureDrawerShader : public Shader {
     public:
         TextureDrawerShader();
     };
+    class ParallaxDrawerShader : public Shader {
+    public:
+        ParallaxDrawerShader();
+    };
 private:
-    static std::weak_ptr<TextureDrawerShader> _uniqueShader;
-    std::shared_ptr<TextureDrawerShader> _shader;
+    static std::weak_ptr<TextureDrawerShader> _uniqueTextureShader;
+    static std::weak_ptr<ParallaxDrawerShader> _uniqueParallaxShader;
+    std::shared_ptr<TextureDrawerShader> _textureShader;
+    std::shared_ptr<ParallaxDrawerShader> _parallalShader;
     VertexArrayObject _vaos[6];
 };
  

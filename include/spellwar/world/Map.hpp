@@ -15,7 +15,7 @@
 #define MAX_ATTEMPTS 50
 #define MAX_ANGLE_ROTATION 45.0f
 #define PROBABILITY_ROTATE 0.5f
-#define X_Z_GAP 5
+#define X_Z_GAP 8
 #define Y_GAP 20
 
 #define STALAGMITE_MODEL "assets/model/stalagmite/scene.gltf"
@@ -48,7 +48,9 @@ private:
     Stalagmite _stalagmite;
     std::vector<Cuboid> _platforms;
     std::vector<TextureDrawer> _drawers;
-    Texture2D _texture;
+    Texture2D _diffuse;
+    Texture2D _normal;
+    Texture2D _height;
 };
 
 #endif

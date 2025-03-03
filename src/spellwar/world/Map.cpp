@@ -12,10 +12,22 @@
 
 Map::Map(const Hitbox & hitbox) : GameObject(hitbox) {
     Image image("assets/moon.bmp");
-    _texture.setType(TEXTURE_2D);
-    _texture.setInterpolationMode(GL_LINEAR);
-    _texture.setRepeatMode(GL_REPEAT);
-    _texture.setData(image);
+    _diffuse.setType(TEXTURE_2D);
+    _diffuse.setInterpolationMode(GL_LINEAR);
+    _diffuse.setRepeatMode(GL_REPEAT);
+    _diffuse.setData(image);
+
+    Image imageMoon("assets/moon_n.bmp");
+    _normal.setType(TEXTURE_2D);
+    _normal.setInterpolationMode(GL_LINEAR);
+    _normal.setRepeatMode(GL_REPEAT);
+    _normal.setData(imageMoon);
+
+    Image imageHeight("assets/moon_h.bmp");
+    _height.setType(TEXTURE_2D);
+    _height.setInterpolationMode(GL_LINEAR);
+    _height.setRepeatMode(GL_REPEAT);
+    _height.setData(imageHeight);
 }
 
 void Map::generatePlatform(
@@ -80,12 +92,26 @@ void Map::generatePlatform(
 void Map::render() {
     for (TextureDrawer & drawer: _drawers) {
         drawer.draw({
-            &_texture,
-            &_texture,
-            &_texture,
-            &_texture,
-            &_texture,
-            &_texture
+            &_diffuse,
+            &_diffuse,
+            &_diffuse,
+            &_diffuse,
+            &_diffuse,
+            &_diffuse
+        }, {
+            &_normal,
+            &_normal,
+            &_normal,
+            &_normal,
+            &_normal,
+            &_normal
+        }, {
+            &_height,
+            &_height,
+            &_height,
+            &_height,
+            &_height,
+            &_height
         });
     }   
     cullClockwise();

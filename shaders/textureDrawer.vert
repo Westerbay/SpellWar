@@ -13,8 +13,6 @@ out vec3 currentPosition;
 out vec3 fragNormal;
 out vec2 texCoord;
 
-uniform bool hasHeight;
-
 void main() {
     vec3 position = aPos;
     gl_Position = cameraMatrixDynamic * vec4(position, 1.0);
