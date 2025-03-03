@@ -16,7 +16,7 @@
 #define MAX_ANGLE_ROTATION 45.0f
 #define PROBABILITY_ROTATE 0.5f
 #define X_Z_GAP 5
-#define Y_GAP 15
+#define Y_GAP 20
 
 #define STALAGMITE_MODEL "assets/model/stalagmite/scene.gltf"
 

@@ -49,9 +49,9 @@ std::vector<Point3D> Cuboid::getVertices() const {
     std::vector<std::vector<int>> faceIndices = {
         {0, 1, 2, 3}, 
         {4, 5, 6, 7}, 
-        {0, 1, 5, 4}, 
-        {1, 5, 6, 2}, 
+        {0, 1, 5, 4},          
         {3, 2, 6, 7}, 
+        {1, 5, 6, 2},
         {0, 4, 7, 3}  
     };
 
@@ -82,9 +82,9 @@ std::vector<std::vector<Point3D>> Cuboid::getVerticesPerFace() const {
     std::vector<std::vector<int>> faceIndices = {
         {0, 1, 2, 3}, 
         {4, 5, 6, 7}, 
-        {0, 1, 5, 4}, 
-        {1, 5, 6, 2}, 
-        {3, 2, 6, 7}, 
+        {0, 1, 5, 4},        
+        {3, 2, 6, 7},
+        {1, 5, 6, 2},  
         {0, 4, 7, 3}  
     };
 
@@ -103,15 +103,15 @@ std::vector<std::vector<Vector3D>> Cuboid::getNormalsPerFace() const {
     std::vector<std::vector<Vector3D>> normalsPerFace;
 
     Vector3D normalFront  = Vector3D(0, 0, 1);
-    Vector3D normalBack   = Vector3D(0, 0, -1);
-    Vector3D normalLeft   = Vector3D(-1, 0, 0);
-    Vector3D normalRight  = Vector3D(1, 0, 0);
-    Vector3D normalTop    = Vector3D(0, 1, 0);
+    Vector3D normalBack   = Vector3D(0, 0, -1);    
     Vector3D normalBottom = Vector3D(0, -1, 0);
+    Vector3D normalTop    = Vector3D(0, 1, 0);    
+    Vector3D normalRight  = Vector3D(1, 0, 0);
+    Vector3D normalLeft   = Vector3D(-1, 0, 0);
 
     std::vector<Vector3D> localNormals = {
-        normalFront, normalBack, normalLeft,
-        normalRight, normalTop, normalBottom
+        normalFront, normalBack, normalBottom,
+        normalTop, normalRight, normalLeft
     };
 
     for (const Vector3D & localNormal : localNormals) {
@@ -121,7 +121,7 @@ std::vector<std::vector<Vector3D>> Cuboid::getNormalsPerFace() const {
         }    
         normalsPerFace.push_back(normals);    
     }
-
+    
     return normalsPerFace;
 }
 
@@ -143,9 +143,9 @@ std::vector<std::vector<Vector3D>> Cuboid::getTangentsPerFace() const {
     std::vector<std::vector<int>> faceIndices = {
         {0, 1, 2, 3}, 
         {4, 5, 6, 7}, 
-        {0, 1, 5, 4}, 
-        {1, 5, 6, 2}, 
+        {0, 1, 5, 4},         
         {3, 2, 6, 7}, 
+        {1, 5, 6, 2},
         {0, 4, 7, 3}  
     };
 

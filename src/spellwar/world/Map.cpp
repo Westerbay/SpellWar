@@ -64,8 +64,8 @@ void Map::generatePlatform(
                     {{0.0f, 0.0f}, {platform.size.x / TEXT_SCALE, 0.0f}, {platform.size.x / TEXT_SCALE, platform.size.y / TEXT_SCALE}, {0.0f, platform.size.y / TEXT_SCALE}},
                     {{0.0f, 0.0f}, {platform.size.x / TEXT_SCALE, 0.0f}, {platform.size.x / TEXT_SCALE, platform.size.y / TEXT_SCALE}, {0.0f, platform.size.y / TEXT_SCALE}},
                     {{0.0f, 0.0f}, {platform.size.x / TEXT_SCALE, 0.0f}, {platform.size.x / TEXT_SCALE, platform.size.z / TEXT_SCALE}, {0.0f, platform.size.z / TEXT_SCALE}},
-                    {{0.0f, 0.0f}, {platform.size.z / TEXT_SCALE, 0.0f}, {platform.size.z / TEXT_SCALE, platform.size.y / TEXT_SCALE}, {0.0f, platform.size.y / TEXT_SCALE}},
                     {{0.0f, 0.0f}, {platform.size.x / TEXT_SCALE, 0.0f}, {platform.size.x / TEXT_SCALE, platform.size.z / TEXT_SCALE}, {0.0f, platform.size.z / TEXT_SCALE}},
+                    {{0.0f, 0.0f}, {platform.size.z / TEXT_SCALE, 0.0f}, {platform.size.z / TEXT_SCALE, platform.size.y / TEXT_SCALE}, {0.0f, platform.size.y / TEXT_SCALE}},
                     {{0.0f, 0.0f}, {platform.size.z / TEXT_SCALE, 0.0f}, {platform.size.z / TEXT_SCALE, platform.size.y / TEXT_SCALE}, {0.0f, platform.size.y / TEXT_SCALE}}
                 });
 
