@@ -19,6 +19,9 @@
 #define COLOR_DRAWER_VERTEX_SHADER_PATH "shaders/colorDrawer.vert"
 #define COLOR_DRAWER_FRAGMENT_SHADER_PATH "shaders/colorDrawer.frag"
 
+#define LIGHT_VERTEX_SHADER_PATH "shaders/lightDrawer.vert"
+#define LIGHT_FRAGMENT_SHADER_PATH "shaders/lightDrawer.frag"
+
 
 namespace wgame {
 
@@ -33,16 +36,24 @@ public:
         const Cuboid & cuboid, 
         const std::vector<ColorRGB> & colors
     );
-    void draw();
+    void setFillCuboidData(const Cuboid & cuboid);
+    void draw();    
     void fill();
+    void drawLight();
 public:
     class ColorDrawerShader : public Shader {
     public:
         ColorDrawerShader();
     };
+    class LightShader : public Shader {
+    public:
+        LightShader();
+    };
 private:
-    static std::weak_ptr<ColorDrawerShader> _uniqueShader;
-    std::shared_ptr<ColorDrawerShader> _shader;
+    static std::weak_ptr<ColorDrawerShader> _uniqueColorShader;
+    static std::weak_ptr<LightShader> _uniqueLightShader;
+    std::shared_ptr<ColorDrawerShader> _shaderColor;
+    std::shared_ptr<LightShader> _shaderLight;
     VertexArrayObject _vaos[6];
 };
 

@@ -98,20 +98,6 @@ void Map::render() {
             &_diffuse,
             &_diffuse,
             &_diffuse
-        }, {
-            &_normal,
-            &_normal,
-            &_normal,
-            &_normal,
-            &_normal,
-            &_normal
-        }, {
-            &_height,
-            &_height,
-            &_height,
-            &_height,
-            &_height,
-            &_height
         });
     }   
     cullClockwise();

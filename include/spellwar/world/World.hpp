@@ -13,6 +13,7 @@
 #include "Player.hpp"
 #include "Background.hpp"
 #include "Map.hpp"
+#include "Light.hpp"
 
 #include <wgame/wgame.hpp>
 
@@ -21,7 +22,7 @@ using namespace wgame;
 
 class World : public GameObjectGroup {
 public:
-    World(GameCamera * camera);
+    World(GameCamera * camera, GameLight * light);
 };
 
 #endif

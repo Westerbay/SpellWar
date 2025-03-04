@@ -12,13 +12,20 @@
 
 namespace wgame {
 
-std::weak_ptr<ColorDrawer::ColorDrawerShader> ColorDrawer::_uniqueShader;
+std::weak_ptr<ColorDrawer::ColorDrawerShader> ColorDrawer::_uniqueColorShader;
+std::weak_ptr<ColorDrawer::LightShader> ColorDrawer::_uniqueLightShader;
 
 ColorDrawer::ColorDrawer() {
-    _shader = _uniqueShader.lock();
-    if (!_shader) {
-        _shader = std::make_shared<ColorDrawerShader>();
-        _uniqueShader = _shader;
+    _shaderColor = _uniqueColorShader.lock();
+    if (!_shaderColor) {
+        _shaderColor = std::make_shared<ColorDrawerShader>();
+        _uniqueColorShader = _shaderColor;
+    }
+
+    _shaderLight = _uniqueLightShader.lock();
+    if (!_shaderLight) {
+        _shaderLight = std::make_shared<LightShader>();
+        _uniqueLightShader = _shaderLight;
     }
 }
 
@@ -42,34 +49,51 @@ void ColorDrawer::setFillCuboidData(
     const Cuboid & cuboid, 
     const std::vector<ColorRGB> & colors
 ) {
+    setFillCuboidData(cuboid);
+    for (int i = 0; i < 6; i ++) {
+        std::vector<Vector3D> vboColors = {colors[i], colors[i], colors[i], colors[i]};
+        _vaos[i].setVBO(VBO_COLOR, vboColors);
+    }
+}
+
+void ColorDrawer::setFillCuboidData(const Cuboid & cuboid) {
     std::vector<std::vector<Point3D>> vertices = cuboid.getVerticesPerFace();
     std::vector<std::vector<Vector3D>> normals = cuboid.getNormalsPerFace();
     std::vector<std::vector<unsigned>> elements = cuboid.getElementsPerFace();    
     for (int i = 0; i < 6; i ++) {
-        std::vector<Vector3D> vboColors = {colors[i], colors[i], colors[i], colors[i]};
         _vaos[i].setVBO(VBO_VERTEX, vertices[i]);
         _vaos[i].setVBO(VBO_NORMAL, normals[i]);
-        _vaos[i].setVBO(VBO_COLOR, vboColors);
         _vaos[i].setEBO(elements[i]);
     }
 }
 
 void ColorDrawer::draw() {
-    _shader -> bind();
+    _shaderColor -> bind();
     _vaos[0].draw(DRAW_LINES);
-    _shader -> unbind();
+    _shaderColor -> unbind();
 }
 
 void ColorDrawer::fill() {
-    _shader -> bind();
+    _shaderColor -> bind();
     for (VertexArrayObject & vao: _vaos) {
         vao.draw(DRAW_TRIANGLES);
     }  
-    _shader -> unbind();
+    _shaderColor -> unbind();
+}
+
+void ColorDrawer::drawLight() {
+    _shaderLight -> bind();
+    for (VertexArrayObject & vao: _vaos) {
+        vao.draw(DRAW_TRIANGLES);
+    }  
+    _shaderLight -> unbind();
 }
 
 ColorDrawer::ColorDrawerShader::ColorDrawerShader() : 
 Shader(COLOR_DRAWER_VERTEX_SHADER_PATH, COLOR_DRAWER_FRAGMENT_SHADER_PATH) {}
+
+ColorDrawer::LightShader::LightShader() :
+Shader(LIGHT_VERTEX_SHADER_PATH, LIGHT_FRAGMENT_SHADER_PATH) {}
 
 }
 

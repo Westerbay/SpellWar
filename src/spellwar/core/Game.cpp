@@ -19,6 +19,6 @@ void Game::init() {
     getLight() -> setSpecularFactor(0.3f);
     getLight() -> setSpecularExponent(4);
 
-    addToWorld(new World(getCamera()));
+    addToWorld(new World(getCamera(), getLight()));
 }
 

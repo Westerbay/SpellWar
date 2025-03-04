@@ -10,8 +10,9 @@
 #include <spellwar/world/World.hpp>
 
 
-World::World(GameCamera * camera) : GameObjectGroup() {
+World::World(GameCamera * camera, GameLight * light) : GameObjectGroup() {
     add(new Background());
+    add(new Light(light));
 
     Hitbox mapHitbox(Point3D(0.0f), Vector3D(100.0f, 30.0f, 100.0f));
     Map * map = new Map(mapHitbox);
