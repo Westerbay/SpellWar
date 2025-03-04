@@ -14,6 +14,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#define PI 3.14159265f
+
 #define AXIS_X Vector3D(1.0f, 0.0f, 0.0f)
 #define AXIS_Y Vector3D(0.0f, 1.0f, 0.0f)
 #define AXIS_Z Vector3D(0.0f, 0.0f, 1.0f)
@@ -27,7 +29,6 @@
 #define EPSILON 1e-6f
 
 #define PRINT_VEC3(v) std::cout << #v << ": (" << v.x << ", " << v.y << ", " << v.z << ")" << std::endl;
-
 
 namespace wgame {
 

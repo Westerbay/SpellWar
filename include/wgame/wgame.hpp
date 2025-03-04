@@ -11,6 +11,7 @@
 
 #include "geometry/Geometry.hpp"
 #include "geometry/Cuboid.hpp"
+#include "geometry/Sphere.hpp"
 
 #include "graphics/ColorDrawer.hpp"
 #include "graphics/TextureDrawer.hpp"

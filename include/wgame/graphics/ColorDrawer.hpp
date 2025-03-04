@@ -13,6 +13,7 @@
 #include "../opengl/VertexArrayObject.hpp"
 #include "../opengl/Shader.hpp"
 #include "../geometry/Cuboid.hpp"
+#include "../geometry/Sphere.hpp"
 
 #include <memory>
 
@@ -37,9 +38,19 @@ public:
         const std::vector<ColorRGB> & colors
     );
     void setFillCuboidData(const Cuboid & cuboid);
-    void draw();    
-    void fill();
-    void drawLight();
+    void setFillSphereData(
+        const Sphere & sphere, 
+        const ColorRGB & color, 
+        unsigned int stacks, unsigned int slices
+    );
+    void setFillSphereData(
+        const Sphere & sphere, 
+        unsigned int stacks, 
+        unsigned int slices
+    );
+    void draw(const Matrix4D & model = Matrix4D(1.0f));    
+    void fill(const Matrix4D & model = Matrix4D(1.0f));
+    void drawLight(const Matrix4D & model = Matrix4D(1.0f));
 public:
     class ColorDrawerShader : public Shader {
     public:

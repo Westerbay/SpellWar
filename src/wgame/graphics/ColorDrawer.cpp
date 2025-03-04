@@ -56,6 +56,32 @@ void ColorDrawer::setFillCuboidData(
     }
 }
 
+void ColorDrawer::setFillSphereData(
+    const Sphere & sphere, 
+    const ColorRGB & color, 
+    unsigned int stacks, unsigned int slices
+) {
+    std::vector<ColorRGB> colors(stacks * slices, color);
+    _vaos[0].setVBO(VBO_COLOR, colors);
+    setFillSphereData(sphere, stacks, slices);
+}
+
+void ColorDrawer::setFillSphereData(
+    const Sphere & sphere, 
+    unsigned int stacks, 
+    unsigned int slices
+) {
+    std::vector<Point3D> vertices;
+    std::vector<Vector3D> normals;
+    std::vector<unsigned> elements;
+
+    sphere.generateSphere(elements, normals, vertices, stacks, slices);
+
+    _vaos[0].setEBO(elements);
+    _vaos[0].setVBO(VBO_VERTEX, vertices);
+    _vaos[0].setVBO(VBO_NORMAL, normals);
+}
+
 void ColorDrawer::setFillCuboidData(const Cuboid & cuboid) {
     std::vector<std::vector<Point3D>> vertices = cuboid.getVerticesPerFace();
     std::vector<std::vector<Vector3D>> normals = cuboid.getNormalsPerFace();
@@ -67,22 +93,25 @@ void ColorDrawer::setFillCuboidData(const Cuboid & cuboid) {
     }
 }
 
-void ColorDrawer::draw() {
+void ColorDrawer::draw(const Matrix4D & model) {
     _shaderColor -> bind();
+    _shaderColor -> setUniform("model", model);
     _vaos[0].draw(DRAW_LINES);
     _shaderColor -> unbind();
 }
 
-void ColorDrawer::fill() {
+void ColorDrawer::fill(const Matrix4D & model) {
     _shaderColor -> bind();
+    _shaderColor -> setUniform("model", model);
     for (VertexArrayObject & vao: _vaos) {
         vao.draw(DRAW_TRIANGLES);
     }  
     _shaderColor -> unbind();
 }
 
-void ColorDrawer::drawLight() {
+void ColorDrawer::drawLight(const Matrix4D & model) {
     _shaderLight -> bind();
+    _shaderLight -> setUniform("model", model);
     for (VertexArrayObject & vao: _vaos) {
         vao.draw(DRAW_TRIANGLES);
     }  

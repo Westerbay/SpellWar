@@ -7,6 +7,8 @@ layout(std140, binding = 0) uniform CameraMatrices {
     mat4 cameraMatrixDynamic;
 };
 
+uniform mat4 model;
+
 void main() {
-    gl_Position = cameraMatrixStatic * vec4(aPos, 1.0);
+    gl_Position = cameraMatrixStatic * model * vec4(aPos, 1.0);
 }

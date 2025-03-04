@@ -16,6 +16,8 @@
 #define LIGHT_SIZE 0.1f
 #define LIGHT_DISTANCE_TO_WORLD 100000.0f
 
+#define SLICES_STACKS 40
+
 
 using namespace wgame;
 
@@ -25,6 +27,7 @@ public:
     void update() override;
     void renderBackground() override;
 private:
+    Sphere _sphere;
     ColorDrawer _drawer;
     ColorRGB _color;
     GameLight * _gameLight;

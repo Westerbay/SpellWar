@@ -13,9 +13,11 @@ out vec3 currentPosition;
 out vec3 fragNormal;
 out vec3 color;
 
+uniform mat4 model;
+
 void main() {
-    gl_Position = cameraMatrixDynamic * vec4(aPos, 1.0);
+    gl_Position = cameraMatrixDynamic * model * vec4(aPos, 1.0);
     color = aColor;
-    fragNormal = aNormal;
-    currentPosition = aPos;
+    fragNormal = vec3(transpose(inverse(model)) * vec4(aNormal, 1.0));
+    currentPosition = vec3(model * vec4(aPos, 1.0));
 }
