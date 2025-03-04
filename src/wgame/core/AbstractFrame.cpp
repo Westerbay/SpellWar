@@ -112,10 +112,9 @@ void AbstractFrame::render() {
 
 	glDepthFunc(GL_LEQUAL);
 	glDisable(GL_CULL_FACE);	
-	glDepthMask(GL_FALSE);
 	_world -> renderBackground();	
-	glDepthMask(GL_TRUE);
-
+	
+	glClear(GL_DEPTH_BUFFER_BIT);	
 	glDepthFunc(GL_LESS);
 	glEnable(GL_CULL_FACE);	
 	glCullFace(GL_BACK);
