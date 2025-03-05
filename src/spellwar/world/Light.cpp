@@ -31,7 +31,7 @@ void Light::update() {
 void Light::renderBackground() {   
     Matrix4D model(1.0f); 
     model = glm::translate(model, hitbox.position);
-    model = glm::rotate(model, glm::radians(_angle * 5.0f), AXIS_Y);
+    model = glm::rotate(model, glm::radians(_angle * SUN_ROTATION), AXIS_Y);
     model = glm::scale(model, Vector3D(LIGHT_SIZE));
     _sun.setTransform(model);
     _drawer.drawStatic(_sun);

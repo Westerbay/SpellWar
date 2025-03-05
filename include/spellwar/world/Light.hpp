@@ -16,8 +16,7 @@
 #define LIGHT_SIZE 0.003f
 #define LIGHT_DISTANCE_TO_WORLD 100000.0f
 
-#define SLICES_STACKS 40
-
+#define SUN_ROTATION 5.0f
 #define SUN_ASSET "assets/model/sun/scene.gltf"
 
 

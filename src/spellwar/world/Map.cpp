@@ -64,7 +64,12 @@ void Map::generatePlatform(
                 platform.rotateX(randomFloat(0.0f, MAX_ANGLE_ROTATION));
                 platform.rotateY(randomFloat(0.0f, MAX_ANGLE_ROTATION));
                 platform.rotateZ(randomFloat(0.0f, MAX_ANGLE_ROTATION));
-            }            
+            }       
+            
+            if (platform.position.y > hitbox.position.y * 3/2.0f) {
+            	platform.rotateX(180.0f);
+            }
+                 
             hitbox = platform;            
             hitbox.size.x += X_Z_GAP;
             hitbox.size.y += Y_GAP;
