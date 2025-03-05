@@ -13,10 +13,12 @@
 #include <wgame/wgame.hpp>
 
 #define STEP_TIME 0.01f
-#define LIGHT_SIZE 0.1f
+#define LIGHT_SIZE 0.003f
 #define LIGHT_DISTANCE_TO_WORLD 100000.0f
 
 #define SLICES_STACKS 40
+
+#define SUN_ASSET "assets/model/sun/scene.gltf"
 
 
 using namespace wgame;
@@ -26,9 +28,14 @@ public:
     Light(GameLight * gameLight);
     void update() override;
     void renderBackground() override;
+public:
+	class Sun : public StaticModelGLTF {
+	public:
+		Sun();
+	};
 private:
-    Sphere _sphere;
-    ColorDrawer _drawer;
+    Sun _sun;
+    ModelDrawer _drawer;
     ColorRGB _color;
     GameLight * _gameLight;
     float _angle;

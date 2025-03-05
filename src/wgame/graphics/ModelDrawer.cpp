@@ -13,6 +13,7 @@
 namespace wgame {
 
 std::weak_ptr<ModelDrawer::ModelDrawerShader> ModelDrawer::_uniqueShader;
+std::weak_ptr<ModelDrawer::ModelStaticDrawerShader> ModelDrawer::_uniqueShaderStatic;
 
 ModelDrawer::ModelDrawer() {
     _shader = _uniqueShader.lock();
@@ -20,6 +21,13 @@ ModelDrawer::ModelDrawer() {
         _shader = std::make_shared<ModelDrawerShader>();
         _uniqueShader = _shader;
     }
+    
+    _shaderStatic = _uniqueShaderStatic.lock();
+    if (!_shaderStatic) {
+        _shaderStatic = std::make_shared<ModelStaticDrawerShader>();
+        _uniqueShaderStatic = _shaderStatic;
+    }
+    
     _instanced = nullptr;
     _numberOfInstances = 0;
 }
@@ -41,6 +49,13 @@ void ModelDrawer::draw(ModelGLTF & model) const {
     _shader -> unbind();
 }
 
+void ModelDrawer::drawStatic(ModelGLTF & model) const {
+    _shaderStatic -> bind();
+    _shaderStatic -> setUniform("drawInstanced", 0);
+    model.draw(*_shaderStatic);
+    _shaderStatic -> unbind();
+}
+
 void ModelDrawer::drawInstanced(ModelGLTF & model) const {
     if (!_instanced) {
         return;
@@ -55,5 +70,8 @@ void ModelDrawer::drawInstanced(ModelGLTF & model) const {
 
 ModelDrawer::ModelDrawerShader::ModelDrawerShader() : 
 Shader(MODEL_DRAWER_VERTEX_SHADER_PATH, MODEL_DRAWER_FRAGMENT_SHADER_PATH) {}
+
+ModelDrawer::ModelStaticDrawerShader::ModelStaticDrawerShader() : 
+Shader(MODEL_STATIC_DRAWER_VERTEX_SHADER_PATH, MODEL_STATIC_DRAWER_FRAGMENT_SHADER_PATH) {}
 
 }

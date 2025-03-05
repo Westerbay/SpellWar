@@ -20,6 +20,9 @@
 #define MODEL_DRAWER_VERTEX_SHADER_PATH "shaders/modelDrawer.vert"
 #define MODEL_DRAWER_FRAGMENT_SHADER_PATH "shaders/modelDrawer.frag"
 
+#define MODEL_STATIC_DRAWER_VERTEX_SHADER_PATH "shaders/modelStaticDrawer.vert"
+#define MODEL_STATIC_DRAWER_FRAGMENT_SHADER_PATH "shaders/modelStaticDrawer.frag"
+
 #define BINDING_POINT_TRANSFORMS_MODEL 5
 
 namespace wgame {
@@ -29,15 +32,22 @@ public:
     ModelDrawer();
     void configureInstances(const std::vector<Matrix4D> & transforms);
     void draw(ModelGLTF & model) const;
+    void drawStatic(ModelGLTF & model) const;
     void drawInstanced(ModelGLTF & model) const;
 public:
     class ModelDrawerShader : public Shader {
     public:
         ModelDrawerShader(); 
     };
+    class ModelStaticDrawerShader : public Shader {
+    public:
+        ModelStaticDrawerShader(); 
+    };
 private:
     static std::weak_ptr<ModelDrawerShader> _uniqueShader;
+    static std::weak_ptr<ModelStaticDrawerShader> _uniqueShaderStatic;
     std::shared_ptr<ModelDrawerShader> _shader;
+	std::shared_ptr<ModelStaticDrawerShader> _shaderStatic; 
     std::unique_ptr<UniformBufferObject> _instanced;
     size_t _numberOfInstances;
 };
