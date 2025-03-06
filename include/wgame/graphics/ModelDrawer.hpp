@@ -16,6 +16,7 @@
 #include "../geometry/Geometry.hpp"
 
 #include <memory>
+#include <map>
 
 #define MODEL_DRAWER_VERTEX_SHADER_PATH "shaders/modelDrawer.vert"
 #define MODEL_DRAWER_FRAGMENT_SHADER_PATH "shaders/modelDrawer.frag"
@@ -30,10 +31,10 @@ namespace wgame {
 class ModelDrawer {
 public:
     ModelDrawer();
-    void configureInstances(const std::vector<Matrix4D> & transforms);
+    void configureInstances(const std::vector<Matrix4D> & transforms, int id);
     void draw(ModelGLTF & model) const;
     void drawStatic(ModelGLTF & model) const;
-    void drawInstanced(ModelGLTF & model) const;
+    void drawInstanced(ModelGLTF & model, int id);
 public:
     class ModelDrawerShader : public Shader {
     public:
@@ -48,8 +49,8 @@ private:
     static std::weak_ptr<ModelStaticDrawerShader> _uniqueShaderStatic;
     std::shared_ptr<ModelDrawerShader> _shader;
 	std::shared_ptr<ModelStaticDrawerShader> _shaderStatic; 
-    std::unique_ptr<UniformBufferObject> _instanced;
-    size_t _numberOfInstances;
+	std::map<int, std::unique_ptr<UniformBufferObject>> _instances;
+	std::map<int, size_t> _numberOfInstances;
 };
 
 }

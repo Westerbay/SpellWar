@@ -19,8 +19,19 @@
 #define Y_GAP 20
 
 #define STALAGMITE_MODEL "assets/model/stalagmite/scene.gltf"
+#define TREE_MODEL "assets/model/decoration/pinkTree/scene.gltf"
 
-#define TEXT_SCALE 10.0f
+#define TEX_SCALE 10.0f
+
+#define STALAGMITE_MIN_SCALE 0.8f
+#define STALAGMITE_MAX_SCALE 1.5f
+
+#define TREE_PROBABILITY 0.7f
+#define TREE_MIN_SCALE 0.5f
+#define TREE_MAX_SCALE 1.0f
+
+#define STALAGMITE_ID 0
+#define PINK_TREE_ID 1
 
 
 using namespace wgame;
@@ -41,11 +52,20 @@ protected:
         Stalagmite();
         Vector3D getSize() const;
     };
+    class PinkTree : public StaticModelGLTF {
+    public:
+        PinkTree();
+        Vector3D getSize() const;
+    };
 private:
     void generateStalagmite();
+    void generateTree();
 private:
-    ModelDrawer _modelDrawer;
+    ModelDrawer _modelStalagmiteDrawer;
+    ModelDrawer _modelPinkTreeDrawer;
+    ColorDrawer _hitboxDrawer;
     Stalagmite _stalagmite;
+    PinkTree _pinkTree;
     std::vector<Cuboid> _platforms;
     std::vector<TextureDrawer> _drawers;
     Texture2D _diffuse;

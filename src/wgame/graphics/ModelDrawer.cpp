@@ -28,18 +28,15 @@ ModelDrawer::ModelDrawer() {
         _uniqueShaderStatic = _shaderStatic;
     }
     
-    _instanced = nullptr;
-    _numberOfInstances = 0;
 }
 
-void ModelDrawer::configureInstances(const std::vector<Matrix4D> & transforms) {
-    if (!_instanced) {
-        _instanced = std::make_unique<UniformBufferObject>();
-        _instanced -> setBindingPoint(BINDING_POINT_TRANSFORMS_MODEL);
+void ModelDrawer::configureInstances(const std::vector<Matrix4D> & transforms, int id) {
+    if (_instances.find(id) == _instances.end()) {
+        _instances[id] = std::make_unique<UniformBufferObject>();
     }
-    _instanced -> configure(transforms.size() * sizeof(Matrix4D));
-    _instanced -> setData(transforms.data(), transforms.size() * sizeof(Matrix4D));
-    _numberOfInstances = transforms.size();
+    _instances[id] -> configure(transforms.size() * sizeof(Matrix4D));
+    _instances[id] -> setData(transforms.data(), transforms.size() * sizeof(Matrix4D));
+    _numberOfInstances[id] = transforms.size();
 }
 
 void ModelDrawer::draw(ModelGLTF & model) const {
@@ -56,15 +53,16 @@ void ModelDrawer::drawStatic(ModelGLTF & model) const {
     _shaderStatic -> unbind();
 }
 
-void ModelDrawer::drawInstanced(ModelGLTF & model) const {
-    if (!_instanced) {
+void ModelDrawer::drawInstanced(ModelGLTF & model, int id) {
+    if (_instances.find(id) == _instances.end()) {
         return;
     }
     _shader -> bind();
-    _instanced -> bind();
-    _shader -> setUniform("drawInstanced", 1);
-    model.drawInstanced(*_shader, _numberOfInstances);
-    _instanced -> unbind();
+    _instances[id] -> setBindingPoint(BINDING_POINT_TRANSFORMS_MODEL);
+    _instances[id] -> bind();
+    _shader -> setUniform("drawInstanced", 1);    
+    model.drawInstanced(*_shader, _numberOfInstances[id]);
+    _instances[id] -> unbind();
     _shader -> unbind();
 }
 

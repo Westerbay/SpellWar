@@ -65,10 +65,6 @@ void Map::generatePlatform(
                 platform.rotateY(randomFloat(0.0f, MAX_ANGLE_ROTATION));
                 platform.rotateZ(randomFloat(0.0f, MAX_ANGLE_ROTATION));
             }       
-            
-            if (platform.position.y > hitbox.position.y * 3/2.0f) {
-            	platform.rotateX(180.0f);
-            }
                  
             hitbox = platform;            
             hitbox.size.x += X_Z_GAP;
@@ -78,12 +74,12 @@ void Map::generatePlatform(
                 _platforms.push_back(platform);   
 
                 _drawers[i].setCuboidData(platform, {
-                    {{0.0f, 0.0f}, {platform.size.x / TEXT_SCALE, 0.0f}, {platform.size.x / TEXT_SCALE, platform.size.y / TEXT_SCALE}, {0.0f, platform.size.y / TEXT_SCALE}},
-                    {{0.0f, 0.0f}, {platform.size.x / TEXT_SCALE, 0.0f}, {platform.size.x / TEXT_SCALE, platform.size.y / TEXT_SCALE}, {0.0f, platform.size.y / TEXT_SCALE}},
-                    {{0.0f, 0.0f}, {platform.size.x / TEXT_SCALE, 0.0f}, {platform.size.x / TEXT_SCALE, platform.size.z / TEXT_SCALE}, {0.0f, platform.size.z / TEXT_SCALE}},
-                    {{0.0f, 0.0f}, {platform.size.x / TEXT_SCALE, 0.0f}, {platform.size.x / TEXT_SCALE, platform.size.z / TEXT_SCALE}, {0.0f, platform.size.z / TEXT_SCALE}},
-                    {{0.0f, 0.0f}, {platform.size.z / TEXT_SCALE, 0.0f}, {platform.size.z / TEXT_SCALE, platform.size.y / TEXT_SCALE}, {0.0f, platform.size.y / TEXT_SCALE}},
-                    {{0.0f, 0.0f}, {platform.size.z / TEXT_SCALE, 0.0f}, {platform.size.z / TEXT_SCALE, platform.size.y / TEXT_SCALE}, {0.0f, platform.size.y / TEXT_SCALE}}
+                    {{0.0f, 0.0f}, {platform.size.x / TEX_SCALE, 0.0f}, {platform.size.x / TEX_SCALE, platform.size.y / TEX_SCALE}, {0.0f, platform.size.y / TEX_SCALE}},
+                    {{0.0f, 0.0f}, {platform.size.x / TEX_SCALE, 0.0f}, {platform.size.x / TEX_SCALE, platform.size.y / TEX_SCALE}, {0.0f, platform.size.y / TEX_SCALE}},
+                    {{0.0f, 0.0f}, {platform.size.x / TEX_SCALE, 0.0f}, {platform.size.x / TEX_SCALE, platform.size.z / TEX_SCALE}, {0.0f, platform.size.z / TEX_SCALE}},
+                    {{0.0f, 0.0f}, {platform.size.x / TEX_SCALE, 0.0f}, {platform.size.x / TEX_SCALE, platform.size.z / TEX_SCALE}, {0.0f, platform.size.z / TEX_SCALE}},
+                    {{0.0f, 0.0f}, {platform.size.z / TEX_SCALE, 0.0f}, {platform.size.z / TEX_SCALE, platform.size.y / TEX_SCALE}, {0.0f, platform.size.y / TEX_SCALE}},
+                    {{0.0f, 0.0f}, {platform.size.z / TEX_SCALE, 0.0f}, {platform.size.z / TEX_SCALE, platform.size.y / TEX_SCALE}, {0.0f, platform.size.y / TEX_SCALE}}
                 });
 
                 tries = 0;
@@ -92,6 +88,7 @@ void Map::generatePlatform(
         }
     }
     generateStalagmite();
+    generateTree();
 }
 
 void Map::render() {
@@ -106,8 +103,9 @@ void Map::render() {
         });
     }   
     cullClockwise();
-    _modelDrawer.drawInstanced(_stalagmite);
-    cullCounterClockwise();
+    _modelStalagmiteDrawer.drawInstanced(_stalagmite, STALAGMITE_ID);
+    _modelPinkTreeDrawer.drawInstanced(_pinkTree, PINK_TREE_ID);
+    cullCounterClockwise();    
 }
 
 void Map::generateStalagmite() {
@@ -123,7 +121,7 @@ void Map::generateStalagmite() {
         while (nb < limit && tries < MAX_ATTEMPTS) {
             tries ++;
             Matrix4D transform = platform.getTransformWithoutScale();
-            float scale = randomFloat(0.8f, 1.5f);
+            float scale = randomFloat(STALAGMITE_MIN_SCALE, STALAGMITE_MAX_SCALE);
             Vector3D translate = {
                 (platform.size.x * 0.5f - scale * stalagmiteSize.x) * randomFloat(-1.0f, 1.0f),
                 -platform.size.y * 0.5f,
@@ -157,7 +155,30 @@ void Map::generateStalagmite() {
         }        
     }    
 
-    _modelDrawer.configureInstances(stalagmiteTransform);
+    _modelStalagmiteDrawer.configureInstances(stalagmiteTransform, STALAGMITE_ID);
+}
+
+void Map::generateTree() {
+	std::vector<Matrix4D> treeTransforms;
+    Vector3D treeSize = _pinkTree.getSize();
+    
+    for (const Cuboid & platform : _platforms) {
+    	if (!P(TREE_PROBABILITY)) {
+    		continue;
+    	}
+    	Matrix4D transform = platform.getTransformWithoutScale();
+    	float scale = randomFloat(TREE_MIN_SCALE, TREE_MAX_SCALE);
+    	Vector3D translate = {
+		    (platform.size.x * 0.5f - scale * treeSize.x) * randomFloat(-1.0f, 1.0f),
+		    platform.size.y * 0.5f,
+		    (platform.size.z * 0.5f - scale * treeSize.z) * randomFloat(-1.0f, 1.0f),
+    	};
+    	transform = glm::translate(transform, translate);
+        transform = glm::scale(transform, Vector3D(scale, scale, scale));   
+        treeTransforms.push_back(transform);    
+    }
+    
+    _modelPinkTreeDrawer.configureInstances(treeTransforms, PINK_TREE_ID);
 }
 
 Map::Stalagmite::Stalagmite() : StaticModelGLTF(STALAGMITE_MODEL) {}
@@ -165,3 +186,10 @@ Map::Stalagmite::Stalagmite() : StaticModelGLTF(STALAGMITE_MODEL) {}
 Vector3D Map::Stalagmite::getSize() const {
     return Vector3D(2.0f, 5.0f, 2.0f);
 }
+
+Map::PinkTree::PinkTree() : StaticModelGLTF(TREE_MODEL) {}
+
+Vector3D Map::PinkTree::getSize() const {
+    return Vector3D(1.0f, 19.0f, 1.0f);
+}
+
