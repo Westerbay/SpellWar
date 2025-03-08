@@ -19,10 +19,14 @@ Player::Player(const Hitbox & hitbox) : GameObject(hitbox) {
     //_modelStatic -> setTransform(transform);
     //_model = nullptr;
 
-    _model = new AnimatedModelGLTF("assets/model/brenda.glb");
+    _model = new AnimatedModelGLTF("assets/model/player/frost.glb");
+    _model -> switchAnimation("Run");
     _model -> setLoop(true);
     //_model -> setTransform(transform);
     _modelStatic = nullptr;
+    for (std::string name: _model -> getAnimationNames()) {
+        std::cout << name << std::endl;
+    }
 }
 
 Player::~Player() {
@@ -62,6 +66,8 @@ void Player::update() {
 }
 
 void Player::render() {
-    //_modelDrawer.draw(*_model);
+    glDisable(GL_CULL_FACE);
+    _modelDrawer.draw(*_model);
+    glEnable(GL_CULL_FACE);
     //_modelDrawer.draw(*_modelStatic);
 }
