@@ -30,6 +30,10 @@
 
 #define BINDING_JOINT_MATRICES 2
 
+#define UNIT_TEXTURE_DIFFUSE 0
+#define UNIT_TEXTURE_PBR 1
+#define UNIT_TEXTURE_NORMAL 2
+
 
 namespace wgame {
 
@@ -56,6 +60,7 @@ protected:
         const tinygltf::Model & model, 
         const tinygltf::Mesh & mesh, Matrix4D transform
     );    
+    int processTexture(const tinygltf::Model & model, int textureIndex);
     Matrix4D getTransformNode(const tinygltf::Node & node) const;
 private: 
     Matrix4D _transform;

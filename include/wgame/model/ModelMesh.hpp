@@ -73,7 +73,7 @@ public:
     void draw(const Shader & shader, const Matrix4D & transform);
     void draw(const Shader & shader, size_t numberOfInstance);
 protected:
-    void configureBuffers(const ModelSubMeshInfo & subMesh);
+    void configureBuffers(const ModelSubMeshInfo & subMesh, const Shader & shader);
 private:
     GLuint _vao; 
     std::unordered_map<int, GLuint> _ebos;

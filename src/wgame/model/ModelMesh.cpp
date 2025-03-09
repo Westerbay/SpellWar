@@ -102,7 +102,11 @@ void ModelMesh::unbind() const {
     glBindVertexArray(0);
 }
 
-void ModelMesh::configureBuffers(const ModelSubMeshInfo & subMesh) {
+void ModelMesh::configureBuffers(const ModelSubMeshInfo & subMesh, const Shader & shader) {
+    
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, subMesh.textureID == -1 ? 0 : _textures[subMesh.textureID]);
+    
     for (const VertexBufferInfo & vboInfo : subMesh.vboInfo) {
         glBindBuffer(GL_ARRAY_BUFFER, _vbos[vboInfo.vboIndex]);
         glEnableVertexAttribArray(vboInfo.vboLocation);
@@ -120,36 +124,34 @@ void ModelMesh::configureBuffers(const ModelSubMeshInfo & subMesh) {
         }
         glBindBuffer(GL_ARRAY_BUFFER, 0);        
     } 
+    
+    shader.setUniform("baseColorFactor", subMesh.baseColorFactor);
+    shader.setUniform("metallicFactor", subMesh.metallicFactor);
+    shader.setUniform("roughnessFactor", subMesh.roughnessFactor);
+    if (subMesh.metallicRoughnessID >= 0) {
+        shader.setUniform("hasMetallicRoughness", true);            
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, _textures[subMesh.metallicRoughnessID]);
+    } else {
+        shader.setUniform("hasMetallicRoughness", false);              
+    }
+
+    if (subMesh.normalMapID >= 0) {
+        shader.setUniform("hasNormalMap", true);  
+        glActiveTexture(GL_TEXTURE2);
+        glBindTexture(GL_TEXTURE_2D, _textures[subMesh.normalMapID]);
+    } else {
+        shader.setUniform("hasNormalMap", false);  
+    }
+    
 }
 
 void ModelMesh::draw(const Shader & shader, const Matrix4D & transform) {
     bind();
     for (const ModelSubMeshInfo & subMesh : _subMeshesInfo) {
         shader.setUniform("model", transform * subMesh.transform);
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, subMesh.textureID == -1 ? 0 : _textures[subMesh.textureID]);
-        configureBuffers(subMesh);
+        configureBuffers(subMesh, shader);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ebos[subMesh.elementsInfo.eboIndex]);
-        
-        shader.setUniform("baseColorFactor", subMesh.baseColorFactor);
-        shader.setUniform("metallicFactor", subMesh.metallicFactor);
-        shader.setUniform("roughnessFactor", subMesh.roughnessFactor);
-        if (subMesh.metallicRoughnessID >= 0) {
-            shader.setUniform("hasMetallicRoughness", true);            
-            glActiveTexture(GL_TEXTURE1);         
-            glBindTexture(GL_TEXTURE_2D, _textures[subMesh.metallicRoughnessID]);
-        } else {
-            shader.setUniform("hasMetallicRoughness", false);              
-        }
-
-        if (subMesh.normalMapID >= 0) {
-            shader.setUniform("hasNormalMap", true);  
-            glActiveTexture(GL_TEXTURE2);
-            glBindTexture(GL_TEXTURE_2D, _textures[subMesh.normalMapID]);
-        } else {
-            shader.setUniform("hasNormalMap", false);  
-        }  
-
         glDrawElements(
             subMesh.elementsInfo.drawMode, 
             subMesh.elementsInfo.countElement, 
@@ -171,30 +173,8 @@ void ModelMesh::draw(const Shader & shader, size_t numberOfInstance) {
     bind();
     for (const ModelSubMeshInfo & subMesh : _subMeshesInfo) {
         shader.setUniform("model", subMesh.transform);
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, subMesh.textureID == -1 ? 0 : _textures[subMesh.textureID]);
-        configureBuffers(subMesh);  
+        configureBuffers(subMesh, shader);  
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ebos[subMesh.elementsInfo.eboIndex]);
-        
-        shader.setUniform("baseColorFactor", subMesh.baseColorFactor);
-        shader.setUniform("metallicFactor", subMesh.metallicFactor);
-        shader.setUniform("roughnessFactor", subMesh.roughnessFactor);
-        if (subMesh.metallicRoughnessID >= 0) {
-            shader.setUniform("hasMetallicRoughness", true);            
-            glActiveTexture(GL_TEXTURE1);
-            glBindTexture(GL_TEXTURE_2D, _textures[subMesh.metallicRoughnessID]);
-        } else {
-            shader.setUniform("hasMetallicRoughness", false);              
-        }
-
-        if (subMesh.normalMapID >= 0) {
-            shader.setUniform("hasNormalMap", true);  
-            glActiveTexture(GL_TEXTURE2);
-            glBindTexture(GL_TEXTURE_2D, _textures[subMesh.normalMapID]);
-        } else {
-            shader.setUniform("hasNormalMap", false);  
-        }       
-
         glDrawElementsInstanced(
             subMesh.elementsInfo.drawMode, 
             subMesh.elementsInfo.countElement, 
