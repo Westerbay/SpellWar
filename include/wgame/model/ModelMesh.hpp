@@ -45,6 +45,10 @@ struct VertexBufferInfo {
 
 struct ModelSubMeshInfo {
     int textureID;
+    int metallicRoughnessID;
+    Vector4D baseColorFactor;
+    float metallicFactor;
+    float roughnessFactor;
     Matrix4D transform;
     ElementBufferInfo elementsInfo;
     std::vector<VertexBufferInfo> vboInfo;
@@ -56,7 +60,7 @@ public:
     ~ModelMesh();
     void setVBO(int vboIndex, GLsizei byteLength, const void * data);
     void setEBO(int eboIndex, GLsizei byteLength, const void * data);
-    void setTexture0(
+    void setTexture(
         int textureIndex, int width, int height, 
         int numChannels, const void * data,
         GLenum minFilter, GLenum magFilter,

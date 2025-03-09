@@ -44,11 +44,13 @@ void ModelGLTF::setTransform(const Matrix4D & transform) {
 
 void ModelGLTF::drawModelMesh(const Shader & shader) {
     shader.setUniform("textureDiffuse", 0);
+    shader.setUniform("textureMetallicRoughness", 1);   
     _modelMesh.draw(shader, _transform);
 }  
 
 void ModelGLTF::drawModelMeshInstanced(const Shader & shader, size_t numberOfInstance) {
     shader.setUniform("textureDiffuse", 0);
+    shader.setUniform("textureMetallicRoughness", 1);   
     _modelMesh.draw(shader, numberOfInstance);
 }  
 
@@ -163,8 +165,14 @@ void ModelGLTF::processMesh(
         };
 
         int textureID = -1;
+        int metallicRoughnessID = -1;
+
+        Vector4D baseColorFactor = Vector4D(1.0f);
+        float metallicFactor = 0.0f;
+        float roughnessFactor = 0.0f;
+
         if (primitive.material >= 0) {
-            const tinygltf::Material & mat = model.materials[primitive.material];
+            const tinygltf::Material & mat = model.materials[primitive.material];            
             int textureIndex = mat.pbrMetallicRoughness.baseColorTexture.index;
             if (textureIndex < 0) {
                 textureIndex = mat.emissiveTexture.index;
@@ -175,7 +183,7 @@ void ModelGLTF::processMesh(
                 int imageIndex = texture.source;
                 if (imageIndex >= 0) {
                     const tinygltf::Image & image = model.images[imageIndex];
-                    _modelMesh.setTexture0(
+                    _modelMesh.setTexture(
                         imageIndex, image.width, image.height, 
                         image.component, image.image.data(),
                         sampler.minFilter, sampler.magFilter, 
@@ -183,10 +191,38 @@ void ModelGLTF::processMesh(
                     );
                     textureID = imageIndex;
                 }
-            }                
+            } 
+            int metallicRoughnessIndex = mat.pbrMetallicRoughness.metallicRoughnessTexture.index;
+            if (metallicRoughnessIndex >= 0) {
+                const tinygltf::Texture & texture = model.textures[metallicRoughnessIndex];
+                const tinygltf::Sampler & sampler = model.samplers[texture.sampler];
+                int imageIndex = texture.source;
+                if (imageIndex >= 0) {
+                    const tinygltf::Image & image = model.images[imageIndex];
+                    _modelMesh.setTexture(
+                        imageIndex, image.width, image.height, 
+                        image.component, image.image.data(),
+                        sampler.minFilter, sampler.magFilter, 
+                        sampler.wrapS, sampler.wrapT, image.pixel_type
+                    );
+                    metallicRoughnessID = imageIndex;
+                    baseColorFactor = Vector4D(
+                        mat.pbrMetallicRoughness.baseColorFactor[0],
+                        mat.pbrMetallicRoughness.baseColorFactor[1],
+                        mat.pbrMetallicRoughness.baseColorFactor[2],
+                        mat.pbrMetallicRoughness.baseColorFactor[3]
+                    );
+                    metallicFactor = (float) mat.pbrMetallicRoughness.metallicFactor;
+                    roughnessFactor = (float) mat.pbrMetallicRoughness.roughnessFactor;
+                }
+            }       
         } 
         ModelSubMeshInfo subMesh = {
             textureID,
+            metallicRoughnessID,
+            baseColorFactor,
+            metallicFactor,
+            roughnessFactor,
             transform,
             elementsInfo,
             vboInfo
