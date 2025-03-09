@@ -14,23 +14,12 @@
 Player::Player(const Hitbox & hitbox) : GameObject(hitbox) {
     _speed = 0.2f;
     _sensibility = 0.2f;
-    //_modelStatic = new StaticModelGLTF("assets/model/player/gai/scene.gltf");
-    Matrix4D transform = glm::scale(Matrix4D(1.0f), Vector3D(0.05f));
-    //_modelStatic -> setTransform(transform);
-    //_model = nullptr;
-
     _model = new AnimatedModelGLTF("assets/model/player/frost.glb");
     _model -> switchAnimation("Run");
     _model -> setLoop(true);
-    //_model -> setTransform(transform);
-    _modelStatic = nullptr;
-    for (std::string name: _model -> getAnimationNames()) {
-        std::cout << name << std::endl;
-    }
 }
 
 Player::~Player() {
-    delete _modelStatic;
     delete _model;
 }
 
@@ -66,8 +55,7 @@ void Player::update() {
 }
 
 void Player::render() {
-    glDisable(GL_CULL_FACE);
-    _modelDrawer.draw(*_model);
-    glEnable(GL_CULL_FACE);
-    //_modelDrawer.draw(*_modelStatic);
+    //glDisable(GL_CULL_FACE);
+    //_modelDrawer.draw(*_model);
+    //glEnable(GL_CULL_FACE);
 }

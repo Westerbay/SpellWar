@@ -11,24 +11,9 @@
 #define __MAP_H__
 
 #include <wgame/wgame.hpp>
-
-#define MAX_ATTEMPTS 50
-#define MAX_ANGLE_ROTATION 45.0f
-#define PROBABILITY_ROTATE 0.5f
-#define X_Z_GAP 8
-#define Y_GAP 20
-
-#define STALAGMITE_MODEL "assets/model/stalagmite/scene.gltf"
-#define TREE_MODEL "assets/model/decoration/pinkTree/scene.gltf"
+#include <spellwar/world/Platform.hpp>
 
 #define TEX_SCALE 10.0f
-
-#define STALAGMITE_MIN_SCALE 0.8f
-#define STALAGMITE_MAX_SCALE 1.5f
-
-#define TREE_PROBABILITY 0.7f
-#define TREE_MIN_SCALE 0.5f
-#define TREE_MAX_SCALE 1.0f
 
 #define STALAGMITE_ID 0
 #define PINK_TREE_ID 1
@@ -58,19 +43,14 @@ protected:
         Vector3D getSize() const;
     };
 private:
-    void generateStalagmite();
-    void generateTree();
-private:
     ModelDrawer _modelStalagmiteDrawer;
     ModelDrawer _modelPinkTreeDrawer;
     ColorDrawer _hitboxDrawer;
     Stalagmite _stalagmite;
     PinkTree _pinkTree;
-    std::vector<Cuboid> _platforms;
-    std::vector<TextureDrawer> _drawers;
+    std::vector<Platform> _platforms;
+    std::vector<TextureDrawer> _platformDrawers;
     Texture2D _diffuse;
-    Texture2D _normal;
-    Texture2D _height;
 };
 
 #endif

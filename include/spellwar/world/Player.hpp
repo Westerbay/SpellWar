@@ -29,7 +29,6 @@ private:
     System _system;
     PlayerCamera _camera;
     AnimatedModelGLTF * _model;
-    StaticModelGLTF * _modelStatic;
     ModelDrawer _modelDrawer;
 };
 

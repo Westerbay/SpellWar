@@ -16,18 +16,6 @@ Map::Map(const Hitbox & hitbox) : GameObject(hitbox) {
     _diffuse.setInterpolationMode(GL_LINEAR);
     _diffuse.setRepeatMode(GL_REPEAT);
     _diffuse.setData(image);
-
-    Image imageMoon("assets/moon_n.bmp");
-    _normal.setType(TEXTURE_2D);
-    _normal.setInterpolationMode(GL_LINEAR);
-    _normal.setRepeatMode(GL_REPEAT);
-    _normal.setData(imageMoon);
-
-    Image imageHeight("assets/moon_h.bmp");
-    _height.setType(TEXTURE_2D);
-    _height.setInterpolationMode(GL_LINEAR);
-    _height.setRepeatMode(GL_REPEAT);
-    _height.setData(imageHeight);
 }
 
 void Map::generatePlatform(
@@ -38,61 +26,67 @@ void Map::generatePlatform(
 ) {
     Point3D position = hitbox.position;
     Vector3D size = hitbox.size;
+    std::vector<Hitbox> _platformHitboxes;
 
-    unsigned tries = 0;
-    _drawers.resize(maxNumberOfPlatforms);
-    for (size_t i = 0; i < maxNumberOfPlatforms; i ++) {
-        if (tries >= maxAttempts) {
-            break;
-        }
-        while (tries < maxAttempts) {            
-            Cuboid platform; 
-            Hitbox hitbox; 
+    std::vector<Matrix4D> stalagmiteTransform;
+    std::vector<Matrix4D> treeTransforms;
 
-            tries ++;          
-            for (int i = 0; i < 3; i ++) {
-                platform.position[i] = randomFloat(
-                    position[i] - size[i] / 2,
-                    position[i] + size[i] / 2
-                );
-                platform.size[i] = (float) randomInt(
-                    (int)minSize[i], (int)maxSize[i]
-                );
-            }  
+    unsigned tries = 0;    
+    while (tries < maxAttempts && _platforms.size() < maxNumberOfPlatforms) {   
+        tries ++;         
+        Cuboid platform; 
+        Hitbox hitbox;                      
+        for (int i = 0; i < 3; i ++) {
+            platform.position[i] = randomFloat(
+                position[i] - size[i] / 2,
+                position[i] + size[i] / 2
+            );
+            platform.size[i] = (float) randomInt(
+                (int)minSize[i], (int)maxSize[i]
+            );
+        } 
+        if (P(PROBABILITY_ROTATE)) {
+            platform.rotateX(randomFloat(0.0f, MAX_ANGLE_ROTATION));
+            platform.rotateY(randomFloat(0.0f, MAX_ANGLE_ROTATION));
+            platform.rotateZ(randomFloat(0.0f, MAX_ANGLE_ROTATION));
+        }                 
+        hitbox = platform;            
+        hitbox.size.x += X_Z_GAP;
+        hitbox.size.y += Y_GAP;
+        hitbox.size.z += X_Z_GAP;
 
-            if (P(PROBABILITY_ROTATE)) {
-                platform.rotateX(randomFloat(0.0f, MAX_ANGLE_ROTATION));
-                platform.rotateY(randomFloat(0.0f, MAX_ANGLE_ROTATION));
-                platform.rotateZ(randomFloat(0.0f, MAX_ANGLE_ROTATION));
-            }       
-                 
-            hitbox = platform;            
-            hitbox.size.x += X_Z_GAP;
-            hitbox.size.y += Y_GAP;
-            hitbox.size.z += X_Z_GAP;
-            if (!hitbox.collidesList(_platforms)) {
-                _platforms.push_back(platform);   
-
-                _drawers[i].setCuboidData(platform, {
-                    {{0.0f, 0.0f}, {platform.size.x / TEX_SCALE, 0.0f}, {platform.size.x / TEX_SCALE, platform.size.y / TEX_SCALE}, {0.0f, platform.size.y / TEX_SCALE}},
-                    {{0.0f, 0.0f}, {platform.size.x / TEX_SCALE, 0.0f}, {platform.size.x / TEX_SCALE, platform.size.y / TEX_SCALE}, {0.0f, platform.size.y / TEX_SCALE}},
-                    {{0.0f, 0.0f}, {platform.size.x / TEX_SCALE, 0.0f}, {platform.size.x / TEX_SCALE, platform.size.z / TEX_SCALE}, {0.0f, platform.size.z / TEX_SCALE}},
-                    {{0.0f, 0.0f}, {platform.size.x / TEX_SCALE, 0.0f}, {platform.size.x / TEX_SCALE, platform.size.z / TEX_SCALE}, {0.0f, platform.size.z / TEX_SCALE}},
-                    {{0.0f, 0.0f}, {platform.size.z / TEX_SCALE, 0.0f}, {platform.size.z / TEX_SCALE, platform.size.y / TEX_SCALE}, {0.0f, platform.size.y / TEX_SCALE}},
-                    {{0.0f, 0.0f}, {platform.size.z / TEX_SCALE, 0.0f}, {platform.size.z / TEX_SCALE, platform.size.y / TEX_SCALE}, {0.0f, platform.size.y / TEX_SCALE}}
-                });
-
-                tries = 0;
-                break;
-            }         
-        }
+        if (!hitbox.collidesList(_platformHitboxes)) {
+            _platforms.push_back(platform);
+            _platformHitboxes.push_back(platform); 
+            _platforms.back().generateStalagmite(stalagmiteTransform, _stalagmite.getSize());
+            _platforms.back().generateDecoration(
+                treeTransforms, _pinkTree.getSize(),
+                TREE_PROBABILITY, TREE_MIN_SCALE, TREE_MAX_SCALE
+            );
+            tries = 0;
+        }         
     }
-    generateStalagmite();
-    generateTree();
+
+    _platformDrawers.resize(_platforms.size());
+    for (size_t i = 0; i < _platforms.size(); i ++) {
+        const Cuboid & platform = _platforms[i].getHitbox();
+        _platformDrawers[i].setCuboidData(platform, {
+            {{0.0f, 0.0f}, {platform.size.x / TEX_SCALE, 0.0f}, {platform.size.x / TEX_SCALE, platform.size.y / TEX_SCALE}, {0.0f, platform.size.y / TEX_SCALE}},
+            {{0.0f, 0.0f}, {platform.size.x / TEX_SCALE, 0.0f}, {platform.size.x / TEX_SCALE, platform.size.y / TEX_SCALE}, {0.0f, platform.size.y / TEX_SCALE}},
+            {{0.0f, 0.0f}, {platform.size.x / TEX_SCALE, 0.0f}, {platform.size.x / TEX_SCALE, platform.size.z / TEX_SCALE}, {0.0f, platform.size.z / TEX_SCALE}},
+            {{0.0f, 0.0f}, {platform.size.x / TEX_SCALE, 0.0f}, {platform.size.x / TEX_SCALE, platform.size.z / TEX_SCALE}, {0.0f, platform.size.z / TEX_SCALE}},
+            {{0.0f, 0.0f}, {platform.size.z / TEX_SCALE, 0.0f}, {platform.size.z / TEX_SCALE, platform.size.y / TEX_SCALE}, {0.0f, platform.size.y / TEX_SCALE}},
+            {{0.0f, 0.0f}, {platform.size.z / TEX_SCALE, 0.0f}, {platform.size.z / TEX_SCALE, platform.size.y / TEX_SCALE}, {0.0f, platform.size.y / TEX_SCALE}}
+        });
+    }                
+
+    _modelStalagmiteDrawer.configureInstances(stalagmiteTransform, STALAGMITE_ID);
+    _modelPinkTreeDrawer.configureInstances(treeTransforms, PINK_TREE_ID);
+
 }
 
 void Map::render() {
-    for (TextureDrawer & drawer: _drawers) {
+    for (TextureDrawer & drawer: _platformDrawers) {
         drawer.draw({
             &_diffuse,
             &_diffuse,
@@ -106,79 +100,6 @@ void Map::render() {
     _modelStalagmiteDrawer.drawInstanced(_stalagmite, STALAGMITE_ID);
     _modelPinkTreeDrawer.drawInstanced(_pinkTree, PINK_TREE_ID);
     cullCounterClockwise();    
-}
-
-void Map::generateStalagmite() {
-
-    std::vector<Matrix4D> stalagmiteTransform;
-    Vector3D stalagmiteSize = _stalagmite.getSize();
-
-    for (const Cuboid & platform: _platforms) {        
-        std::vector<Cuboid> stalagmiteHitbox;
-        unsigned limit = (unsigned)(platform.size.x * platform.size.z);
-        unsigned tries = 0;
-        unsigned nb = 0;
-        while (nb < limit && tries < MAX_ATTEMPTS) {
-            tries ++;
-            Matrix4D transform = platform.getTransformWithoutScale();
-            float scale = randomFloat(STALAGMITE_MIN_SCALE, STALAGMITE_MAX_SCALE);
-            Vector3D translate = {
-                (platform.size.x * 0.5f - scale * stalagmiteSize.x) * randomFloat(-1.0f, 1.0f),
-                -platform.size.y * 0.5f,
-                (platform.size.z * 0.5f - scale * stalagmiteSize.z) * randomFloat(-1.0f, 1.0f),
-            };
-            transform = glm::translate(transform, translate);
-            transform = glm::rotate(transform, glm::radians(180.0f), AXIS_X);
-            transform = glm::scale(transform, Vector3D(scale, scale, scale));            
-
-            Hitbox hitbox(Point3D(0.0f), stalagmiteSize);
-            Vector3D offset(0.5f, 0.0f, 0.5f);
-            offset *= scale;
-            hitbox.orientation = platform.orientation;            
-            hitbox.position += platform.position;
-            hitbox.position += translate.x * platform.orientation[0];
-            hitbox.position += translate.y * platform.orientation[1];
-            hitbox.position += translate.z * platform.orientation[2]; 
-
-            hitbox.position += offset.x * platform.orientation[0];
-            hitbox.position += offset.y * platform.orientation[1];
-            hitbox.position += offset.z * platform.orientation[2]; 
-            hitbox.size *= scale;   
-
-            if (!hitbox.collidesList(stalagmiteHitbox)) {
-                nb ++;
-                tries = 0;
-                stalagmiteHitbox.push_back(hitbox);
-                stalagmiteTransform.push_back(transform); 
-            }
-                    
-        }        
-    }    
-
-    _modelStalagmiteDrawer.configureInstances(stalagmiteTransform, STALAGMITE_ID);
-}
-
-void Map::generateTree() {
-	std::vector<Matrix4D> treeTransforms;
-    Vector3D treeSize = _pinkTree.getSize();
-    
-    for (const Cuboid & platform : _platforms) {
-    	if (!P(TREE_PROBABILITY)) {
-    		continue;
-    	}
-    	Matrix4D transform = platform.getTransformWithoutScale();
-    	float scale = randomFloat(TREE_MIN_SCALE, TREE_MAX_SCALE);
-    	Vector3D translate = {
-		    (platform.size.x * 0.5f - scale * treeSize.x) * randomFloat(-1.0f, 1.0f),
-		    platform.size.y * 0.5f,
-		    (platform.size.z * 0.5f - scale * treeSize.z) * randomFloat(-1.0f, 1.0f),
-    	};
-    	transform = glm::translate(transform, translate);
-        transform = glm::scale(transform, Vector3D(scale, scale, scale));   
-        treeTransforms.push_back(transform);    
-    }
-    
-    _modelPinkTreeDrawer.configureInstances(treeTransforms, PINK_TREE_ID);
 }
 
 Map::Stalagmite::Stalagmite() : StaticModelGLTF(STALAGMITE_MODEL) {}

@@ -57,7 +57,7 @@ void GameCamera::update() {
     
     Matrix4D projection = glm::perspective(
         glm::radians(_FOVDeg), 
-        (float) (hitbox.size.x / hitbox.size.y),
+        (float) hitbox.size.x / hitbox.size.y,
          _nearPlane, 
          _farPlane
     );
