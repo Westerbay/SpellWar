@@ -45,6 +45,7 @@ struct VertexBufferInfo {
 
 struct ModelSubMeshInfo {
     int textureID;
+    int normalMapID;
     int metallicRoughnessID;
     Vector4D baseColorFactor;
     float metallicFactor;

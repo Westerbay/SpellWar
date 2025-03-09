@@ -15,6 +15,8 @@ layout(std140, binding = 1) uniform LightBlock {
 };
 
 in vec3 currentPosition;
+in vec3 fragTangent;
+in vec3 fragBitangent;
 in vec3 fragNormal;
 in vec2 texCoord0;
 
@@ -22,8 +24,11 @@ out vec4 fragColor;
 
 uniform sampler2D textureDiffuse;
 uniform sampler2D textureMetallicRoughness;
+uniform sampler2D textureNormal;
 
 uniform bool hasMetallicRoughness;
+uniform bool hasNormalMap;
+
 uniform vec4 baseColorFactor;  
 uniform float metallicFactor;  
 uniform float roughnessFactor;  
@@ -49,23 +54,28 @@ float geometrySmith(float NdotV, float NdotL, float roughness) {
     return G1 * G2;
 }
 
+vec3 getNormalFromMap() {
+    vec3 tangentNormal = texture(textureNormal, texCoord0).rgb * 2.0 - 1.0; 
+
+    vec3 T = normalize(fragTangent);
+    vec3 B = normalize(fragBitangent);
+    vec3 N = normalize(fragNormal);
+
+    mat3 TBN = mat3(T, B, N);
+    return normalize(TBN * tangentNormal);
+}
 
 void main() {  
-
     vec4 baseColor = texture(textureDiffuse, texCoord0) * baseColorFactor;
-    vec2 metallicRoughness;
-    if (hasMetallicRoughness) {
-        metallicRoughness = texture(textureMetallicRoughness, texCoord0).bg;
-    } 
-    else {
-        metallicRoughness = vec2(0.0f, 0.0f);
-    }     
-    
-    float metallic = metallicRoughness.r * metallicFactor;
-    float roughness = clamp(metallicRoughness.g * roughnessFactor, 0.04, 1.0);
-    
+
     if (light.display != 0) {
-        vec3 normal = normalize(fragNormal);
+
+        vec2 metallicRoughness = hasMetallicRoughness ? texture(textureMetallicRoughness, texCoord0).bg : vec2(0.0);    
+        float metallic = metallicRoughness.r * metallicFactor;
+        float roughness = clamp(metallicRoughness.g * roughnessFactor, 0.04, 1.0);
+        
+        vec3 normal = hasNormalMap ? getNormalFromMap() : normalize(fragNormal);
+
         vec3 lightDir = normalize(light.position.xyz - currentPosition);
         vec3 viewDir = normalize(light.cameraPosition.xyz - currentPosition);
         vec3 halfVec = normalize(lightDir + viewDir);
@@ -94,5 +104,5 @@ void main() {
     else {
         fragColor = baseColor;
     } 
-    
+
 }

@@ -31,6 +31,9 @@ int ModelGLTF::getVBOIndex(const std::string & key) {
     if (key.compare(WEIGHTS) == 0) {
         return VBO_WEIGHTS;
     }
+    if (key.compare(TANGENT) == 0) {
+        return VBO_TANGENTS;
+    }
     return -1;
 }
 
@@ -45,12 +48,14 @@ void ModelGLTF::setTransform(const Matrix4D & transform) {
 void ModelGLTF::drawModelMesh(const Shader & shader) {
     shader.setUniform("textureDiffuse", 0);
     shader.setUniform("textureMetallicRoughness", 1);   
+    shader.setUniform("textureNormal", 2);   
     _modelMesh.draw(shader, _transform);
 }  
 
 void ModelGLTF::drawModelMeshInstanced(const Shader & shader, size_t numberOfInstance) {
     shader.setUniform("textureDiffuse", 0);
-    shader.setUniform("textureMetallicRoughness", 1);   
+    shader.setUniform("textureMetallicRoughness", 1);  
+    shader.setUniform("textureNormal", 2); 
     _modelMesh.draw(shader, numberOfInstance);
 }  
 
@@ -166,6 +171,7 @@ void ModelGLTF::processMesh(
 
         int textureID = -1;
         int metallicRoughnessID = -1;
+        int normalMapID = -1;
 
         Vector4D baseColorFactor = Vector4D(1.0f);
         float metallicFactor = 0.0f;
@@ -215,10 +221,29 @@ void ModelGLTF::processMesh(
                     metallicFactor = (float) mat.pbrMetallicRoughness.metallicFactor;
                     roughnessFactor = (float) mat.pbrMetallicRoughness.roughnessFactor;
                 }
-            }       
+            } 
+            
+            int normalIndex = mat.normalTexture.index;
+            if (normalIndex >= 0) {
+                const tinygltf::Texture & texture = model.textures[normalIndex];
+                const tinygltf::Sampler & sampler = model.samplers[texture.sampler];
+                int imageIndex = texture.source;
+                if (imageIndex >= 0) {
+                    const tinygltf::Image & image = model.images[imageIndex];
+                    _modelMesh.setTexture(
+                        imageIndex, image.width, image.height, 
+                        image.component, image.image.data(),
+                        sampler.minFilter, sampler.magFilter, 
+                        sampler.wrapS, sampler.wrapT, image.pixel_type
+                    );
+                    normalMapID = imageIndex;
+                }
+            } 
+            
         } 
         ModelSubMeshInfo subMesh = {
             textureID,
+            normalMapID,
             metallicRoughnessID,
             baseColorFactor,
             metallicFactor,

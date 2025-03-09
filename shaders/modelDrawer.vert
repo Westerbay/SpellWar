@@ -5,6 +5,7 @@ layout(location = 2) in vec3 aNormal;
 layout(location = 3) in vec2 aTexCoord0;
 layout(location = 5) in ivec4 aJoint;
 layout(location = 6) in vec4 aWeight;
+layout(location = 7) in vec3 aTangent;
 
 layout(std140, binding = 0) uniform CameraMatrices {
     mat4 cameraMatrixStatic;
@@ -22,11 +23,14 @@ layout(std140, binding = 5) uniform TransformsBlock {
 out vec3 currentPosition;
 out vec3 fragNormal;
 out vec2 texCoord0;
+out vec3 fragTangent;
+out vec3 fragBitangent;
 
 uniform int isAnimated;
 uniform int drawInstanced;
 uniform mat4 model;
 
+uniform bool hasNormalMap;
 
 void main() {
 
@@ -53,4 +57,13 @@ void main() {
     }    
 
     texCoord0 = aTexCoord0;
+
+    if (hasNormalMap) {
+        fragTangent = normalize(mat3(transform) * aTangent);
+        fragBitangent = normalize(cross(fragNormal, fragTangent));
+    } else {
+        fragTangent = vec3(0.0, 0.0, 0.0);
+        fragBitangent = vec3(0.0, 0.0, 0.0);
+    }
+
 }

@@ -142,6 +142,14 @@ void ModelMesh::draw(const Shader & shader, const Matrix4D & transform) {
             shader.setUniform("hasMetallicRoughness", false);              
         }
 
+        if (subMesh.normalMapID >= 0) {
+            shader.setUniform("hasNormalMap", true);  
+            glActiveTexture(GL_TEXTURE2);
+            glBindTexture(GL_TEXTURE_2D, _textures[subMesh.normalMapID]);
+        } else {
+            shader.setUniform("hasNormalMap", false);  
+        }  
+
         glDrawElements(
             subMesh.elementsInfo.drawMode, 
             subMesh.elementsInfo.countElement, 
@@ -178,6 +186,14 @@ void ModelMesh::draw(const Shader & shader, size_t numberOfInstance) {
         } else {
             shader.setUniform("hasMetallicRoughness", false);              
         }
+
+        if (subMesh.normalMapID >= 0) {
+            shader.setUniform("hasNormalMap", true);  
+            glActiveTexture(GL_TEXTURE2);
+            glBindTexture(GL_TEXTURE_2D, _textures[subMesh.normalMapID]);
+        } else {
+            shader.setUniform("hasNormalMap", false);  
+        }       
 
         glDrawElementsInstanced(
             subMesh.elementsInfo.drawMode, 
