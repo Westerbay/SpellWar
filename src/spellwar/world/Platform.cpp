@@ -12,13 +12,14 @@
 Platform::Platform(const Hitbox & hitbox) : GameObject(hitbox) {}
 
 void Platform::generateStalagmite(
-    std::vector<Matrix4D> & transforms,
+    std::vector<Matrix4D> * transforms,
     const Decoration & decoration
 ) {
 	
-	DecorationInfo info = decoration.getDecorationInfo();
-	
+	DecorationInfo info = decoration.getDecorationInfo();	
     std::vector<Cuboid> stalagmiteHitbox;
+    Hitbox hitboxDecoration;
+    
     unsigned limit = (unsigned)(hitbox.size.x * hitbox.size.z);
     unsigned tries = 0;
     unsigned nb = 0;
@@ -35,32 +36,24 @@ void Platform::generateStalagmite(
         transform = glm::rotate(transform, glm::radians(180.0f), AXIS_X);
         transform = glm::scale(transform, Vector3D(scale, scale, scale));            
 
-        Hitbox hitbox(Point3D(0.0f), info.size);
-        Vector3D offset(0.5f, 0.0f, 0.5f);
-        offset *= scale;
-        hitbox.orientation = hitbox.orientation;            
-        hitbox.position += hitbox.position;
-        hitbox.position += translate.x * hitbox.orientation[0];
-        hitbox.position += translate.y * hitbox.orientation[1];
-        hitbox.position += translate.z * hitbox.orientation[2]; 
-
-        hitbox.position += offset.x * hitbox.orientation[0];
-        hitbox.position += offset.y * hitbox.orientation[1];
-        hitbox.position += offset.z * hitbox.orientation[2]; 
-        hitbox.size *= scale;   
-
-        if (!hitbox.collidesList(stalagmiteHitbox)) {
+		hitboxDecoration.size = info.size * scale;
+		hitboxDecoration.orientation = hitbox.orientation;	
+		hitboxDecoration.position = hitbox.position;
+		hitboxDecoration.position += hitbox.orientation[1] * hitboxDecoration.size.y * -0.5f;
+		hitboxDecoration.move(translate);	
+        if (!hitboxDecoration.collidesList(stalagmiteHitbox)) {
             nb ++;
             tries = 0;
-            stalagmiteHitbox.push_back(hitbox);
-            transforms.push_back(transform); 
+            stalagmiteHitbox.push_back(hitboxDecoration);
+            transforms -> push_back(transform); 
+            _decorationHitboxes.push_back(hitboxDecoration);
         }
                 
     }
 }
 
 void Platform::generateDecoration(
-    std::vector<Matrix4D> & transforms, 
+    std::vector<Matrix4D> * transforms, 
     const Decoration & decoration
 ) {
 	DecorationInfo info = decoration.getDecorationInfo();
@@ -96,7 +89,7 @@ void Platform::generateDecoration(
 			
 		} while (numberOfTries < MAX_ATTEMPTS_DECORATION && hitboxDecoration.collidesList(_decorationHitboxes));
 		if (numberOfTries < MAX_ATTEMPTS_DECORATION) {
-			transforms.push_back(transform);
+			transforms -> push_back(transform);
 			_decorationHitboxes.push_back(hitboxDecoration);
 		}
 	} 

@@ -15,6 +15,8 @@
 #define STALAGMITE_MODEL "assets/model/decoration/stalagmite/scene.gltf"
 #define TREE_MODEL "assets/model/decoration/pinkTree/scene.gltf"
 #define FERN_MODEL "assets/model/decoration/fern/scene.gltf"
+#define ROCK_MODEL "assets/model/decoration/rock/scene.gltf"
+#define RADIANCE_TREE_MODEL "assets/model/decoration/radianceTree/scene.gltf"
 
 #define MAX_ATTEMPTS_DECORATION 5
 
@@ -22,6 +24,7 @@
 using namespace wgame;
 
 struct DecorationInfo {
+	int id;
 	Vector3D size;
 	float minScale;
 	float maxScale;
@@ -51,6 +54,18 @@ public:
 class Fern : public Decoration {
 public:
 	Fern();
+	DecorationInfo getDecorationInfo() const override;
+};
+
+class Rock : public Decoration {
+public:
+	Rock();
+	DecorationInfo getDecorationInfo() const override;
+};
+
+class RadianceTree : public Decoration {
+public:
+	RadianceTree();
 	DecorationInfo getDecorationInfo() const override;
 };
 

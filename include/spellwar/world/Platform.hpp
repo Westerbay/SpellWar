@@ -26,11 +26,11 @@ class Platform : public GameObject {
 public:
     Platform(const Hitbox & hitbox);
     void generateStalagmite(
-        std::vector<Matrix4D> & transforms,
+        std::vector<Matrix4D> * transforms,
         const Decoration & decoration
     );
     void generateDecoration(
-        std::vector<Matrix4D> & transforms, 
+        std::vector<Matrix4D> * transforms, 
         const Decoration & decoration
     );
 	std::vector<Hitbox> & getDecorationHitboxes();

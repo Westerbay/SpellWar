@@ -15,9 +15,6 @@
 
 #define TEX_SCALE 10.0f
 
-#define STALAGMITE_ID 0
-#define PINK_TREE_ID 1
-
 
 using namespace wgame;
 
@@ -33,8 +30,11 @@ public:
     void render() override;	
 private:
 	Stalagmite _stalagmite;
-    PinkTree _pinkTree;
+	PinkTree _pinkTree;
     Fern _fern;
+    Rock _rock;
+    RadianceTree _radianceTree;
+    std::vector<Decoration *> _decorations;
 	std::vector<Platform> _platforms;    
 private:
 	Texture2D _diffuse;

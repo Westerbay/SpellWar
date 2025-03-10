@@ -16,6 +16,11 @@ Map::Map(const Hitbox & hitbox) : GameObject(hitbox) {
     _diffuse.setInterpolationMode(GL_LINEAR);
     _diffuse.setRepeatMode(GL_REPEAT);
     _diffuse.setData(image);
+    
+    _decorations.push_back(&_pinkTree);
+    _decorations.push_back(&_fern);
+    _decorations.push_back(&_rock);
+    _decorations.push_back(&_radianceTree);
 }
 
 void Map::generatePlatform(
@@ -27,10 +32,9 @@ void Map::generatePlatform(
     Point3D position = hitbox.position;
     Vector3D size = hitbox.size;
     std::vector<Hitbox> _platformHitboxes;
-
     std::vector<Matrix4D> stalagmiteTransform;
-    std::vector<Matrix4D> treeTransforms;
-
+    std::map<int, std::vector<Matrix4D>> decorationTransforms;
+    
     unsigned tries = 0;    
     while (tries < maxAttempts && _platforms.size() < maxNumberOfPlatforms) {   
         tries ++;         
@@ -58,8 +62,13 @@ void Map::generatePlatform(
         if (!hitbox.collidesList(_platformHitboxes)) {
             _platforms.push_back(platform);
             _platformHitboxes.push_back(platform); 
-            _platforms.back().generateStalagmite(stalagmiteTransform, _stalagmite);
-            _platforms.back().generateDecoration(treeTransforms, _pinkTree);
+            _platforms.back().generateStalagmite(&stalagmiteTransform, _stalagmite);
+            
+            for (Decoration * decoration : _decorations) {
+            	DecorationInfo info = decoration -> getDecorationInfo();
+            	decorationTransforms[info.id] = std::vector<Matrix4D>();
+            	_platforms.back().generateDecoration(&decorationTransforms[info.id], *decoration);
+            }
             tries = 0;
         }         
     }
@@ -76,9 +85,10 @@ void Map::generatePlatform(
             {{0.0f, 0.0f}, {platform.size.z / TEX_SCALE, 0.0f}, {platform.size.z / TEX_SCALE, platform.size.y / TEX_SCALE}, {0.0f, platform.size.y / TEX_SCALE}}
         });
     }                
-
-    _modelDrawer.configureInstances(stalagmiteTransform, STALAGMITE_ID);
-    _modelDrawer.configureInstances(treeTransforms, PINK_TREE_ID);
+	
+	for (const auto & pair : decorationTransforms) {
+		_modelDrawer.configureInstances(pair.second, pair.first);
+	}
 
 }
 
@@ -102,8 +112,12 @@ void Map::render() {
     } 
 		
     cullClockwise();
-    _modelDrawer.drawInstanced(_stalagmite, STALAGMITE_ID);
-    _modelDrawer.drawInstanced(_pinkTree, PINK_TREE_ID);
-    cullCounterClockwise();    
+    
+    for (Decoration * decoration : _decorations) {
+    	DecorationInfo info = decoration -> getDecorationInfo();
+    	_modelDrawer.drawInstanced(*decoration, info.id);
+    }
+    _modelDrawer.drawInstanced(_stalagmite, _stalagmite.getDecorationInfo().id);
+    cullCounterClockwise();        
 }
 
