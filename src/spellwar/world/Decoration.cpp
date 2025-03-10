@@ -12,13 +12,17 @@
 
 Decoration::Decoration(const std::string & filepath) : StaticModelGLTF(filepath) {}
 
+Matrix4D Decoration::getTransform() const {
+	return Matrix4D(1.0f);
+}
+
 /* Stalagmite */
 Stalagmite::Stalagmite() : Decoration(STALAGMITE_MODEL) {}
 
 DecorationInfo Stalagmite::getDecorationInfo() const {
 	DecorationInfo info;
 	info.id = 0;
-	info.size = Vector3D(2.0f, 5.0f, 2.0f);
+	info.size = Vector3D(2.0f, 4.2f, 2.0f);
 	info.minScale = 0.8f;
 	info.maxScale = 1.5f;
 	info.minInstances = 1;   // Not Used
@@ -43,19 +47,23 @@ DecorationInfo PinkTree::getDecorationInfo() const {
 	return info;
 }
 
-/* Fern */
-Fern::Fern() : Decoration(FERN_MODEL) {}
+/* FantasyPlant */
+FantasyPlant::FantasyPlant() : Decoration(FANTASY_PLANT_MODEL) {}
 
-DecorationInfo Fern::getDecorationInfo() const {
+DecorationInfo FantasyPlant::getDecorationInfo() const {
 	DecorationInfo info;
 	info.id = 2;
-	info.size = Vector3D(1.0f, 0.5f, 1.0f);
-	info.minScale = 1.0;
-	info.maxScale = 3.0f;
+	info.size = Vector3D(1.0f, 1.0f, 1.0f);
+	info.minScale = 1.5f;
+	info.maxScale = 4.0f;
 	info.minInstances = 1;
 	info.maxInstances = 2;
 	info.probability = 0.8f;
 	return info;
+}
+
+Matrix4D FantasyPlant::getTransform() const {
+	return glm::translate(Matrix4D(1.0f), Vector3D(0.0f, 0.48f, 0.0f));
 }
 
 /* Fern */
@@ -64,24 +72,24 @@ Rock::Rock() : Decoration(ROCK_MODEL) {}
 DecorationInfo Rock::getDecorationInfo() const {
 	DecorationInfo info;
 	info.id = 3;
-	info.size = Vector3D(20.0f, 10.0f, 20.0f);
-	info.minScale = 0.05f;
-	info.maxScale = 0.1f;
+	info.size = Vector3D(9.0f, 7.0f, 8.0f);
+	info.minScale = 0.5f;
+	info.maxScale = 1.2f;
 	info.minInstances = 1;
 	info.maxInstances = 2;
 	info.probability = 0.8f;
 	return info;
 }
 
-/* RadianceTree */
-RadianceTree::RadianceTree() : Decoration(RADIANCE_TREE_MODEL) {}
+/* WaterPlant */
+WaterPlant::WaterPlant() : Decoration(WATER_PLANT_MODEL) {}
 
-DecorationInfo RadianceTree::getDecorationInfo() const {
+DecorationInfo WaterPlant::getDecorationInfo() const {
 	DecorationInfo info;
 	info.id = 4;
-	info.size = Vector3D(1.0f, 5.0f, 1.0f);
-	info.minScale = 1.5f;
-	info.maxScale = 5.0f;
+	info.size = Vector3D(0.5f, 0.3f, 0.5f);
+	info.minScale = 4.0f;
+	info.maxScale = 8.0f;
 	info.minInstances = 1;
 	info.maxInstances = 2;
 	info.probability = 0.5f;

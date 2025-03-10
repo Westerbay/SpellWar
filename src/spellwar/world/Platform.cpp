@@ -12,7 +12,7 @@
 Platform::Platform(const Hitbox & hitbox) : GameObject(hitbox) {}
 
 void Platform::generateStalagmite(
-    std::vector<Matrix4D> * transforms,
+    std::vector<Matrix4D> & transforms,
     const Decoration & decoration
 ) {
 	
@@ -45,15 +45,14 @@ void Platform::generateStalagmite(
             nb ++;
             tries = 0;
             stalagmiteHitbox.push_back(hitboxDecoration);
-            transforms -> push_back(transform); 
+            transforms.push_back(transform); 
             _decorationHitboxes.push_back(hitboxDecoration);
-        }
-                
+        }                
     }
 }
 
 void Platform::generateDecoration(
-    std::vector<Matrix4D> * transforms, 
+    std::vector<Matrix4D> & transforms, 
     const Decoration & decoration
 ) {
 	DecorationInfo info = decoration.getDecorationInfo();
@@ -68,7 +67,7 @@ void Platform::generateDecoration(
     for (int i = 0; i < numberOfInstances; i ++) {
 		numberOfTries = 0;
 		do {
-			numberOfTries ++;
+			numberOfTries ++;            
 			transform = hitbox.getTransformWithoutScale();
 			float scale = randomFloat(info.minScale, info.maxScale);
 			float rotation = randomFloat(0.0f, 360.0f);
@@ -76,10 +75,11 @@ void Platform::generateDecoration(
 				(hitbox.size.x * 0.5f - scale * info.size.x) * randomFloat(-1.0f, 1.0f),
 				hitbox.size.y * 0.5f,
 				(hitbox.size.z * 0.5f - scale * info.size.z) * randomFloat(-1.0f, 1.0f),
-			};
+			};            
 			transform = glm::translate(transform, translate);
 			transform = glm::rotate(transform, glm::radians(rotation), AXIS_Y);
 			transform = glm::scale(transform, Vector3D(scale, scale, scale)); 
+            transform *= decoration.getTransform();
 			
 			hitboxDecoration.size = info.size * scale;
 			hitboxDecoration.orientation = hitbox.orientation;	
@@ -89,7 +89,7 @@ void Platform::generateDecoration(
 			
 		} while (numberOfTries < MAX_ATTEMPTS_DECORATION && hitboxDecoration.collidesList(_decorationHitboxes));
 		if (numberOfTries < MAX_ATTEMPTS_DECORATION) {
-			transforms -> push_back(transform);
+			transforms.push_back(transform);
 			_decorationHitboxes.push_back(hitboxDecoration);
 		}
 	} 

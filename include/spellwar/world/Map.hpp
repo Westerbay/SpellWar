@@ -29,12 +29,14 @@ public:
     );    
     void render() override;	
 private:
+    void constructPlatform(
+        Cuboid & platform, Hitbox & hitboxPlatform,
+        const Vector3D & minSize, const Vector3D & maxSize
+    );
+    void setUpPlatformTextures();
+private:
 	Stalagmite _stalagmite;
-	PinkTree _pinkTree;
-    Fern _fern;
-    Rock _rock;
-    RadianceTree _radianceTree;
-    std::vector<Decoration *> _decorations;
+    std::vector<std::unique_ptr<Decoration>> _decorations;
 	std::vector<Platform> _platforms;    
 private:
 	Texture2D _diffuse;
