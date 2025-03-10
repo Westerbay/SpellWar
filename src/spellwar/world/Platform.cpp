@@ -13,8 +13,11 @@ Platform::Platform(const Hitbox & hitbox) : GameObject(hitbox) {}
 
 void Platform::generateStalagmite(
     std::vector<Matrix4D> & transforms,
-    const Vector3D & size
+    const Decoration & decoration
 ) {
+	
+	DecorationInfo info = decoration.getDecorationInfo();
+	
     std::vector<Cuboid> stalagmiteHitbox;
     unsigned limit = (unsigned)(hitbox.size.x * hitbox.size.z);
     unsigned tries = 0;
@@ -22,17 +25,17 @@ void Platform::generateStalagmite(
     while (nb < limit && tries < MAX_ATTEMPTS) {
         tries ++;
         Matrix4D transform = hitbox.getTransformWithoutScale();
-        float scale = randomFloat(STALAGMITE_MIN_SCALE, STALAGMITE_MAX_SCALE);
+        float scale = randomFloat(info.minScale, info.maxScale);
         Vector3D translate = {
-            (hitbox.size.x * 0.5f - scale * size.x) * randomFloat(-1.0f, 1.0f),
+            (hitbox.size.x * 0.5f - scale * info.size.x) * randomFloat(-1.0f, 1.0f),
             -hitbox.size.y * 0.5f,
-            (hitbox.size.z * 0.5f - scale * size.z) * randomFloat(-1.0f, 1.0f),
+            (hitbox.size.z * 0.5f - scale * info.size.z) * randomFloat(-1.0f, 1.0f),
         };
         transform = glm::translate(transform, translate);
         transform = glm::rotate(transform, glm::radians(180.0f), AXIS_X);
         transform = glm::scale(transform, Vector3D(scale, scale, scale));            
 
-        Hitbox hitbox(Point3D(0.0f), size);
+        Hitbox hitbox(Point3D(0.0f), info.size);
         Vector3D offset(0.5f, 0.0f, 0.5f);
         offset *= scale;
         hitbox.orientation = hitbox.orientation;            
@@ -58,18 +61,19 @@ void Platform::generateStalagmite(
 
 void Platform::generateDecoration(
     std::vector<Matrix4D> & transforms, 
-    const Vector3D & size, float probability,
-    float minScale, float maxScale
+    const Decoration & decoration
 ) {
-    if (!P(probability)) {
+	DecorationInfo info = decoration.getDecorationInfo();
+    if (!P(info.probability)) {
         return;
     }
+    
     Matrix4D transform = hitbox.getTransformWithoutScale();
-    float scale = randomFloat(minScale, maxScale);
+    float scale = randomFloat(info.minScale, info.maxScale);
     Vector3D translate = {
-        (hitbox.size.x * 0.5f - scale * size.x) * randomFloat(-1.0f, 1.0f),
+        (hitbox.size.x * 0.5f - scale * info.size.x) * randomFloat(-1.0f, 1.0f),
         hitbox.size.y * 0.5f,
-        (hitbox.size.z * 0.5f - scale * size.z) * randomFloat(-1.0f, 1.0f),
+        (hitbox.size.z * 0.5f - scale * info.size.z) * randomFloat(-1.0f, 1.0f),
     };
     transform = glm::translate(transform, translate);
     transform = glm::scale(transform, Vector3D(scale, scale, scale));   

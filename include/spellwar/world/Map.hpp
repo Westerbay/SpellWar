@@ -30,27 +30,17 @@ public:
         const Vector3D & maxSize,
         unsigned maxAttempts = MAX_ATTEMPTS
     );    
-    void render() override;
-protected:
-    class Stalagmite : public StaticModelGLTF {
-    public:
-        Stalagmite();
-        Vector3D getSize() const;
-    };
-    class PinkTree : public StaticModelGLTF {
-    public:
-        PinkTree();
-        Vector3D getSize() const;
-    };
+    void render() override;	
 private:
+	Stalagmite _stalagmite;
+    PinkTree _pinkTree;
+	std::vector<Platform> _platforms;    
+private:
+	Texture2D _diffuse;
     ModelDrawer _modelStalagmiteDrawer;
     ModelDrawer _modelPinkTreeDrawer;
-    ColorDrawer _hitboxDrawer;
-    Stalagmite _stalagmite;
-    PinkTree _pinkTree;
-    std::vector<Platform> _platforms;
-    std::vector<TextureDrawer> _platformDrawers;
-    Texture2D _diffuse;
+    ColorDrawer _hitboxDrawer; 
+    std::vector<TextureDrawer> _platformDrawers;       
 };
 
 #endif

@@ -58,11 +58,8 @@ void Map::generatePlatform(
         if (!hitbox.collidesList(_platformHitboxes)) {
             _platforms.push_back(platform);
             _platformHitboxes.push_back(platform); 
-            _platforms.back().generateStalagmite(stalagmiteTransform, _stalagmite.getSize());
-            _platforms.back().generateDecoration(
-                treeTransforms, _pinkTree.getSize(),
-                TREE_PROBABILITY, TREE_MIN_SCALE, TREE_MAX_SCALE
-            );
+            _platforms.back().generateStalagmite(stalagmiteTransform, _stalagmite);
+            _platforms.back().generateDecoration(treeTransforms, _pinkTree);
             tries = 0;
         }         
     }
@@ -100,17 +97,5 @@ void Map::render() {
     _modelStalagmiteDrawer.drawInstanced(_stalagmite, STALAGMITE_ID);
     _modelPinkTreeDrawer.drawInstanced(_pinkTree, PINK_TREE_ID);
     cullCounterClockwise();    
-}
-
-Map::Stalagmite::Stalagmite() : StaticModelGLTF(STALAGMITE_MODEL) {}
-
-Vector3D Map::Stalagmite::getSize() const {
-    return Vector3D(2.0f, 5.0f, 2.0f);
-}
-
-Map::PinkTree::PinkTree() : StaticModelGLTF(TREE_MODEL) {}
-
-Vector3D Map::PinkTree::getSize() const {
-    return Vector3D(1.0f, 19.0f, 1.0f);
 }
 
