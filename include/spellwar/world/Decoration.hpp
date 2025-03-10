@@ -16,6 +16,8 @@
 #define TREE_MODEL "assets/model/decoration/pinkTree/scene.gltf"
 #define FERN_MODEL "assets/model/decoration/fern/scene.gltf"
 
+#define MAX_ATTEMPTS_DECORATION 5
+
 
 using namespace wgame;
 

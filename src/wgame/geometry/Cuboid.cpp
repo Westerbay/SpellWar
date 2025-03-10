@@ -220,6 +220,10 @@ void Cuboid::translate(float delta, const Vector3D & axis) {
     position += delta * axis;
 }
 
+void Cuboid::move(const Vector3D & vector) {
+	position += orientation * vector;
+}
+
 void Cuboid::move(float delta, const Vector3D & axis) {
     position += delta * orientation * axis;
 }

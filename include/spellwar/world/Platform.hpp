@@ -33,7 +33,7 @@ public:
         std::vector<Matrix4D> & transforms, 
         const Decoration & decoration
     );
-    void endGenerate();
+	std::vector<Hitbox> & getDecorationHitboxes();
 private:
     std::vector<Hitbox> _decorationHitboxes;
 };

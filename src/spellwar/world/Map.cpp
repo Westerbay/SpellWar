@@ -77,8 +77,8 @@ void Map::generatePlatform(
         });
     }                
 
-    _modelStalagmiteDrawer.configureInstances(stalagmiteTransform, STALAGMITE_ID);
-    _modelPinkTreeDrawer.configureInstances(treeTransforms, PINK_TREE_ID);
+    _modelDrawer.configureInstances(stalagmiteTransform, STALAGMITE_ID);
+    _modelDrawer.configureInstances(treeTransforms, PINK_TREE_ID);
 
 }
 
@@ -92,10 +92,18 @@ void Map::render() {
             &_diffuse,
             &_diffuse
         });
-    }   
+    }  
+    
+    for (Platform & platform : _platforms) {
+    	for (Hitbox & hitboxDecoration : platform.getDecorationHitboxes()) {
+    		_hitboxDrawer.setDrawCuboidData(hitboxDecoration, ColorRGB(1.0f, 0.0f, 0.0f));
+    		_hitboxDrawer.draw();
+		}
+    } 
+		
     cullClockwise();
-    _modelStalagmiteDrawer.drawInstanced(_stalagmite, STALAGMITE_ID);
-    _modelPinkTreeDrawer.drawInstanced(_pinkTree, PINK_TREE_ID);
+    _modelDrawer.drawInstanced(_stalagmite, STALAGMITE_ID);
+    _modelDrawer.drawInstanced(_pinkTree, PINK_TREE_ID);
     cullCounterClockwise();    
 }
 

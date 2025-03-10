@@ -68,18 +68,42 @@ void Platform::generateDecoration(
         return;
     }
     
-    Matrix4D transform = hitbox.getTransformWithoutScale();
-    float scale = randomFloat(info.minScale, info.maxScale);
-    Vector3D translate = {
-        (hitbox.size.x * 0.5f - scale * info.size.x) * randomFloat(-1.0f, 1.0f),
-        hitbox.size.y * 0.5f,
-        (hitbox.size.z * 0.5f - scale * info.size.z) * randomFloat(-1.0f, 1.0f),
-    };
-    transform = glm::translate(transform, translate);
-    transform = glm::scale(transform, Vector3D(scale, scale, scale));   
-    transforms.push_back(transform); 
+    Matrix4D transform;
+	Hitbox hitboxDecoration;
+	unsigned numberOfTries;
+    int numberOfInstances = randomInt(info.minInstances, info.maxInstances);
+    for (int i = 0; i < numberOfInstances; i ++) {
+		numberOfTries = 0;
+		do {
+			numberOfTries ++;
+			transform = hitbox.getTransformWithoutScale();
+			float scale = randomFloat(info.minScale, info.maxScale);
+			float rotation = randomFloat(0.0f, 360.0f);
+			Vector3D translate = {
+				(hitbox.size.x * 0.5f - scale * info.size.x) * randomFloat(-1.0f, 1.0f),
+				hitbox.size.y * 0.5f,
+				(hitbox.size.z * 0.5f - scale * info.size.z) * randomFloat(-1.0f, 1.0f),
+			};
+			transform = glm::translate(transform, translate);
+			transform = glm::rotate(transform, glm::radians(rotation), AXIS_Y);
+			transform = glm::scale(transform, Vector3D(scale, scale, scale)); 
+			
+			hitboxDecoration.size = info.size * scale;
+			hitboxDecoration.orientation = hitbox.orientation;	
+			hitboxDecoration.position = hitbox.position;
+			hitboxDecoration.position += hitbox.orientation[1] * hitboxDecoration.size.y * 0.5f;
+		    hitboxDecoration.move(translate);					
+			
+		} while (numberOfTries < MAX_ATTEMPTS_DECORATION && hitboxDecoration.collidesList(_decorationHitboxes));
+		if (numberOfTries < MAX_ATTEMPTS_DECORATION) {
+			transforms.push_back(transform);
+			_decorationHitboxes.push_back(hitboxDecoration);
+		}
+	} 
 }
 
-void Platform::endGenerate() {
-    _decorationHitboxes.clear();
+std::vector<Hitbox> & Platform::getDecorationHitboxes() {
+	return _decorationHitboxes;
 }
+
+

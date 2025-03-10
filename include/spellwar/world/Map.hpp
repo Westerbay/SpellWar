@@ -34,11 +34,11 @@ public:
 private:
 	Stalagmite _stalagmite;
     PinkTree _pinkTree;
+    Fern _fern;
 	std::vector<Platform> _platforms;    
 private:
 	Texture2D _diffuse;
-    ModelDrawer _modelStalagmiteDrawer;
-    ModelDrawer _modelPinkTreeDrawer;
+    ModelDrawer _modelDrawer;
     ColorDrawer _hitboxDrawer; 
     std::vector<TextureDrawer> _platformDrawers;       
 };
