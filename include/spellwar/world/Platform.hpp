@@ -17,7 +17,7 @@
 #define PROBABILITY_ROTATE 0.5f
 #define X_Z_GAP 8
 #define Y_GAP 20
-#define MAX_ATTEMPTS 20
+#define MAX_ATTEMPTS 15
 
 
 using namespace wgame;
@@ -33,7 +33,7 @@ public:
         std::vector<Matrix4D> & transforms, 
         const Decoration & decoration
     );
-    void endGenerate();
+	std::vector<Hitbox> & getDecorationHitboxes();
 private:
     std::vector<Hitbox> _decorationHitboxes;
 };

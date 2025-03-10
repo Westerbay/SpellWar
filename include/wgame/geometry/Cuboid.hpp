@@ -38,6 +38,7 @@ struct Cuboid {
     bool collidesWith(const Cuboid & other) const;
     bool collidesList(const std::vector<Cuboid> & cuboids) const;
     void translate(float delta, const Vector3D & axis);
+    void move(const Vector3D & vector);    
     void move(float delta, const Vector3D & axis);
     void rotateX(float angle);
     void rotateY(float angle);

@@ -14,12 +14,17 @@
 
 #define STALAGMITE_MODEL "assets/model/decoration/stalagmite/scene.gltf"
 #define TREE_MODEL "assets/model/decoration/pinkTree/scene.gltf"
-#define FERN_MODEL "assets/model/decoration/fern/scene.gltf"
+#define FANTASY_PLANT_MODEL "assets/model/decoration/fantasyPlant/scene.gltf"
+#define ROCK_MODEL "assets/model/decoration/rock/scene.gltf"
+#define WATER_PLANT_MODEL "assets/model/decoration/waterPlant/scene.gltf"
+
+#define MAX_ATTEMPTS_DECORATION 5
 
 
 using namespace wgame;
 
 struct DecorationInfo {
+	int id;
 	Vector3D size;
 	float minScale;
 	float maxScale;
@@ -32,6 +37,7 @@ class Decoration : public StaticModelGLTF {
 public:
 	Decoration(const std::string & filepath);
 	virtual DecorationInfo getDecorationInfo() const = 0;
+	virtual Matrix4D getTransform() const;
 };
 
 class Stalagmite : public Decoration {
@@ -46,9 +52,22 @@ public:
     DecorationInfo getDecorationInfo() const override;
 };
 
-class Fern : public Decoration {
+class FantasyPlant : public Decoration {
 public:
-	Fern();
+	FantasyPlant();
+	DecorationInfo getDecorationInfo() const override;
+	Matrix4D getTransform() const override;
+};
+
+class Rock : public Decoration {
+public:
+	Rock();
+	DecorationInfo getDecorationInfo() const override;
+};
+
+class WaterPlant : public Decoration {
+public:
+WaterPlant();
 	DecorationInfo getDecorationInfo() const override;
 };
 

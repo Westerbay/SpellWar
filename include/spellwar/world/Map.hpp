@@ -15,9 +15,6 @@
 
 #define TEX_SCALE 10.0f
 
-#define STALAGMITE_ID 0
-#define PINK_TREE_ID 1
-
 
 using namespace wgame;
 
@@ -32,13 +29,18 @@ public:
     );    
     void render() override;	
 private:
+    void constructPlatform(
+        Cuboid & platform, Hitbox & hitboxPlatform,
+        const Vector3D & minSize, const Vector3D & maxSize
+    );
+    void setUpPlatformTextures();
+private:
 	Stalagmite _stalagmite;
-    PinkTree _pinkTree;
+    std::vector<std::unique_ptr<Decoration>> _decorations;
 	std::vector<Platform> _platforms;    
 private:
 	Texture2D _diffuse;
-    ModelDrawer _modelStalagmiteDrawer;
-    ModelDrawer _modelPinkTreeDrawer;
+    ModelDrawer _modelDrawer;
     ColorDrawer _hitboxDrawer; 
     std::vector<TextureDrawer> _platformDrawers;       
 };
