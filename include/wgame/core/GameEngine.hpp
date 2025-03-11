@@ -16,7 +16,7 @@
 #include "GameCamera.hpp"
 #include "GameLight.hpp"
 
-#include <atomic>
+#include <thread>
 
 
 namespace wgame {
@@ -27,7 +27,7 @@ public:
     ~GameEngine();
     void start();
 private:
-    static void gameLoop(AbstractGame * game);
+    static void runGame(AbstractFrame * frame);
 private:
     GameLight * _light;
     GameCamera * _camera;

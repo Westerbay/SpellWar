@@ -14,9 +14,9 @@
 #include "GameCamera.hpp"
 #include "GameLight.hpp"
 
-#include <thread>
 #include <chrono>
 #include <stdexcept>
+#include <thread>
 
 
 #define DEFAULT_TPS 60
@@ -27,17 +27,16 @@ class AbstractGame {
 public:
     AbstractGame(unsigned tps = DEFAULT_TPS);
     virtual ~AbstractGame() = default;
+    unsigned getUpdateDelay() const;
     void setTPS(unsigned tps);
     GameCamera * getCamera();
     GameLight * getLight();
     void initWorld(GameObjectGroup * world);
     void initCamera(GameCamera * camera);
     void initLight(GameLight * light);
-    void start();
-    void stop();    
     void addToWorld(GameObject * gameObject);
     void removeFromWorld(GameObject * gameObject);
-    void updateWorld();
+    void update();
     virtual void init() = 0;
 private:
     GameObjectGroup * _world;

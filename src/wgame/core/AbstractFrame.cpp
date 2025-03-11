@@ -39,11 +39,17 @@ AbstractFrame::AbstractFrame(const char * title, const Size & size) : _running(f
 	_camera = nullptr;
 	_light = nullptr;
 	System::initContext(_frame);
+	glfwSwapInterval(0);
+	initOpenGLState();
 }
 
 AbstractFrame::~AbstractFrame() {
 	glfwDestroyWindow(_frame);
 	glfwTerminate();
+}
+
+GLFWwindow * AbstractFrame::getFrameWindow() {
+	return _frame;
 }
 
 void AbstractFrame::setCursorActive(bool cursorActive) {
@@ -80,20 +86,6 @@ void AbstractFrame::initLight(GameLight * light) {
 		throw std::runtime_error("Light already initialized ! ");
 	}
 	_light = light;
-}
-
-void AbstractFrame::start() {
-	initOpenGLState();
-	_running = true;
-	while (!glfwWindowShouldClose(_frame) && _running) {
-		glfwPollEvents();
-		render();
-		glfwSwapBuffers(_frame);
-    }
-}
-
-void AbstractFrame::stop() {
-	_running = false;
 }
 
 void AbstractFrame::initOpenGLState() {

@@ -20,6 +20,10 @@ AbstractGame::AbstractGame(unsigned tps) : _running(false) {
     _light = nullptr;
 }
 
+unsigned AbstractGame::getUpdateDelay() const {
+    return _updateDelay;
+}
+
 void AbstractGame::setTPS(unsigned tps) {
     _updateDelay = 1000 / tps;
 }
@@ -53,34 +57,6 @@ void AbstractGame::initLight(GameLight * light) {
 	_light = light;
 }
 
-void AbstractGame::start() {
-	using namespace std::chrono;
-    _running = true;
-    while (_running) {
-        steady_clock::time_point updateStart = steady_clock::now();
-        
-        System::record();
-        updateWorld();
-        _camera -> update();
-        
-        #ifdef _WIN32
-        while (duration_cast<milliseconds>(steady_clock::now() - updateStart).count() < _updateDelay);
-        #else
-        steady_clock::time_point updateEnd = steady_clock::now();
-        unsigned updateTime = duration_cast<milliseconds>(updateEnd - updateStart).count();
-        if (updateTime < _updateDelay) {
-            std::this_thread::sleep_for(
-                milliseconds(_updateDelay - updateTime)
-            );
-        }
-        #endif
-    }
-}
-
-void AbstractGame::stop() {
-    _running = false;
-}
-
 void AbstractGame::addToWorld(GameObject * gameObject) {
     _world -> add(gameObject);
 }
@@ -89,7 +65,7 @@ void AbstractGame::removeFromWorld(GameObject * gameObject) {
     _world -> remove(gameObject);
 }
 
-void AbstractGame::updateWorld() {
+void AbstractGame::update() {
     _world -> update();
 }
 

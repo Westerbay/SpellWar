@@ -64,9 +64,8 @@ protected:
     );    
     int processTexture(const tinygltf::Model & model, int textureIndex);
     Matrix4D getTransformNode(const tinygltf::Node & node) const;
-private: 
+private:
 	bool _activeLight;
-    bool _isRendering;
     Matrix4D _transform;
     ModelMesh _modelMesh;    
 };

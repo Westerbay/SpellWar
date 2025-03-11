@@ -37,16 +37,14 @@ class AbstractFrame {
 public:
 	AbstractFrame(const char * title, const Size & size);
 	virtual ~AbstractFrame();
+	GLFWwindow * getFrameWindow();
 	void setCursorActive(bool cursorActive);
 	void setBackgroundColor(GLclampf red, GLclampf green, GLclampf blue);
 	void initWorld(GameObjectGroup * world);
 	void initCamera(GameCamera * camera);
 	void initLight(GameLight * light);
-	void start();
-	void stop();
-private:
 	void initOpenGLState();
-	void render();
+	void render();	
 private:
 	GLFWwindow * _frame;
 	GameObjectGroup * _world;

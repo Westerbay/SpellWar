@@ -28,11 +28,9 @@ GameEngine::~GameEngine() {
     delete _frame;
 }
 
-void GameEngine::gameLoop(AbstractGame * game) {
-    game -> start();
-}
-
 void GameEngine::start() {
+    using namespace std::chrono;
+
     _game -> initWorld(_world);
     _frame -> initWorld(_world);
 
@@ -42,13 +40,31 @@ void GameEngine::start() {
     _game -> initLight(_light);
     _frame -> initLight(_light);
 
-    _game -> init();
-    _game -> updateWorld();
-    std::thread gameThread(gameLoop, _game);
-    _frame -> start();
+    _game -> init();   
+    while (!glfwWindowShouldClose(_frame -> getFrameWindow())) {
+        steady_clock::time_point updateStart = steady_clock::now();
+        
+        glfwPollEvents();   
+        System::record();             
+        
+        _game -> update();
+        _camera -> update();
+        _frame -> render();
+        glfwSwapBuffers(_frame -> getFrameWindow());
+        
+        #ifdef _WIN32
+        while (duration_cast<milliseconds>(steady_clock::now() - updateStart).count() < _updateDelay);
+        #else
+        steady_clock::time_point updateEnd = steady_clock::now();
+        unsigned updateTime = duration_cast<milliseconds>(updateEnd - updateStart).count();
+        if (updateTime < _game -> getUpdateDelay()) {
+            std::this_thread::sleep_for(
+                milliseconds(_game -> getUpdateDelay() - updateTime)
+            );
+        }
+        #endif
+    }
 
-    _game -> stop();
-    gameThread.join();
 }
 
 }
