@@ -33,6 +33,8 @@ uniform vec4 baseColorFactor;
 uniform float metallicFactor;  
 uniform float roughnessFactor;  
 
+uniform bool activeLight;
+
 
 const vec3 F0_DIELECTRIC = vec3(0.04);
 const float alphaThreshold = 0.2;
@@ -70,7 +72,7 @@ void main() {
     vec4 baseColor = texture(textureDiffuse, texCoord0) * baseColorFactor;
     if (baseColor.a <= alphaThreshold) discard;
 
-    if (light.display != 0) {
+    if (light.display != 0 && activeLight) {
 
         vec2 metallicRoughness = hasMetallicRoughness ? texture(textureMetallicRoughness, texCoord0).bg : vec2(0.0);    
         float metallic = metallicRoughness.r * metallicFactor;

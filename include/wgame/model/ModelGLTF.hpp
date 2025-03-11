@@ -43,8 +43,10 @@ public:
     ModelGLTF();
     virtual ~ModelGLTF() = default;
     void setTransform(const Matrix4D & transform);
+    void configureShader(const Shader & shader);
     void drawModelMesh(const Shader & shader);
     void drawModelMeshInstanced(const Shader & shader, size_t numberOfInstance);
+    void setActiveLight(bool activeLight);
     virtual void draw(const Shader & shader) = 0;
     virtual void drawInstanced(const Shader & shader, size_t numberOfInstance) = 0;
 protected:
@@ -63,6 +65,8 @@ protected:
     int processTexture(const tinygltf::Model & model, int textureIndex);
     Matrix4D getTransformNode(const tinygltf::Node & node) const;
 private: 
+	bool _activeLight;
+    bool _isRendering;
     Matrix4D _transform;
     ModelMesh _modelMesh;    
 };

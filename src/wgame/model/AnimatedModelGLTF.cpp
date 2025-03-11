@@ -94,7 +94,7 @@ void AnimatedModelGLTF::draw(const Shader & shader) {
     _currentAnimation -> update(_skeleton, _timeAcceleration);
     _ubo.bind();
     _ubo.setData(_skeleton.jointMatrices.data(), _skeleton.jointMatricesByteLength);
-    shader.setUniform("isAnimated", 1);
+    shader.setUniform("isAnimated", true);
     drawModelMesh(shader);
     _ubo.unbind();
 }  
@@ -103,7 +103,7 @@ void AnimatedModelGLTF::drawInstanced(const Shader & shader, size_t numberOfInst
     _currentAnimation -> update(_skeleton, _timeAcceleration);
     _ubo.bind();
     _ubo.setData(_skeleton.jointMatrices.data(), _skeleton.jointMatricesByteLength);
-    shader.setUniform("isAnimated", 1);
+    shader.setUniform("isAnimated", true);
     drawModelMeshInstanced(shader, numberOfInstance);
     _ubo.unbind();
 }

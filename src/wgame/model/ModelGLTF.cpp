@@ -39,23 +39,31 @@ int ModelGLTF::getVBOIndex(const std::string & key) {
 
 ModelGLTF::ModelGLTF() {
     _transform = Matrix4D(1.0f);
+    _activeLight = true;
+}
+
+void ModelGLTF::setActiveLight(bool activeLight) {
+	_activeLight = activeLight;
 }
 
 void ModelGLTF::setTransform(const Matrix4D & transform) {
     _transform = transform;
 }
 
-void ModelGLTF::drawModelMesh(const Shader & shader) {
+void ModelGLTF::configureShader(const Shader & shader) {
+	shader.setUniform("activeLight", _activeLight);
     shader.setUniform("textureDiffuse", UNIT_TEXTURE_DIFFUSE);
     shader.setUniform("textureMetallicRoughness", UNIT_TEXTURE_PBR);   
-    shader.setUniform("textureNormal", UNIT_TEXTURE_NORMAL);   
+    shader.setUniform("textureNormal", UNIT_TEXTURE_NORMAL);  
+}
+
+void ModelGLTF::drawModelMesh(const Shader & shader) {	
+	configureShader(shader); 
     _modelMesh.draw(shader, _transform);
 }  
 
 void ModelGLTF::drawModelMeshInstanced(const Shader & shader, size_t numberOfInstance) {
-    shader.setUniform("textureDiffuse", UNIT_TEXTURE_DIFFUSE);
-    shader.setUniform("textureMetallicRoughness", UNIT_TEXTURE_PBR);  
-    shader.setUniform("textureNormal", UNIT_TEXTURE_NORMAL); 
+	configureShader(shader);
     _modelMesh.draw(shader, numberOfInstance);
 }  
 

@@ -26,7 +26,7 @@ out vec2 texCoord0;
 out vec3 fragTangent;
 out vec3 fragBitangent;
 
-uniform int isAnimated;
+uniform bool isAnimated;
 uniform int drawInstanced;
 uniform mat4 model;
 
@@ -41,7 +41,7 @@ void main() {
         transform = model;
     }
 
-    if (isAnimated == 1) {
+    if (isAnimated) {
         mat4 skinningMatrix = mat4(0.0);
         for (int i = 0; i < 4; i ++) {
             skinningMatrix += aWeight[i] * jointsMatrices[aJoint[i]];

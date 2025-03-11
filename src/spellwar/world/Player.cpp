@@ -17,6 +17,8 @@ Player::Player(const Hitbox & hitbox) : GameObject(hitbox) {
     _model = new AnimatedModelGLTF("assets/model/player/frost.glb");
     _model -> switchAnimation("Run");
     _model -> setLoop(true);
+    _model -> setActiveLight(false);
+    _model -> stop();
 }
 
 Player::~Player() {
@@ -51,11 +53,13 @@ void Player::update() {
     _camera.increaseAngle(mouseMovement.y * _sensibility);
     _camera.updatePlayer(hitbox);
 
-    
+    Matrix4D transform = glm::translate(Matrix4D(1.0f), hitbox.position);
+    transform *= Matrix4D(hitbox.orientation);
+    _model -> setTransform(transform);
 }
 
 void Player::render() {
-    //glDisable(GL_CULL_FACE);
-    //_modelDrawer.draw(*_model);
-    //glEnable(GL_CULL_FACE);
+    glDisable(GL_CULL_FACE);
+    _modelDrawer.draw(*_model);
+    glEnable(GL_CULL_FACE);
 }

@@ -43,12 +43,12 @@ StaticModelGLTF::StaticModelGLTF(const std::string & filename) {
 }
 
 void StaticModelGLTF::draw(const Shader & shader) {
-    shader.setUniform("isAnimated", 0);
+    shader.setUniform("isAnimated", false);
     drawModelMesh(shader);
 }
 
 void StaticModelGLTF::drawInstanced(const Shader & shader, size_t numberOfInstance) {
-    shader.setUniform("isAnimated", 0);
+    shader.setUniform("isAnimated", false);
     drawModelMeshInstanced(shader, numberOfInstance);
 }
 

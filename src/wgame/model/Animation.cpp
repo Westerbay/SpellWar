@@ -44,7 +44,7 @@ void Animation::start() {
 }
 
 void Animation::stop() {
-    _currentKeyFrameTime = _lastKeyFrameTime;
+    _currentKeyFrameTime = _lastKeyFrameTime + 1.0f;
     _repeat = false;
 }
 
