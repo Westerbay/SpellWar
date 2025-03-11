@@ -53,7 +53,7 @@ void GameEngine::start() {
         glfwSwapBuffers(_frame -> getFrameWindow());
         
         #ifdef _WIN32
-        while (duration_cast<milliseconds>(steady_clock::now() - updateStart).count() < _updateDelay);
+        while (duration_cast<milliseconds>(steady_clock::now() - updateStart).count() < _game -> getUpdateDelay());
         #else
         steady_clock::time_point updateEnd = steady_clock::now();
         unsigned updateTime = duration_cast<milliseconds>(updateEnd - updateStart).count();
