@@ -38,6 +38,9 @@ public:
 	AbstractFrame(const char * title, const Size & size);
 	virtual ~AbstractFrame();
 	GLFWwindow * getFrameWindow();
+	bool shouldExit() const;
+	void pollEvents() const;
+	void swapBuffers() const;
 	void setCursorActive(bool cursorActive);
 	void setBackgroundColor(GLclampf red, GLclampf green, GLclampf blue);
 	void initWorld(GameObjectGroup * world);

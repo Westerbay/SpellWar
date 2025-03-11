@@ -81,6 +81,18 @@ void AbstractFrame::initCamera(GameCamera * camera) {
 	_camera -> setSize(_size);
 }
 
+bool AbstractFrame::shouldExit() const {
+	return glfwWindowShouldClose(_frame);
+}
+
+void AbstractFrame::pollEvents() const {
+	glfwPollEvents();   
+}
+
+void AbstractFrame::swapBuffers() const {
+	glfwSwapBuffers(_frame);
+}
+
 void AbstractFrame::initLight(GameLight * light) {
 	if (_light != nullptr) {
 		throw std::runtime_error("Light already initialized ! ");

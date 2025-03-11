@@ -41,16 +41,16 @@ void GameEngine::start() {
     _frame -> initLight(_light);
 
     _game -> init();   
-    while (!glfwWindowShouldClose(_frame -> getFrameWindow())) {
+    while (!_frame -> shouldExit()) {
         steady_clock::time_point updateStart = steady_clock::now();
         
-        glfwPollEvents();   
+        _frame -> pollEvents();
         System::record();             
         
         _game -> update();
         _camera -> update();
         _frame -> render();
-        glfwSwapBuffers(_frame -> getFrameWindow());
+        _frame -> swapBuffers();
         
         #ifdef _WIN32
         while (duration_cast<milliseconds>(steady_clock::now() - updateStart).count() < _game -> getUpdateDelay());
