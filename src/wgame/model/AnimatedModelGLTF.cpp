@@ -84,6 +84,9 @@ void AnimatedModelGLTF::stop() {
 }
 
 void AnimatedModelGLTF::switchAnimation(std::string name, bool loop) {
+    if (_currentAnimation == &_animations[_nameToAnimation[name]]) {
+        return;
+    }
     _currentAnimation -> stop();
     _currentAnimation = &_animations[_nameToAnimation[name]];
     _currentAnimation -> setLoop(loop);

@@ -12,17 +12,16 @@
 
 
 Player::Player(const Hitbox & hitbox) : GameObject(hitbox) {
-    _speed = 0.2f;
+    _speed = SPEED;
+    _runningFactor = RUNNING_FACTOR;
     _sensibility = 0.2f;
-    _model = new AnimatedModelGLTF("assets/model/player/frost.glb");
-    _model -> switchAnimation("Run");
-    _model -> setLoop(true);
-    _model -> setActiveLight(false);
-    _model -> stop();
-}
+    _state = IDLE;
 
-Player::~Player() {
-    delete _model;
+    _model.setTimeAcceleration(ANIMATION_ACCELERATION);
+    _model.setActiveLight(false);
+    for (String name: _model.getAnimationNames()) {
+        std::cout << name << std::endl;
+    }
 }
 
 GameObject * Player::getCameraObject() {
@@ -30,24 +29,70 @@ GameObject * Player::getCameraObject() {
 }
 
 void Player::update() {
+    state();
+    move();
+    animate();
+}
+
+void Player::state() {
     if (_system.isKeyPressed(KEY_W)) {
-        hitbox.move(_speed, AXIS_Z);
+        if (_system.isKeyPressed(KEY_LEFT_SHIFT)) {
+            _state = RUNNING;
+        }
+        else {
+            _state = WALKING;
+        }
     }
-    if (_system.isKeyPressed(KEY_S)) {
-        hitbox.move(-_speed, AXIS_Z);
+    else if (_system.isKeyPressed(KEY_S)) {
+        _state = BACK;
     }
-    if (_system.isKeyPressed(KEY_D)) {
-        hitbox.move(_speed, AXIS_X);
+    else {
+        _state = IDLE;
     }
-    if (_system.isKeyPressed(KEY_A)) {
-        hitbox.move(-_speed, AXIS_X);
+
+    if (_system.isKeyPressed(KEY_D) && !_system.isKeyPressed(KEY_A)) {
+        if (_state == IDLE) {
+            _state = STRAFE;
+        }
+        _direction = RIGHT;
     }
-    if (_system.isKeyPressed(KEY_SPACE)) {
-        hitbox.move(_speed, AXIS_Y);
+    else if (_system.isKeyPressed(KEY_A) && !_system.isKeyPressed(KEY_D)) {
+        if (_state == IDLE) {
+            _state = STRAFE;
+        }
+        _direction = LEFT;
     }
-    if (_system.isKeyPressed(KEY_LEFT_SHIFT)) {
-        hitbox.move(-_speed, AXIS_Y);
+    else {
+        _direction = NONE;
     }
+}
+
+void Player::move() {  
+    
+    Vector3D movement(0.0f);
+    switch (_state) {
+        case RUNNING:
+            movement.z = _speed * _runningFactor;
+            break;
+        case WALKING:
+            movement.z = _speed;
+            break;
+        case BACK:
+            movement.z = -_speed;
+            break;
+    }
+
+    switch (_direction) {
+        case RIGHT:
+            movement.x = _speed;
+            break;
+        case LEFT:
+            movement.x = -_speed;
+            break;
+    }
+
+    hitbox.move(movement);
+
     Vector2D mouseMovement = _system.getMouseMovement();
     hitbox.rotateY(mouseMovement.x * _sensibility);
     _camera.increaseAngle(mouseMovement.y * _sensibility);
@@ -55,11 +100,28 @@ void Player::update() {
 
     Matrix4D transform = glm::translate(Matrix4D(1.0f), hitbox.position);
     transform *= Matrix4D(hitbox.orientation);
-    _model -> setTransform(transform);
+    _model.setTransform(transform);
+}
+
+void Player::animate() {
+    if (_state == IDLE) {
+        _model.switchAnimation("Idle", true);
+    } else if (_state == STRAFE && _direction == LEFT) {
+        _model.switchAnimation("WalkRight", true);
+    } else if (_state == STRAFE && _direction == RIGHT) {
+        _model.switchAnimation("WalkLeft", true);
+    } else if (_state == WALKING) {
+        _model.switchAnimation("Walking", true);
+    } else if (_state == RUNNING) {
+        _model.switchAnimation("Run", true);
+    }    
 }
 
 void Player::render() {
     glDisable(GL_CULL_FACE);
-    _modelDrawer.draw(*_model);
+    _modelDrawer.draw(_model);
     glEnable(GL_CULL_FACE);
 }
+
+
+Player::FrostModel::FrostModel() : AnimatedModelGLTF(FROST_MODEL) {}

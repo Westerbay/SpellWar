@@ -12,7 +12,9 @@
 
 #include <iostream>
 
-std::string getFilePathExtension(const std::string & fileName);
+typedef std::string String;
+
+String getFilePathExtension(const String & fileName);
 
 unsigned nextInt(unsigned threshold);
 

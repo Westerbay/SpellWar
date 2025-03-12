@@ -13,23 +13,52 @@
 #include <wgame/wgame.hpp>
 #include "PlayerCamera.hpp"
 
+#define FROST_MODEL "assets/model/player/frost.glb"
+
+#define SPEED 0.1f
+#define RUNNING_FACTOR 2.0f
+#define ANIMATION_ACCELERATION 1.5f
 
 using namespace wgame;
 
 class Player : public GameObject {
 public:
+    enum State {
+        RUNNING,
+        WALKING,
+        BACK,
+        IDLE,
+        STRAFE
+    };
+    enum Direction {
+        LEFT,
+        RIGHT,
+        NONE
+    };
+public:
     Player(const Hitbox & hitbox);    
-    ~Player();
     GameObject * getCameraObject();
+    void state();
+    void move();
+    void animate();
     void update() override;
     void render() override;
+public:
+    class FrostModel : public AnimatedModelGLTF {
+    public:
+        FrostModel();
+    };
 private: 
     float _speed;
+    float _runningFactor;
     float _sensibility;
     System _system;
     PlayerCamera _camera;
-    AnimatedModelGLTF * _model;
+    FrostModel _model;
     ModelDrawer _modelDrawer;
+
+    State _state;
+    Direction _direction;
 };
 
 
