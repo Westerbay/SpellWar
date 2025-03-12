@@ -24,6 +24,7 @@ Animation::Animation(
     }
     _currentKeyFrameTime = 0.0f;
     _repeat = false;
+    _revert = false;
     _lastFrame = System::getTime();
 }
 
@@ -33,6 +34,10 @@ std::string Animation::getName() const {
 
 void Animation::setLoop(bool repeat) {
     _repeat = repeat;
+}
+
+void Animation::setRevert(bool revert) {
+    _revert = revert;
 }
 
 bool Animation::isRunning() const {
@@ -56,9 +61,13 @@ void Animation::update(Skeleton & skeleton, float elapsedTime) {
         return;
     }
     _lastFrame = System::getTime();
-    _currentKeyFrameTime += (float) KEYFRAME_TIME_SECOND * elapsedTime;
+    float opposite = _revert ? -1.0f : 1.0f;
+    _currentKeyFrameTime += (float) KEYFRAME_TIME_SECOND * elapsedTime * opposite;
     if (_repeat && _currentKeyFrameTime > _lastKeyFrameTime) {
         _currentKeyFrameTime = _firstKeyFrameTime;
+    }
+    if (_repeat && _currentKeyFrameTime < _firstKeyFrameTime) {
+        _currentKeyFrameTime = _lastKeyFrameTime;
     }
     for (Channel & channel : _channels) {
         Sampler & sampler = _samplers[channel.samplerIndex];

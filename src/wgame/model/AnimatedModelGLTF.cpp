@@ -71,6 +71,10 @@ void AnimatedModelGLTF::setLoop(bool loop) {
     _currentAnimation -> setLoop(loop);
 }
 
+void AnimatedModelGLTF::setRevert(bool revert) {
+    _currentAnimation -> setRevert(revert);
+}
+
 bool AnimatedModelGLTF::isRunning() const {
     return _currentAnimation -> isRunning();
 }
@@ -83,14 +87,17 @@ void AnimatedModelGLTF::stop() {
     _currentAnimation -> stop();
 }
 
-void AnimatedModelGLTF::switchAnimation(std::string name, bool loop) {
+void AnimatedModelGLTF::switchAnimation(std::string name, bool loop, bool revert) {
     if (_currentAnimation == &_animations[_nameToAnimation[name]]) {
+        _currentAnimation -> setRevert(revert);
         return;
     }
+    _currentAnimation -> setRevert(false);
     _currentAnimation -> stop();
     _currentAnimation = &_animations[_nameToAnimation[name]];
     _currentAnimation -> setLoop(loop);
-    _currentAnimation -> start();
+    _currentAnimation -> setRevert(revert);
+    _currentAnimation -> start();    
 }
 
 void AnimatedModelGLTF::draw(const Shader & shader) {

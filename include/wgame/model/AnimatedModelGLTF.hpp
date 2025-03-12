@@ -26,10 +26,11 @@ public:
     std::string getCurrentAnimation() const;
     void setTimeAcceleration(float elapsedTime);
     void setLoop(bool loop);
+    void setRevert(bool revert);
     bool isRunning() const;
     void start();
     void stop();
-    void switchAnimation(std::string name, bool loop = false);
+    void switchAnimation(std::string name, bool loop = false, bool revert = false);
     void draw(const Shader & shader) override;    
     void drawInstanced(const Shader & shader, size_t numberOfInstance) override;
 private:

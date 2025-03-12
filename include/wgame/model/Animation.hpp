@@ -52,6 +52,7 @@ public:
     );    
     std::string getName() const;
     void setLoop(bool repeat);
+    void setRevert(bool revert);
     bool isRunning() const;
     void start();
     void stop();
@@ -75,7 +76,6 @@ private:
         Path path,
         const Vector4D & pathValue
     );
-
     std::string _name;
     std::vector<Sampler> _samplers;
     std::vector<Channel> _channels;
@@ -84,6 +84,7 @@ private:
     float _lastKeyFrameTime;        
     float _currentKeyFrameTime;
     bool _repeat;
+    bool _revert;
 };
  
 }

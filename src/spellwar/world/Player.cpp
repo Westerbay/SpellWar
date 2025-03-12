@@ -16,12 +16,8 @@ Player::Player(const Hitbox & hitbox) : GameObject(hitbox) {
     _runningFactor = RUNNING_FACTOR;
     _sensibility = 0.2f;
     _state = IDLE;
-
-    _model.setTimeAcceleration(ANIMATION_ACCELERATION);
     _model.setActiveLight(false);
-    for (String name: _model.getAnimationNames()) {
-        std::cout << name << std::endl;
-    }
+    _model.setTimeAcceleration(ANIMATION_ACCELERATION);
 }
 
 GameObject * Player::getCameraObject() {
@@ -81,7 +77,6 @@ void Player::move() {
             movement.z = -_speed;
             break;
     }
-
     switch (_direction) {
         case RIGHT:
             movement.x = _speed;
@@ -114,7 +109,9 @@ void Player::animate() {
         _model.switchAnimation("Walking", true);
     } else if (_state == RUNNING) {
         _model.switchAnimation("Run", true);
-    }    
+    } else if (_state == BACK) {
+        _model.switchAnimation("Walking", true, true);
+    }     
 }
 
 void Player::render() {
