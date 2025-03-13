@@ -22,6 +22,9 @@ public:
     virtual ~IObjectGL() = default;
 };
 
+void cullClockwise();
+void cullCounterClockwise();
+
 }
 
 #endif

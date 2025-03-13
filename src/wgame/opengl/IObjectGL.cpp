@@ -7,15 +7,18 @@
  */
 
 
-#include <wgame/core/GameObject.hpp>
+#include <wgame/opengl/IObjectGL.hpp>
 
 
 namespace wgame {
 
-GameObject::GameObject(const Hitbox & hitbox): hitbox(hitbox) {}
-
-Hitbox GameObject::getHitbox() const {
-    return hitbox;
+void cullClockwise() {
+    glFrontFace(GL_CW); 
 }
 
+void cullCounterClockwise() {
+    glFrontFace(GL_CCW); 
 }
+    
+}
+

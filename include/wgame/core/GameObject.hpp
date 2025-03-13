@@ -21,8 +21,6 @@ class GameObject {
 public:
     GameObject(const Hitbox & hitbox = Hitbox());
     Hitbox getHitbox() const;
-    void cullClockwise() const;
-    void cullCounterClockwise() const;
     virtual void update() {};
     virtual void render() {};
     virtual void renderBackground() {};
