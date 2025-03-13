@@ -13,19 +13,12 @@
 namespace wgame {
 
 std::weak_ptr<ColorDrawer::ColorDrawerShader> ColorDrawer::_uniqueColorShader;
-std::weak_ptr<ColorDrawer::LightShader> ColorDrawer::_uniqueLightShader;
 
 ColorDrawer::ColorDrawer() {
     _shaderColor = _uniqueColorShader.lock();
     if (!_shaderColor) {
         _shaderColor = std::make_shared<ColorDrawerShader>();
         _uniqueColorShader = _shaderColor;
-    }
-
-    _shaderLight = _uniqueLightShader.lock();
-    if (!_shaderLight) {
-        _shaderLight = std::make_shared<LightShader>();
-        _uniqueLightShader = _shaderLight;
     }
 }
 
@@ -109,20 +102,8 @@ void ColorDrawer::fill(const Matrix4D & model) {
     _shaderColor -> unbind();
 }
 
-void ColorDrawer::drawLight(const Matrix4D & model) {
-    _shaderLight -> bind();
-    _shaderLight -> setUniform("model", model);
-    for (VertexArrayObject & vao: _vaos) {
-        vao.draw(DRAW_TRIANGLES);
-    }  
-    _shaderLight -> unbind();
-}
-
 ColorDrawer::ColorDrawerShader::ColorDrawerShader() : 
 Shader(COLOR_DRAWER_VERTEX_SHADER_PATH, COLOR_DRAWER_FRAGMENT_SHADER_PATH) {}
-
-ColorDrawer::LightShader::LightShader() :
-Shader(LIGHT_VERTEX_SHADER_PATH, LIGHT_FRAGMENT_SHADER_PATH) {}
 
 }
 

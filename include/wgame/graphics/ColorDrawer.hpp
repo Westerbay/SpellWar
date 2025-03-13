@@ -50,21 +50,14 @@ public:
     );
     void draw(const Matrix4D & model = Matrix4D(1.0f));    
     void fill(const Matrix4D & model = Matrix4D(1.0f));
-    void drawLight(const Matrix4D & model = Matrix4D(1.0f));
 public:
     class ColorDrawerShader : public Shader {
     public:
         ColorDrawerShader();
     };
-    class LightShader : public Shader {
-    public:
-        LightShader();
-    };
 private:
     static std::weak_ptr<ColorDrawerShader> _uniqueColorShader;
-    static std::weak_ptr<LightShader> _uniqueLightShader;
     std::shared_ptr<ColorDrawerShader> _shaderColor;
-    std::shared_ptr<LightShader> _shaderLight;
     VertexArrayObject _vaos[6];
 };
 

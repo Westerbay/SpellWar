@@ -121,14 +121,6 @@ void Map::render() {
             &_diffuse
         });
     }  
-    
-    // Draw hitboxes
-    /*for (Platform & platform : _platforms) {
-    	for (Hitbox & hitboxDecoration : platform.getDecorationHitboxes()) {
-    		_hitboxDrawer.setDrawCuboidData(hitboxDecoration, ColorRGB(1.0f, 0.0f, 0.0f));
-    		_hitboxDrawer.draw();
-		}
-    }*/
 		
     cullClockwise();    
     for (size_t i = 0; i < _decorations.size(); i ++) {
