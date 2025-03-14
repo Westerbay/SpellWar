@@ -70,8 +70,10 @@ void Player::state() {
     }
 }
 
-void Player::move() {  
+void Player::move() {    
     
+    static float value45d = glm::sqrt(2.0f) / 2.0f;
+
     Vector3D movement(0.0f);
     switch (_state) {
         case RUNNING:
@@ -84,13 +86,12 @@ void Player::move() {
             movement.z = -_speed;
             break;
     }
-    switch (_direction) {
-        case RIGHT:
-            movement.x = _speed;
-            break;
-        case LEFT:
-            movement.x = -_speed;
-            break;
+    if (_direction != NONE) {   
+        movement.z *= value45d;
+        movement.x = _speed * (_direction == RIGHT ? 1.0f : -1.0f);
+        if (_state == RUNNING) {
+            movement.x *= _runningFactor;
+        }        
     }
 
     hitbox.move(movement);
