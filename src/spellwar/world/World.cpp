@@ -14,10 +14,10 @@ World::World(GameCamera * camera, GameLight * light) : GameObjectGroup() {
     add(new Background());
     add(new Light(light));
 
-    Hitbox mapHitbox(Point3D(0.0f), Vector3D(100.0f, 30.0f, 100.0f));
+    Hitbox mapHitbox(Point3D(0.0f), Vector3D(200.0f, 30.0f, 200.0f));
     Map * map = new Map(mapHitbox);
     map -> generatePlatform(
-        20, 
+        40, 
         Vector3D(12.0f, 1.0f, 12.0f), 
         Vector3D(36.0f, 1.0f, 36.0f)
     );

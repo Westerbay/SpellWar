@@ -85,9 +85,15 @@ void Map::constructPlatform(
         );
     } 
     if (P(PROBABILITY_ROTATE)) {
-        platform.rotateX(randomFloat(0.0f, MAX_ANGLE_ROTATION));
-        platform.rotateY(randomFloat(0.0f, MAX_ANGLE_ROTATION));
-        platform.rotateZ(randomFloat(0.0f, MAX_ANGLE_ROTATION));
+        Vector3D platformToCenter = glm::normalize(hitbox.position - platform.position);
+        float cosTheta = glm::dot(glm::normalize(platform.orientation[1]), platformToCenter);
+        float theta = glm::acos(glm::clamp(cosTheta, -1.0f, 1.0f));
+        Vector3D rotationAxis = glm::cross(platform.orientation[1], platformToCenter);
+        if (glm::length(rotationAxis) > 0.0001f) {
+            rotationAxis = glm::normalize(rotationAxis);
+            glm::mat4 rotation = glm::rotate(glm::mat4(1.0f), theta, rotationAxis);
+            platform.orientation = glm::mat3(rotation) * platform.orientation;
+        }
     }                 
     hitboxPlatform = platform;            
     hitboxPlatform.size.x += X_Z_GAP;

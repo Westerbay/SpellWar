@@ -22,9 +22,9 @@ Player::Player(Map * map) : GameObject(), _map(map) {
 
     Platform & platform = randomChoice(map->getPlatforms());
     Hitbox spawnHitbox = platform.getPlayerSpawn();
-    this->hitbox.orientation = spawnHitbox.orientation;
-    this->hitbox.position = spawnHitbox.position;
-    this->hitbox.move(this->hitbox.size.y * 0.5f, AXIS_Y);
+    //this->hitbox.orientation = spawnHitbox.orientation;
+    //this->hitbox.position = spawnHitbox.position;
+    //this->hitbox.move(this->hitbox.size.y * 0.5f, AXIS_Y);
 }
 
 GameObject * Player::getCameraObject() {
@@ -96,7 +96,7 @@ void Player::move() {
 
     hitbox.move(movement);
     Vector3D positionModel = hitbox.position;
-    positionModel.y -= hitbox.size.y * 0.5f;
+    positionModel -= hitbox.orientation[1] * hitbox.size.y * 0.5f;
 
     Vector2D mouseMovement = _system.getMouseMovement();
     hitbox.rotateY(mouseMovement.x * _sensibility);
