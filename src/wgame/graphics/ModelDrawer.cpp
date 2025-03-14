@@ -32,7 +32,7 @@ ModelDrawer::ModelDrawer() {
 
 void ModelDrawer::configureInstances(const std::vector<Matrix4D> & transforms, int id) {
     if (_instances.find(id) == _instances.end()) {
-        _instances[id] = std::make_unique<UniformBufferObject>();
+        _instances[id] = std::make_unique<ShaderStorageBufferObject>();
     }
     _instances[id] -> configure(transforms.size() * sizeof(Matrix4D));
     _instances[id] -> setData(transforms.data(), transforms.size() * sizeof(Matrix4D));

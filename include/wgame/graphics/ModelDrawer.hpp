@@ -11,7 +11,7 @@
 #define __WG_MODEL_DRAWER_H__
 
 #include "../opengl/Shader.hpp"
-#include "../opengl/UniformBufferObject.hpp"
+#include "../opengl/ShaderStorageBufferObject.hpp"
 #include "../model/ModelGLTF.hpp"
 #include "../geometry/Geometry.hpp"
 
@@ -49,7 +49,7 @@ private:
     static std::weak_ptr<ModelStaticDrawerShader> _uniqueShaderStatic;
     std::shared_ptr<ModelDrawerShader> _shader;
 	std::shared_ptr<ModelStaticDrawerShader> _shaderStatic; 
-	std::map<int, std::unique_ptr<UniformBufferObject>> _instances;
+	std::map<int, std::unique_ptr<ShaderStorageBufferObject>> _instances;
 	std::map<int, size_t> _numberOfInstances;
 };
 

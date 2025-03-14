@@ -10,7 +10,7 @@
 #include <spellwar/world/PlayerCamera.hpp>
 
 PlayerCamera::PlayerCamera() {
-    _offsetFromPlayer = Vector3D(0.3f, 1.0f, -2.5f);
+    _offsetFromPlayer = Vector3D(0.3f, 0.7f, -2.5f);
     _angle = 0;
 }
 

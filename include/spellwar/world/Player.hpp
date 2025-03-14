@@ -64,6 +64,7 @@ private:
 
     State _state;
     Direction _direction;
+    bool _jumping;
 };
 
 

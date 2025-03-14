@@ -15,8 +15,8 @@ layout(std140, binding = 2) uniform JointsBlock {
     mat4 jointsMatrices[1000];
 };
 
-layout(std140, binding = 5) uniform TransformsBlock {
-    mat4 transformsModel[1000];
+layout(std430, binding = 5) buffer TransformsBlock {
+    mat4 transformsModel[10000];
 };
 
 out vec2 texCoord0;

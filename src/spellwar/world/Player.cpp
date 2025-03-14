@@ -25,6 +25,8 @@ Player::Player(Map * map) : GameObject(), _map(map) {
     this->hitbox.orientation = spawnHitbox.orientation;
     this->hitbox.position = spawnHitbox.position;
     this->hitbox.move(this->hitbox.size.y * 0.5f, AXIS_Y);
+
+    _jumping = false;
 }
 
 GameObject * Player::getCameraObject() {
@@ -68,6 +70,9 @@ void Player::state() {
     else {
         _direction = NONE;
     }
+    if (_system.isKeyPressed(KEY_SPACE) && !_jumping) {
+        _jumping = true;
+    }
 }
 
 void Player::move() {    
@@ -109,7 +114,13 @@ void Player::move() {
 }
 
 void Player::animate() {
-    if (_state == IDLE) {
+    if (_jumping && _model.getCurrentAnimation() == "Jump") {
+        _jumping = _model.isRunning();
+    }
+
+    if (_jumping) {
+        _model.switchAnimation("Jump", false);
+    } else if (_state == IDLE) {
         _model.switchAnimation("Idle", true);
     } else if (_state == STRAFE && _direction == LEFT) {
         _model.switchAnimation("WalkRight", true);
