@@ -17,6 +17,12 @@
 
 #include <wgame/wgame.hpp>
 
+#define MAP_SIZE Vector3D(150.0f, 100.0f, 150.0f)
+#define MIN_PLATFORM_SIZE Vector3D(12.0f, 1.0f, 12.0f)
+#define MAX_PLATFORM_SIZE Vector3D(40.0f, 1.0f, 40.0f)
+#define MAX_NUMBER_OF_PLATFORMS 50
+#define FAR_PLANE 600.0f
+
 
 using namespace wgame;
 

@@ -14,18 +14,18 @@ World::World(GameCamera * camera, GameLight * light) : GameObjectGroup() {
     add(new Background());
     add(new Light(light));
 
-    Hitbox mapHitbox(Point3D(0.0f), Vector3D(200.0f, 70.0f, 200.0f));
+    Hitbox mapHitbox(Point3D(0.0f), MAP_SIZE);
     Map * map = new Map(mapHitbox);
     map -> generatePlatform(
-        50, 
-        Vector3D(12.0f, 1.0f, 12.0f), 
-        Vector3D(40.0f, 1.0f, 40.0f)
+        MAX_NUMBER_OF_PLATFORMS, 
+        MIN_PLATFORM_SIZE, 
+        MAX_PLATFORM_SIZE
     );
     add(map);
 
     Player * player = new Player(map);
     add(player);
     
-    camera -> setFarPlane(800.0f);
+    camera -> setFarPlane(FAR_PLANE);
     camera -> attachGameObject(player -> getCameraObject());
 }
