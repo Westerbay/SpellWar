@@ -12,6 +12,7 @@
 
 #include <glad/glad.h>
 
+#include "../tools/Util.hpp"
 #include "../geometry/Geometry.hpp"
 #include "../opengl/VertexArrayObject.hpp"
 #include "../opengl/Texture2D.hpp"
@@ -20,7 +21,7 @@
 #include <unordered_map>
 #include <stdexcept>
 
-#define MAX_INSTANCED 1000
+#define MAX_INSTANCED 10000
 
 
 namespace wgame {

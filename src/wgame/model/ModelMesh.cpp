@@ -167,7 +167,8 @@ void ModelMesh::draw(const Shader & shader, const Matrix4D & transform) {
 void ModelMesh::draw(const Shader & shader, size_t numberOfInstance) {
     
     if (numberOfInstance > MAX_INSTANCED) {
-        throw std::runtime_error(std::string("Max instances allowed : ") + (MAX_INSTANCED + ""));
+        std::cerr << "Max instances allowed : " << MAX_INSTANCED << std::endl;
+        throw std::runtime_error(std::string("Max instances allowed : "));
     }
     
     bind();
