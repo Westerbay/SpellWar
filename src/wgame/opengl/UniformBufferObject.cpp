@@ -12,36 +12,7 @@
 
 namespace wgame {
  
-UniformBufferObject::UniformBufferObject() {
-    glGenBuffers(1, &_buffer);    
-}
+UniformBufferObject::UniformBufferObject() 
+: SharedBufferObject(GL_UNIFORM_BUFFER) {}
 
-void UniformBufferObject::configure(size_t size, GLenum usage) const {
-    glBindBuffer(GL_UNIFORM_BUFFER, _buffer);
-    glBufferData(GL_UNIFORM_BUFFER, size, NULL, usage);
-    glBindBuffer(GL_UNIFORM_BUFFER, 0);
-}
-
-void UniformBufferObject::setBindingPoint(GLuint bindingPoint) const {
-    glBindBufferBase(GL_UNIFORM_BUFFER, bindingPoint, _buffer);
-}
-
-UniformBufferObject::~UniformBufferObject() {
-    glDeleteBuffers(1, &_buffer);
-}
-
-void UniformBufferObject::setData(const void * data, GLsizeiptr size, GLintptr offset) const {
-    bind();
-    glBufferSubData(GL_UNIFORM_BUFFER, offset, size, data);
-    unbind();
-}
-
-void UniformBufferObject::bind() const {
-    glBindBuffer(GL_UNIFORM_BUFFER, _buffer);
-}
-
-void UniformBufferObject::unbind() const {
-    glBindBuffer(GL_UNIFORM_BUFFER, 0);
-}
- 
 }

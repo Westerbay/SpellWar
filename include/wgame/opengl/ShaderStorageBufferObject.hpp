@@ -10,22 +10,14 @@
 #ifndef __WG_SSBO_H__
 #define __WG_SSBO_H__
   
-#include "BufferObject.hpp"
+#include "SharedBufferObject.hpp"
   
   
 namespace wgame {
   
-class ShaderStorageBufferObject : public IObjectGL {
+class ShaderStorageBufferObject : public SharedBufferObject {
 public:
     ShaderStorageBufferObject();
-    ~ShaderStorageBufferObject();
-    void configure(size_t size, GLenum usage = GL_STATIC_DRAW) const;
-    void setBindingPoint(GLuint bindingPoint) const;
-    void setData(const void * data, GLsizeiptr size, GLintptr offset = 0) const;
-    void bind() const override;
-    void unbind() const override;
-private:
-    GLuint _buffer;
 };
   
 }

@@ -10,24 +10,16 @@
 #ifndef __WG_UBO_H__
 #define __WG_UBO_H__
  
-#include "BufferObject.hpp"
+#include "SharedBufferObject.hpp"
  
  
 namespace wgame {
  
-class UniformBufferObject : public IObjectGL {
+class UniformBufferObject : public SharedBufferObject {
 public:
-    UniformBufferObject();
-    ~UniformBufferObject();
-    void configure(size_t size, GLenum usage = GL_STATIC_DRAW) const;
-    void setBindingPoint(GLuint bindingPoint) const;
-    void setData(const void * data, GLsizeiptr size, GLintptr offset = 0) const;
-    void bind() const override;
-    void unbind() const override;
-private:
-    GLuint _buffer;
+    UniformBufferObject(); 
 };
- 
+
 }
  
 #endif
