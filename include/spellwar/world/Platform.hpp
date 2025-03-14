@@ -13,7 +13,8 @@
 #include <wgame/wgame.hpp>
 #include "Decoration.hpp"
 
-#define PROBABILITY_ROTATE 0.5f
+#define PROBABILITY_ROTATE 0.6f
+#define HEIGHT_ROTATE_RATIO 0.3f
 #define X_Z_GAP 8
 #define Y_GAP 20
 #define MAX_ATTEMPTS 20

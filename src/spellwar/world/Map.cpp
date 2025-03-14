@@ -84,7 +84,7 @@ void Map::constructPlatform(
             (int)minSize[i], (int)maxSize[i]
         );
     } 
-    if (P(PROBABILITY_ROTATE)) {
+    if (P(PROBABILITY_ROTATE) || platform.position.y > hitbox.position.y + HEIGHT_ROTATE_RATIO * hitbox.size.y) {
         Vector3D platformToCenter = glm::normalize(hitbox.position - platform.position);
         float cosTheta = glm::dot(glm::normalize(platform.orientation[1]), platformToCenter);
         float theta = glm::acos(glm::clamp(cosTheta, -1.0f, 1.0f));

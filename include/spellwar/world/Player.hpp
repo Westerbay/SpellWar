@@ -16,7 +16,7 @@
 
 #define FROST_MODEL "assets/model/player/frost.glb"
 
-#define SPEED 0.1f
+#define SPEED 0.08f
 #define RUNNING_FACTOR 2.0f
 #define ANIMATION_ACCELERATION 1.5f
 
