@@ -9,7 +9,16 @@
 
 #include <spellwar/world/Platform.hpp>
 
-Platform::Platform(const Hitbox & hitbox) : GameObject(hitbox) {}
+Platform::Platform(const Hitbox & hitbox) : GameObject(hitbox) {
+    _playerSpawn = hitbox;
+    _playerSpawn.move(hitbox.size.y * 0.5f, AXIS_Y);
+    _playerSpawn.size = Vector3D(1.0f, 2.0f, 1.0f);
+    _decorationHitboxes.push_back(_playerSpawn);
+}
+
+Hitbox Platform::getPlayerSpawn() const {
+    return _playerSpawn;
+}
 
 void Platform::generateStalagmite(
     std::vector<Matrix4D> & transforms,

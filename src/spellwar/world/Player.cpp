@@ -11,7 +11,7 @@
 #include <iostream>
 
 
-Player::Player(const Hitbox & hitbox) : GameObject(hitbox) {
+Player::Player(Map * map) : GameObject(), _map(map) {
     _speed = SPEED;
     _runningFactor = RUNNING_FACTOR;
     _sensibility = 0.2f;
@@ -19,6 +19,12 @@ Player::Player(const Hitbox & hitbox) : GameObject(hitbox) {
     _model.setActiveLight(false);
     _model.setTimeAcceleration(ANIMATION_ACCELERATION);
     this->hitbox.size = Vector3D(0.7f, 1.65f, 0.7f);
+
+    Platform & platform = randomChoice(map->getPlatforms());
+    Hitbox spawnHitbox = platform.getPlayerSpawn();
+    this->hitbox.orientation = spawnHitbox.orientation;
+    this->hitbox.position = spawnHitbox.position;
+    this->hitbox.move(this->hitbox.size.y * 0.5f, AXIS_Y);
 }
 
 GameObject * Player::getCameraObject() {

@@ -11,7 +11,7 @@
 #define __PLATFORM__
 
 #include <wgame/wgame.hpp>
-#include <spellwar/world/Decoration.hpp>
+#include "Decoration.hpp"
 
 #define MAX_ANGLE_ROTATION 45.0f
 #define PROBABILITY_ROTATE 0.5f
@@ -25,6 +25,7 @@ using namespace wgame;
 class Platform : public GameObject {
 public:
     Platform(const Hitbox & hitbox);
+    Hitbox getPlayerSpawn() const;
     void generateStalagmite(
         std::vector<Matrix4D> & transforms,
         const Decoration & decoration
@@ -33,9 +34,10 @@ public:
         std::vector<Matrix4D> & transforms, 
         const Decoration & decoration
     );
-	std::vector<Hitbox> & getDecorationHitboxes();
+	std::vector<Hitbox> & getDecorationHitboxes();    
 private:
     std::vector<Hitbox> _decorationHitboxes;
+    Hitbox _playerSpawn;
 };
 
 #endif

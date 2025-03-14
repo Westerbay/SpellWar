@@ -131,3 +131,7 @@ void Map::render() {
     cullCounterClockwise();        
 }
 
+std::vector<Platform> & Map::getPlatforms() {
+    return _platforms;
+}
+

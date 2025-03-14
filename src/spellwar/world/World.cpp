@@ -23,8 +23,7 @@ World::World(GameCamera * camera, GameLight * light) : GameObjectGroup() {
     );
     add(map);
 
-    Hitbox hitbox(Point3D(0.0f), Vector3D(0.0f));
-    Player * player = new Player(hitbox);
+    Player * player = new Player(map);
     add(player);
     
     camera -> setFarPlane(800.0f);

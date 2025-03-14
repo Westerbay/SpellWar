@@ -11,6 +11,7 @@
 #define __WG_UTIL_H__
 
 #include <iostream>
+#include <vector>
 
 typedef std::string String;
 
@@ -25,5 +26,10 @@ float randomFloat(float min, float max);
 int randomInt(int min, int max);
 
 bool P(float probability);
+
+template <typename T>
+T & randomChoice(std::vector<T> & list) {
+    return list[nextInt((unsigned) list.size())];
+}
 
 #endif

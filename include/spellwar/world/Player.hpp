@@ -12,6 +12,7 @@
 
 #include <wgame/wgame.hpp>
 #include "PlayerCamera.hpp"
+#include "Map.hpp"
 
 #define FROST_MODEL "assets/model/player/frost.glb"
 
@@ -36,7 +37,7 @@ public:
         NONE
     };
 public:
-    Player(const Hitbox & hitbox);    
+    Player(Map * map);    
     GameObject * getCameraObject();
     void state();
     void move();
@@ -49,6 +50,9 @@ public:
         FrostModel();
     };
 private: 
+
+    Map * _map;
+
     float _speed;
     float _runningFactor;
     float _sensibility;

@@ -11,7 +11,7 @@
 #define __MAP_H__
 
 #include <wgame/wgame.hpp>
-#include <spellwar/world/Platform.hpp>
+#include "Platform.hpp"
 
 #define TEX_SCALE 10.0f
 
@@ -28,6 +28,7 @@ public:
         unsigned maxAttempts = MAX_ATTEMPTS
     );    
     void render() override;	
+    std::vector<Platform> & getPlatforms();
 private:
     void constructPlatform(
         Cuboid & platform, Hitbox & hitboxPlatform,
