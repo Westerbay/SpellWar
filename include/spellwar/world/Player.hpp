@@ -56,6 +56,7 @@ private:
     PlayerCamera _camera;
     FrostModel _model;
     ModelDrawer _modelDrawer;
+    ColorDrawer _hitboxDrawer;
 
     State _state;
     Direction _direction;

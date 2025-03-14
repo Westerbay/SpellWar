@@ -18,6 +18,7 @@ Player::Player(const Hitbox & hitbox) : GameObject(hitbox) {
     _state = IDLE;
     _model.setActiveLight(false);
     _model.setTimeAcceleration(ANIMATION_ACCELERATION);
+    this->hitbox.size = Vector3D(0.7f, 1.65f, 0.7f);
 }
 
 GameObject * Player::getCameraObject() {
@@ -87,13 +88,15 @@ void Player::move() {
     }
 
     hitbox.move(movement);
+    Vector3D positionModel = hitbox.position;
+    positionModel.y -= hitbox.size.y * 0.5f;
 
     Vector2D mouseMovement = _system.getMouseMovement();
     hitbox.rotateY(mouseMovement.x * _sensibility);
     _camera.increaseAngle(mouseMovement.y * _sensibility);
     _camera.updatePlayer(hitbox);
 
-    Matrix4D transform = glm::translate(Matrix4D(1.0f), hitbox.position);
+    Matrix4D transform = glm::translate(Matrix4D(1.0f), positionModel);
     transform *= Matrix4D(hitbox.orientation);
     _model.setTransform(transform);
 }
@@ -118,6 +121,8 @@ void Player::render() {
     glDisable(GL_CULL_FACE);
     _modelDrawer.draw(_model);
     glEnable(GL_CULL_FACE);
+    _hitboxDrawer.setDrawCuboidData(hitbox, ColorRGB(1.0f, 0.0f, 0.0f));
+    _hitboxDrawer.draw();
 }
 
 
