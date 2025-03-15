@@ -25,6 +25,7 @@ Player::Player(Map * map) : GameObject(), _map(map) {
     this->hitbox.orientation = spawnHitbox.orientation;
     this->hitbox.position = spawnHitbox.position;
     this->hitbox.move(this->hitbox.size.y * 0.5f, AXIS_Y);
+    _currentPlatform = &platform;
 
     _jumping = false;
 }
@@ -99,7 +100,13 @@ void Player::move() {
         }        
     }
 
+    Point3D lastPosition = hitbox.position;
     hitbox.move(movement);
+    if (!onPlatform()) {
+        hitbox.position = lastPosition;
+        _state = IDLE;
+    }
+
     Vector3D positionModel = hitbox.position;
     positionModel -= hitbox.orientation[1] * hitbox.size.y * 0.5f;
 
@@ -133,6 +140,13 @@ void Player::animate() {
     } else if (_state == BACK) {
         _model.switchAnimation("Walking", true, true);
     }     
+}
+
+bool Player::onPlatform() const {
+    Hitbox platformHitbox = _currentPlatform -> getHitbox();
+    Point3D position = hitbox.position;
+    position.y = platformHitbox.position.y;
+    return platformHitbox.contains(position);
 }
 
 void Player::render() {

@@ -42,8 +42,9 @@ public:
     void state();
     void move();
     void animate();
+    bool onPlatform() const;
     void update() override;
-    void render() override;
+    void render() override;    
 public:
     class FrostModel : public AnimatedModelGLTF {
     public:
@@ -52,6 +53,7 @@ public:
 private: 
 
     Map * _map;
+    Platform * _currentPlatform;
 
     float _speed;
     float _runningFactor;
