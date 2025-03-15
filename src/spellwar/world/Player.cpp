@@ -92,19 +92,21 @@ void Player::move() {
             movement.z = -_speed;
             break;
     }
-    if (_direction != NONE) {   
-        movement.z *= value45d;
-        movement.x = _speed * (_direction == RIGHT ? 1.0f : -1.0f);
-        if (_state == RUNNING) {
-            movement.x *= _runningFactor;
-        }        
+    if (_direction != NONE) {        
+        movement.x = _speed;
+        movement.x *= _direction == RIGHT ? 1.0f : -1.0f;
+        movement.x *= _state == RUNNING ? _runningFactor : 1.0f;        
+        if (movement.z) {
+            movement.z *= value45d;
+            movement.x *= value45d;
+        }      
     }
 
-    Point3D lastPosition = hitbox.position;
+    Point3D lastPosition = hitbox.position;    
     hitbox.move(movement);
     if (!onPlatform()) {
-        hitbox.position = lastPosition;
         _state = IDLE;
+        hitbox.position = lastPosition;      
     }
 
     Vector3D positionModel = hitbox.position;
@@ -144,8 +146,10 @@ void Player::animate() {
 
 bool Player::onPlatform() const {
     Hitbox platformHitbox = _currentPlatform -> getHitbox();
-    Point3D position = hitbox.position;
-    position.y = platformHitbox.position.y;
+    Hitbox playerHitbox = hitbox;
+    float delta = (playerHitbox.size.y + platformHitbox.size.y) * 0.5f;
+    playerHitbox.move(-delta, AXIS_Y);
+    Point3D position = playerHitbox.position;
     return platformHitbox.contains(position);
 }
 
