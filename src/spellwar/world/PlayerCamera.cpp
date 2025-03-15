@@ -26,9 +26,19 @@ void PlayerCamera::increaseAngle(float delta) {
 
 void PlayerCamera::updatePlayer(const Hitbox & playerHitbox) {
     hitbox = playerHitbox;
-    hitbox.move(_offsetFromPlayer.x, AXIS_X);
-    hitbox.move(_offsetFromPlayer.y, AXIS_Y);
-    hitbox.move(_offsetFromPlayer.z, AXIS_Z);
+    
+    Vector3D offset = _offsetFromPlayer;
+    float radians = glm::radians(_angle);
+
+    float radiusX = offset.z;  
+    float radiusZ = offset.z * (_angle > 0 ? 0.5f : 1.0f);  
+
+    offset.y += glm::sin(radians) * radiusZ;
+    offset.z = glm::cos(radians) * radiusX;
+
+    hitbox.move(offset.x, AXIS_X);
+    hitbox.move(offset.y, AXIS_Y);
+    hitbox.move(offset.z, AXIS_Z);
     hitbox.rotateX(_angle);
 }
 
