@@ -25,6 +25,13 @@
 
 using namespace wgame;
 
+struct PlatformAnimation {
+    Hitbox destinationHitbox;
+    Hitbox startHitbox;
+    float keyFrame;
+    bool isSwapping;
+};
+
 class Player : public GameObject {
 public:
     enum State {
@@ -81,6 +88,7 @@ private:
     State _state;
     Direction _direction;
     bool _jumping;
+    PlatformAnimation _swapAnimation;
 };
 
 
