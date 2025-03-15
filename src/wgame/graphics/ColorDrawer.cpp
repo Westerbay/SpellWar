@@ -23,6 +23,7 @@ ColorDrawer::ColorDrawer() {
 }
 
 void ColorDrawer::setDrawCuboidData(const Cuboid & cuboid, const ColorRGB & color) {
+    _vaos.resize(1);
     std::vector<Point3D> vertices = cuboid.getVertices();
     std::vector<ColorRGB> colors = {
         color, color, color, color,
@@ -54,9 +55,9 @@ void ColorDrawer::setFillSphereData(
     const ColorRGB & color, 
     unsigned int stacks, unsigned int slices
 ) {
-    std::vector<ColorRGB> colors(stacks * slices, color);
-    _vaos[0].setVBO(VBO_COLOR, colors);
+    std::vector<ColorRGB> colors(stacks * slices, color);    
     setFillSphereData(sphere, stacks, slices);
+    _vaos[0].setVBO(VBO_COLOR, colors);
 }
 
 void ColorDrawer::setFillSphereData(
@@ -70,6 +71,7 @@ void ColorDrawer::setFillSphereData(
 
     sphere.generateSphere(elements, normals, vertices, stacks, slices);
 
+    _vaos.resize(1);
     _vaos[0].setEBO(elements);
     _vaos[0].setVBO(VBO_VERTEX, vertices);
     _vaos[0].setVBO(VBO_NORMAL, normals);
@@ -79,6 +81,7 @@ void ColorDrawer::setFillCuboidData(const Cuboid & cuboid) {
     std::vector<std::vector<Point3D>> vertices = cuboid.getVerticesPerFace();
     std::vector<std::vector<Vector3D>> normals = cuboid.getNormalsPerFace();
     std::vector<std::vector<unsigned>> elements = cuboid.getElementsPerFace();    
+    _vaos.resize(6);
     for (int i = 0; i < 6; i ++) {
         _vaos[i].setVBO(VBO_VERTEX, vertices[i]);
         _vaos[i].setVBO(VBO_NORMAL, normals[i]);

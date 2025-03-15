@@ -58,7 +58,7 @@ public:
 private:
     static std::weak_ptr<ColorDrawerShader> _uniqueColorShader;
     std::shared_ptr<ColorDrawerShader> _shaderColor;
-    VertexArrayObject _vaos[6];
+    std::vector<VertexArrayObject> _vaos;
 };
 
 }

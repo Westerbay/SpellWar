@@ -22,10 +22,10 @@ TextureDrawer::TextureDrawer() {
         _uniqueTextureShader = _textureShader;
     }
 
-    _parallalShader = _uniqueParallaxShader.lock();
-    if (!_parallalShader) {
-        _parallalShader = std::make_shared<ParallaxDrawerShader>();
-        _uniqueParallaxShader = _parallalShader;
+    _parallaxShader = _uniqueParallaxShader.lock();
+    if (!_parallaxShader) {
+        _parallaxShader = std::make_shared<ParallaxDrawerShader>();
+        _uniqueParallaxShader = _parallaxShader;
     }
 }
 
@@ -37,6 +37,7 @@ void TextureDrawer::setCuboidData(
     std::vector<std::vector<Vector3D>> normals = cuboid.getNormalsPerFace();
     std::vector<std::vector<Vector3D>> tangents = cuboid.getTangentsPerFace();
     std::vector<std::vector<unsigned>> elements = cuboid.getElementsPerFace();
+    _vaos.resize(6);
     for (int i = 0; i < 6; i ++) {
         _vaos[i].setVBO(VBO_VERTEX, vertices[i]);
         _vaos[i].setVBO(VBO_NORMAL, normals[i]);
@@ -50,7 +51,7 @@ void TextureDrawer::draw(const std::vector<Texture2D *> & textures) {
     _textureShader -> bind();    
     _textureShader -> setUniform("colorSampler", 0);
     glActiveTexture(GL_TEXTURE0);  
-    for (int i = 0; i < 6; i ++) {              
+    for (size_t i = 0; i < _vaos.size(); i ++) {              
         textures[i] -> bind();
         _vaos[i].draw(DRAW_TRIANGLES);
         textures[i] -> unbind();
@@ -64,13 +65,13 @@ void TextureDrawer::draw(
     const std::vector<Texture2D *> & heights,
     float heightScale
 ) {
-    _parallalShader -> bind();  
-    _parallalShader -> setUniform("diffuseMap", 0);  
-    _parallalShader -> setUniform("normalMap", 1);
-    _parallalShader -> setUniform("depthMap", 2);   
-    _parallalShader -> setUniform("heightScale", heightScale);  
-    _parallalShader -> setUniform("model", Matrix4D(1.0f));
-    for (int i = 0; i < 6; i ++) {    
+    _parallaxShader -> bind();  
+    _parallaxShader -> setUniform("diffuseMap", 0);  
+    _parallaxShader -> setUniform("normalMap", 1);
+    _parallaxShader -> setUniform("depthMap", 2);   
+    _parallaxShader -> setUniform("heightScale", heightScale);  
+    _parallaxShader -> setUniform("model", Matrix4D(1.0f));
+    for (size_t i = 0; i < _vaos.size(); i ++) {    
         glActiveTexture(GL_TEXTURE0);                
         diffuses[i] -> bind();
         glActiveTexture(GL_TEXTURE1);                   
@@ -82,7 +83,7 @@ void TextureDrawer::draw(
         normals[i] -> unbind();
         diffuses[i] -> unbind();
     }
-    _parallalShader -> unbind();
+    _parallaxShader -> unbind();
 }
  
 TextureDrawer::TextureDrawerShader::TextureDrawerShader() : 

@@ -55,8 +55,8 @@ private:
     static std::weak_ptr<TextureDrawerShader> _uniqueTextureShader;
     static std::weak_ptr<ParallaxDrawerShader> _uniqueParallaxShader;
     std::shared_ptr<TextureDrawerShader> _textureShader;
-    std::shared_ptr<ParallaxDrawerShader> _parallalShader;
-    VertexArrayObject _vaos[6];
+    std::shared_ptr<ParallaxDrawerShader> _parallaxShader;
+    std::vector<VertexArrayObject> _vaos;
 };
  
 }
