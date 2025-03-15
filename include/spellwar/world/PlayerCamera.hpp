@@ -23,7 +23,7 @@ public:
     PlayerCamera();
     void increaseAngle(float delta);    
     void updatePlayer(const Hitbox & playerHitbox);  
-    void update() override;  
+    Vector3D getGaze() const;    
 private:
     Vector3D _offsetFromPlayer;
     float _angle;

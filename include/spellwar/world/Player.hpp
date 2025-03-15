@@ -21,7 +21,7 @@
 #define SPEED 0.08f
 #define RUNNING_FACTOR 2.0f
 #define ANIMATION_ACCELERATION 1.5f
-#define MAX_JUMP_DISTANCE 50.0f
+#define MAX_JUMP_DISTANCE 100.0f
 
 using namespace wgame;
 
@@ -45,9 +45,9 @@ public:
     void state();
     void move();
     void animate();
-    void swapPlatform(Platform * platform);
+    void swapPlatform(Platform * platform, const Point3D & destination);
     bool onPlatform() const;
-    Platform * getNearestPlatform();
+    Platform * findBestAlignedPlatform(Point3D & destination);
     void update() override;
     void render() override;    
 public:
@@ -57,6 +57,13 @@ public:
     };
 private:
     Vector3D getMovement() const;
+    bool intersectionPlatform(
+        const Point3D & gazePosition, 
+        const Vector3D & gazeVector,  
+        const Hitbox & hitbox, 
+        const Vector3D & normal,
+        Point3D & intersection
+    );
 private: 
 
     Map * _map;

@@ -102,12 +102,56 @@ Vector3D Player::getMovement() const {
     return movement;
 }
 
-void Player::swapPlatform(Platform * platform) {
-    Hitbox spawnHitbox = platform -> getPlayerSpawn();
-    this->hitbox.orientation = spawnHitbox.orientation;
-    this->hitbox.position = spawnHitbox.position;
+bool Player::onPlatform() const {
+    Hitbox platformHitbox = _currentPlatform -> getHitbox();
+    Hitbox playerHitbox = hitbox;
+    float delta = (playerHitbox.size.y + platformHitbox.size.y) * 0.5f;
+    playerHitbox.move(-delta, AXIS_Y);
+    Point3D position = playerHitbox.position;
+    return platformHitbox.contains(position);
+}
+
+void Player::swapPlatform(Platform * platform, const Point3D & intersectPoint) {
+    Hitbox platformHitbox = platform -> getHitbox();
+    this->hitbox.orientation = platformHitbox.orientation;
+    this->hitbox.position = intersectPoint;
     this->hitbox.move(this->hitbox.size.y * 0.5f, AXIS_Y);
     _currentPlatform = platform;
+}
+
+Platform * Player::findBestAlignedPlatform(Point3D & destination) {
+    Platform * bestPlatform = nullptr;
+    float minDist = std::numeric_limits<float>::max();
+    Vector3D gazeVector = _camera.getGaze();
+    Point3D gazePosition = _camera.getHitbox().position;
+
+    for (Platform & platform : _map -> getPlatforms()) {
+        Hitbox platformHitbox = platform.getHitbox();
+        Point3D intersectPoint;
+        float distance = glm::length(hitbox.position - platformHitbox.position);
+        if (distance > MAX_JUMP_DISTANCE || &platform == _currentPlatform) {
+            continue;
+        }        
+        Vector3D normal = glm::normalize(platformHitbox.orientation[1]);
+        bool intersect = intersectionPlatform(
+            gazePosition, 
+            gazeVector,  
+            platformHitbox, 
+            normal,
+            intersectPoint
+        );
+        if (!intersect) {
+            continue;
+        }
+        distance = glm::length(gazePosition - intersectPoint);
+        if (distance < minDist) {
+            minDist = distance;
+            bestPlatform = &platform;
+            destination = intersectPoint;
+        }
+    }
+
+    return bestPlatform;
 }
 
 void Player::move() {        
@@ -116,7 +160,14 @@ void Player::move() {
     hitbox.move(movement);
     if (!onPlatform()) {
         if (_jumping) {
-            swapPlatform(getNearestPlatform());
+            Point3D destination;
+            Platform * destPlat = findBestAlignedPlatform(destination);
+            if (!destPlat) {
+                hitbox.position = lastPosition; 
+            }
+            else {
+                swapPlatform(destPlat, destination);
+            }
         }
         else {
             _state = IDLE;
@@ -159,34 +210,6 @@ void Player::animate() {
     }     
 }
 
-bool Player::onPlatform() const {
-    Hitbox platformHitbox = _currentPlatform -> getHitbox();
-    Hitbox playerHitbox = hitbox;
-    float delta = (playerHitbox.size.y + platformHitbox.size.y) * 0.5f;
-    playerHitbox.move(-delta, AXIS_Y);
-    Point3D position = playerHitbox.position;
-    return platformHitbox.contains(position);
-}
-
-Platform * Player::getNearestPlatform() {
-    float minDistance = std::numeric_limits<float>::max();
-    Platform * nearestPlatform = nullptr;
-    Hitbox platformHitbox;
-
-    for (Platform & platform: _map -> getPlatforms()) {
-        if (&platform != _currentPlatform) {
-            platformHitbox = platform.getHitbox();
-            float distance = glm::length(hitbox.position - platformHitbox.position);
-            if (distance < minDistance) {
-                minDistance = distance;
-                nearestPlatform = &platform;
-            }
-        }
-    }
-
-    return nearestPlatform;
-}
-
 void Player::render() {
     glDisable(GL_CULL_FACE);
     _modelDrawer.draw(_model);
@@ -197,3 +220,29 @@ void Player::render() {
 
 
 Player::FrostModel::FrostModel() : AnimatedModelGLTF(FROST_MODEL) {}
+
+bool Player::intersectionPlatform(
+    const Point3D & gazePosition, 
+    const Vector3D & gazeVector,  
+    const Hitbox & hitbox,
+    const Vector3D & normal,
+    Point3D & intersection
+) {    
+    float denom = glm::dot(normal, gazeVector);
+    if (glm::abs(denom) < 1e-6f) {
+        return false; 
+    }
+    
+    float t = glm::dot(normal, (hitbox.position - gazePosition)) / denom;
+    if (t < 0) {
+        return false;
+    }
+
+    intersection = gazePosition + t * gazeVector;
+    if (!hitbox.contains(intersection)) {
+        return false;
+    }
+
+    intersection += hitbox.orientation[1] * 0.5f * hitbox.size.y;
+    return true;
+}

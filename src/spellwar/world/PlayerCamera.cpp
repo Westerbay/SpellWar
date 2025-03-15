@@ -42,5 +42,6 @@ void PlayerCamera::updatePlayer(const Hitbox & playerHitbox) {
     hitbox.rotateX(_angle);
 }
 
-void PlayerCamera::update() {}
-
+Vector3D PlayerCamera::getGaze() const {
+    return glm::normalize(hitbox.orientation[2]);
+}
