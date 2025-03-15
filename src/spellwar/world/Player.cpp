@@ -102,12 +102,16 @@ void Player::move() {
         }      
     }
 
-    Point3D lastPosition = hitbox.position;    
-    hitbox.move(movement);
+    Point3D lastPosition = hitbox.position; 
+    hitbox.move(movement.z, AXIS_Z);
     if (!onPlatform()) {
-        _state = IDLE;
-        hitbox.position = lastPosition;      
-    }
+        hitbox.position = lastPosition;     
+    }    
+    lastPosition = hitbox.position;  
+    hitbox.move(movement.x, AXIS_X);
+    if (!onPlatform()) {
+        hitbox.position = lastPosition;        
+    }    
 
     Vector3D positionModel = hitbox.position;
     positionModel -= hitbox.orientation[1] * hitbox.size.y * 0.5f;
