@@ -76,10 +76,8 @@ void Player::state() {
     }
 }
 
-void Player::move() {    
-    
+Vector3D Player::getMovement() const {
     static float value45d = glm::sqrt(2.0f) / 2.0f;
-
     Vector3D movement(0.0f);
     switch (_state) {
         case RUNNING:
@@ -101,16 +99,29 @@ void Player::move() {
             movement.x *= value45d;
         }      
     }
+    return movement;
+}
 
+void Player::swapPlatform(Platform * platform) {
+    Hitbox spawnHitbox = platform -> getPlayerSpawn();
+    this->hitbox.orientation = spawnHitbox.orientation;
+    this->hitbox.position = spawnHitbox.position;
+    this->hitbox.move(this->hitbox.size.y * 0.5f, AXIS_Y);
+    _currentPlatform = platform;
+}
+
+void Player::move() {        
+    Vector3D movement = getMovement();
     Point3D lastPosition = hitbox.position; 
-    hitbox.move(movement.z, AXIS_Z);
+    hitbox.move(movement);
     if (!onPlatform()) {
-        hitbox.position = lastPosition;     
-    }    
-    lastPosition = hitbox.position;  
-    hitbox.move(movement.x, AXIS_X);
-    if (!onPlatform()) {
-        hitbox.position = lastPosition;        
+        if (_jumping) {
+            swapPlatform(getNearestPlatform());
+        }
+        else {
+            _state = IDLE;
+            hitbox.position = lastPosition;   
+        }             
     }    
 
     Vector3D positionModel = hitbox.position;
@@ -155,6 +166,25 @@ bool Player::onPlatform() const {
     playerHitbox.move(-delta, AXIS_Y);
     Point3D position = playerHitbox.position;
     return platformHitbox.contains(position);
+}
+
+Platform * Player::getNearestPlatform() {
+    float minDistance = std::numeric_limits<float>::max();
+    Platform * nearestPlatform = nullptr;
+    Hitbox platformHitbox;
+
+    for (Platform & platform: _map -> getPlatforms()) {
+        if (&platform != _currentPlatform) {
+            platformHitbox = platform.getHitbox();
+            float distance = glm::length(hitbox.position - platformHitbox.position);
+            if (distance < minDistance) {
+                minDistance = distance;
+                nearestPlatform = &platform;
+            }
+        }
+    }
+
+    return nearestPlatform;
 }
 
 void Player::render() {

@@ -14,11 +14,14 @@
 #include "PlayerCamera.hpp"
 #include "Map.hpp"
 
+#include <limits>
+
 #define FROST_MODEL "assets/model/player/frost.glb"
 
 #define SPEED 0.08f
 #define RUNNING_FACTOR 2.0f
 #define ANIMATION_ACCELERATION 1.5f
+#define MAX_JUMP_DISTANCE 50.0f
 
 using namespace wgame;
 
@@ -42,7 +45,9 @@ public:
     void state();
     void move();
     void animate();
+    void swapPlatform(Platform * platform);
     bool onPlatform() const;
+    Platform * getNearestPlatform();
     void update() override;
     void render() override;    
 public:
@@ -50,6 +55,8 @@ public:
     public:
         FrostModel();
     };
+private:
+    Vector3D getMovement() const;
 private: 
 
     Map * _map;
