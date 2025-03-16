@@ -16,6 +16,10 @@ Matrix4D Decoration::getTransform() const {
 	return Matrix4D(1.0f);
 }
 
+Vector3D Decoration::getCollideSize() const {
+	return Vector3D(0.0f);
+}
+
 /* Stalagmite */
 Stalagmite::Stalagmite() : Decoration(STALAGMITE_MODEL) {}
 
@@ -31,6 +35,10 @@ DecorationInfo Stalagmite::getDecorationInfo() const {
 	return info;
 }
 
+Vector3D Stalagmite::getCollideSize() const {
+	return getDecorationInfo().size;
+}
+
 
 /* Pink Tree */
 PinkTree::PinkTree() : Decoration(TREE_MODEL) {}
@@ -38,7 +46,7 @@ PinkTree::PinkTree() : Decoration(TREE_MODEL) {}
 DecorationInfo PinkTree::getDecorationInfo() const {
 	DecorationInfo info;
 	info.id = 1;
-	info.size = Vector3D(1.0f, 19.0f, 1.0f);
+	info.size = Vector3D(4.0f, 19.0f, 4.0f);
 	info.minScale = 0.5f;
 	info.maxScale = 1.0f;
 	info.minInstances = 1;
@@ -46,6 +54,11 @@ DecorationInfo PinkTree::getDecorationInfo() const {
 	info.probability = 0.7f;
 	return info;
 }
+
+Vector3D PinkTree::getCollideSize() const {
+	return Vector3D(1.0f, 19.0f, 1.0f);
+}
+
 
 /* FantasyPlant */
 FantasyPlant::FantasyPlant() : Decoration(FANTASY_PLANT_MODEL) {}
@@ -79,6 +92,10 @@ DecorationInfo Rock::getDecorationInfo() const {
 	info.maxInstances = 2;
 	info.probability = 0.8f;
 	return info;
+}
+
+Vector3D Rock::getCollideSize() const {
+	return getDecorationInfo().size;
 }
 
 /* WaterPlant */

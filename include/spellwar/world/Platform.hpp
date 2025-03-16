@@ -16,7 +16,7 @@
 #define PROBABILITY_ROTATE 0.6f
 #define HEIGHT_ROTATE_RATIO 0.3f
 #define X_Z_GAP 8
-#define Y_GAP 20
+#define Y_GAP 25
 #define MAX_ATTEMPTS 20
 
 
@@ -26,6 +26,7 @@ class Platform : public GameObject {
 public:
     Platform(const Hitbox & hitbox);
     Hitbox getPlayerSpawn() const;
+    std::vector<Hitbox> & getDecorationHitboxes();  
     void generateStalagmite(
         std::vector<Matrix4D> & transforms,
         const Decoration & decoration
@@ -33,10 +34,11 @@ public:
     void generateDecoration(
         std::vector<Matrix4D> & transforms, 
         const Decoration & decoration
-    );
-	std::vector<Hitbox> & getDecorationHitboxes();    
+    );	
+    bool collideWith(GameObject * object) const;  
 private:
     std::vector<Hitbox> _decorationHitboxes;
+    std::vector<Hitbox> _collideHitboxex;
     Hitbox _playerSpawn;
 };
 

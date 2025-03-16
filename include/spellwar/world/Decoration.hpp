@@ -38,18 +38,21 @@ public:
 	Decoration(const std::string & filepath);
 	virtual DecorationInfo getDecorationInfo() const = 0;
 	virtual Matrix4D getTransform() const;
+	virtual Vector3D getCollideSize() const;
 };
 
 class Stalagmite : public Decoration {
 public:
     Stalagmite();
     DecorationInfo getDecorationInfo() const override;
+	Vector3D getCollideSize() const override;
 };
 
 class PinkTree : public Decoration {
 public:
     PinkTree();
     DecorationInfo getDecorationInfo() const override;
+	Vector3D getCollideSize() const override;
 };
 
 class FantasyPlant : public Decoration {
@@ -63,6 +66,7 @@ class Rock : public Decoration {
 public:
 	Rock();
 	DecorationInfo getDecorationInfo() const override;
+	Vector3D getCollideSize() const override;
 };
 
 class WaterPlant : public Decoration {
