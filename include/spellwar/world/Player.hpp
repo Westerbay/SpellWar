@@ -22,7 +22,16 @@
 #define RUNNING_FACTOR 2.0f
 #define ANIMATION_ACCELERATION 1.5f
 #define MAX_JUMP_DISTANCE 70.0f
-#define SWAP_ANIMATION_KEYFRAME 0.015f
+#define SWAP_ANIMATION_KEYFRAME 0.014f
+#define MIN_SWAP_ANIMATION_KEYFRAME 0.1f
+
+#define HITBOX_SIZE Vector3D(0.7f, 1.65f, 0.7f)
+
+#define JUMP_START_PROGRESS 0.20f
+#define JUMP_END_PROGRESS 0.65f
+#define JUMP_START_ANIM 0.20f
+#define JUMP_END_ANIM 0.80f
+#define JUMP_HEIGHT 0.65f 
 
 
 using namespace wgame;
@@ -64,8 +73,10 @@ public:
 private:
     void state();
     void move();
+    void updateCollideHitbox();
     void orientation();
-    void animate();    
+    void animate();  
+    bool canSwap();  
     Vector3D getMovement() const;
     bool intersectionPlatform(
         const Point3D & gazePosition, 
@@ -79,6 +90,7 @@ private:
     Map * _map;
     Platform * _currentPlatform;
 
+    Hitbox _collideHitbox;
     float _speed;
     float _runningFactor;
     System _system;
@@ -90,6 +102,7 @@ private:
     State _state;
     Direction _direction;
     bool _jumping;
+    bool _leap;
     PlatformAnimation _swapAnimation;
 };
 

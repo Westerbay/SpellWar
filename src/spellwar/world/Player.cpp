@@ -17,16 +17,17 @@ Player::Player(Map * map) : GameObject(), _map(map) {
     _state = IDLE;
     _model.setActiveLight(false);
     _model.setTimeAcceleration(ANIMATION_ACCELERATION);
-    this->hitbox.size = Vector3D(0.7f, 1.65f, 0.7f);
+    hitbox.size = HITBOX_SIZE;
 
     Platform & platform = randomChoice(map->getPlatforms());
     Hitbox spawnHitbox = platform.getPlayerSpawn();
-    this->hitbox.orientation = spawnHitbox.orientation;
-    this->hitbox.position = spawnHitbox.position;
-    this->hitbox.move(this->hitbox.size.y * 0.5f, AXIS_Y);
+    hitbox.orientation = spawnHitbox.orientation;
+    hitbox.position = spawnHitbox.position;
+    hitbox.move(hitbox.size.y * 0.5f, AXIS_Y);
     _currentPlatform = &platform;
 
     _jumping = false;
+    _leap = false;
     _swapAnimation = {
         hitbox,
         hitbox,
@@ -42,6 +43,7 @@ GameObject * Player::getCameraObject() {
 void Player::update() {
     state();
     move();
+    updateCollideHitbox();
     orientation();
     animate();    
 }
@@ -205,7 +207,7 @@ void Player::move() {
         Point3D lastPosition = hitbox.position; 
         hitbox.move(movement);
         if (!onPlatform()) {
-            if (_jumping && !_swapAnimation.isSwapping) {
+            if (canSwap()) {
                 Point3D destination;
                 Platform * destPlat = findBestAlignedPlatform(destination);
                 if (!destPlat) {
@@ -220,7 +222,30 @@ void Player::move() {
                 hitbox.position = lastPosition;   
             }             
         }    
-    }   
+    }     
+}
+
+void Player::updateCollideHitbox() {
+    _collideHitbox = hitbox;
+    if (_jumping) {
+        float progress = _model.getAnimationProgress();
+        if (progress > JUMP_START_PROGRESS && progress < JUMP_END_PROGRESS) {
+            float midProgress = (JUMP_START_PROGRESS + JUMP_END_PROGRESS) / 2.0f;
+            float scaleFactor;
+            float moveFactor;
+            
+            if (progress < midProgress) {
+                scaleFactor = 1.0f + ((progress - JUMP_START_PROGRESS) / (midProgress - JUMP_START_PROGRESS)) * (JUMP_HEIGHT - 1.0f);
+                moveFactor = ((progress - JUMP_START_PROGRESS) / (midProgress - JUMP_START_PROGRESS)) * JUMP_HEIGHT;
+            } else {
+                scaleFactor = 1.0f + ((JUMP_END_PROGRESS - progress) / (JUMP_END_PROGRESS - midProgress)) * (JUMP_HEIGHT - 1.0f);
+                moveFactor = ((JUMP_END_PROGRESS - progress) / (JUMP_END_PROGRESS - midProgress)) * JUMP_HEIGHT;
+            }
+            
+            _collideHitbox.size.y *= scaleFactor;
+            _collideHitbox.move(moveFactor, AXIS_Y);
+        }
+    }
 }
 
 void Player::orientation() {
@@ -230,7 +255,7 @@ void Player::orientation() {
     Vector2D mouseMovement = _system.getMouseMovement();
     hitbox.rotateY(mouseMovement.x * _system.getSensibility());
     _camera.increaseAngle(mouseMovement.y * _system.getSensibility());
-    _camera.updatePlayer(hitbox);
+    _camera.updatePlayer(_collideHitbox);
 
     Matrix4D transform = glm::translate(Matrix4D(1.0f), positionModel);
     transform *= Matrix4D(hitbox.orientation);
@@ -238,12 +263,12 @@ void Player::orientation() {
 }
 
 void Player::animate() {
-    if (_jumping && _model.getCurrentAnimation() == "Jump") {
-        _jumping = _model.isRunning();
-    }
-
-    if (_jumping) {
+    if (_jumping) {        
         _model.switchAnimation("Jump", false);
+        if (!_leap) {
+            _model.setAnimationProgress(JUMP_START_ANIM);
+            _leap = true;
+        }
     } else if (_state == IDLE) {
         _model.switchAnimation("Idle", true);
     } else if (_state == STRAFE && _direction == LEFT) {
@@ -256,14 +281,21 @@ void Player::animate() {
         _model.switchAnimation("Run", true);
     } else if (_state == BACK) {
         _model.switchAnimation("Walking", true, true);
-    }     
+    }    
+    
+    if (_jumping && _model.getCurrentAnimation() == "Jump") {
+        if (_model.getAnimationProgress() > JUMP_END_ANIM) {
+            _jumping = false;
+            _leap = false; 
+        }        
+    }
 }
 
 void Player::render() {
     disableCullFace();
     _modelDrawer.draw(_model);
     enableCullFace();
-    _hitboxDrawer.setDrawCuboidData(hitbox, ColorRGB(1.0f, 0.0f, 0.0f));
+    _hitboxDrawer.setDrawCuboidData(_collideHitbox, ColorRGB(1.0f, 0.0f, 0.0f));
     _hitboxDrawer.draw();
 }
 
@@ -294,4 +326,11 @@ bool Player::intersectionPlatform(
 
     intersection += hitbox.orientation[1] * 0.5f * hitbox.size.y;
     return true;
+}
+
+bool Player::canSwap() {
+    bool ok = _jumping && !_swapAnimation.isSwapping;
+    ok &= _model.getCurrentAnimation() == "Jump";
+    ok &= _model.getAnimationProgress() < JUMP_START_ANIM + MIN_SWAP_ANIMATION_KEYFRAME;
+    return ok;
 }

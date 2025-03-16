@@ -51,6 +51,8 @@ public:
         std::vector<Channel> channels
     );    
     std::string getName() const;
+    float progress() const;
+    void setProgress(float progress);
     void setLoop(bool repeat);
     void setRevert(bool revert);
     bool isRunning() const;

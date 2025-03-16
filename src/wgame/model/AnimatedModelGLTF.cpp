@@ -63,6 +63,14 @@ std::string AnimatedModelGLTF::getCurrentAnimation() const {
     return _currentAnimation -> getName();
 }
 
+float AnimatedModelGLTF::getAnimationProgress() const {
+    return _currentAnimation -> progress();
+}
+
+void AnimatedModelGLTF::setAnimationProgress(float progress) {
+    _currentAnimation -> setProgress(progress);
+}
+
 void AnimatedModelGLTF::setTimeAcceleration(float timeAcceleration) {
     _timeAcceleration = timeAcceleration;
 }

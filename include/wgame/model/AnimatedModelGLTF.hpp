@@ -24,6 +24,8 @@ public:
     AnimatedModelGLTF(const std::string & filename);
     std::vector<std::string> getAnimationNames() const;
     std::string getCurrentAnimation() const;
+    float getAnimationProgress() const;
+    void setAnimationProgress(float progress);
     void setTimeAcceleration(float elapsedTime);
     void setLoop(bool loop);
     void setRevert(bool revert);

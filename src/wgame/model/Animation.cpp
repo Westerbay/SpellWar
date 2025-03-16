@@ -32,6 +32,22 @@ std::string Animation::getName() const {
     return _name;
 }
 
+float Animation::progress() const {
+    float ratio = _currentKeyFrameTime - _firstKeyFrameTime;
+    ratio /= _lastKeyFrameTime - _firstKeyFrameTime;
+    if (ratio < 0.0f) {
+        ratio = 0.0f;
+    } else if (ratio > 1.0f) {
+        ratio = 1.0f;
+    }
+    return ratio;
+}
+
+void Animation::setProgress(float progress) {
+    _currentKeyFrameTime = _firstKeyFrameTime;
+    _currentKeyFrameTime += (_lastKeyFrameTime - _firstKeyFrameTime) * progress;
+}
+
 void Animation::setLoop(bool repeat) {
     _repeat = repeat;
 }
