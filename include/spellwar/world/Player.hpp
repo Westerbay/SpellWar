@@ -21,7 +21,9 @@
 #define SPEED 0.08f
 #define RUNNING_FACTOR 2.0f
 #define ANIMATION_ACCELERATION 1.5f
-#define MAX_JUMP_DISTANCE 100.0f
+#define MAX_JUMP_DISTANCE 50.0f
+#define SWAP_ANIMATION_KEYFRAME 0.015f
+
 
 using namespace wgame;
 
@@ -49,9 +51,6 @@ public:
 public:
     Player(Map * map);    
     GameObject * getCameraObject();
-    void state();
-    void move();
-    void animate();
     void swapPlatform(Platform * platform, const Point3D & destination);
     bool onPlatform() const;
     Platform * findBestAlignedPlatform(Point3D & destination);
@@ -63,6 +62,10 @@ public:
         FrostModel();
     };
 private:
+    void state();
+    void move();
+    void orientation();
+    void animate();    
     Vector3D getMovement() const;
     bool intersectionPlatform(
         const Point3D & gazePosition, 
@@ -78,7 +81,6 @@ private:
 
     float _speed;
     float _runningFactor;
-    float _sensibility;
     System _system;
     PlayerCamera _camera;
     FrostModel _model;

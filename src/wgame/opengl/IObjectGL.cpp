@@ -19,6 +19,14 @@ void cullClockwise() {
 void cullCounterClockwise() {
     glFrontFace(GL_CCW); 
 }
+
+void enableCullFace() {
+    glEnable(GL_CULL_FACE);
+}
+
+void disableCullFace() {
+    glDisable(GL_CULL_FACE);
+}
     
 }
 

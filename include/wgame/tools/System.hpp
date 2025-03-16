@@ -16,6 +16,7 @@
 #include "../geometry/Geometry.hpp"
 
 #define PRESS GLFW_PRESS
+#define DEFAULT_SENSIBILITY 0.2f
 
 
 namespace wgame {
@@ -27,6 +28,7 @@ public:
     static void initContext(GLFWwindow * frame);
     static void record();
     static double getTime();
+    static float getSensibility();
     static Point2D getMousePosition();
     static Vector2D getMouseMovement();
     static bool isKeyPressed(Key key); 
@@ -34,6 +36,7 @@ private:
     static GLFWwindow * _frame;
     static Point2D _mousePosition;
     static Vector2D _lastMousePosition;
+    static float _sensibility;
 };
 
 }

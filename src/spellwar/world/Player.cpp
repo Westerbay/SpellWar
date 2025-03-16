@@ -14,7 +14,6 @@
 Player::Player(Map * map) : GameObject(), _map(map) {
     _speed = SPEED;
     _runningFactor = RUNNING_FACTOR;
-    _sensibility = 0.2f;
     _state = IDLE;
     _model.setActiveLight(false);
     _model.setTimeAcceleration(ANIMATION_ACCELERATION);
@@ -43,13 +42,14 @@ GameObject * Player::getCameraObject() {
 void Player::update() {
     state();
     move();
-    animate();
+    orientation();
+    animate();    
 }
 
 void Player::state() {
     if (_swapAnimation.isSwapping) {
         _direction = NONE;
-        _swapAnimation.keyFrame += 0.01f;
+        _swapAnimation.keyFrame += SWAP_ANIMATION_KEYFRAME;
         return;
     }
 
@@ -119,8 +119,7 @@ bool Player::onPlatform() const {
     Hitbox playerHitbox = hitbox;
     float delta = (playerHitbox.size.y + platformHitbox.size.y) * 0.5f;
     playerHitbox.move(-delta, AXIS_Y);
-    Point3D position = playerHitbox.position;
-    return platformHitbox.contains(position);
+    return platformHitbox.contains(playerHitbox.position);
 }
 
 void Player::swapPlatform(Platform * platform, const Point3D & intersectPoint) {
@@ -181,9 +180,9 @@ void Player::move() {
         }
         else {
             Vector3D path = _swapAnimation.destinationHitbox.position - _swapAnimation.startHitbox.position;
-            hitbox.position += path * 0.01f;
+            hitbox.position += path * SWAP_ANIMATION_KEYFRAME;
             Matrix3D pathOrientation = _swapAnimation.destinationHitbox.orientation - _swapAnimation.startHitbox.orientation;
-            hitbox.orientation += pathOrientation * 0.01f;
+            hitbox.orientation += pathOrientation * SWAP_ANIMATION_KEYFRAME;
         }
     } else {
         Vector3D movement = getMovement();
@@ -205,14 +204,16 @@ void Player::move() {
                 hitbox.position = lastPosition;   
             }             
         }    
-    }      
+    }   
+}
 
+void Player::orientation() {
     Vector3D positionModel = hitbox.position;
     positionModel -= hitbox.orientation[1] * hitbox.size.y * 0.5f;
 
     Vector2D mouseMovement = _system.getMouseMovement();
-    hitbox.rotateY(mouseMovement.x * _sensibility);
-    _camera.increaseAngle(mouseMovement.y * _sensibility);
+    hitbox.rotateY(mouseMovement.x * _system.getSensibility());
+    _camera.increaseAngle(mouseMovement.y * _system.getSensibility());
     _camera.updatePlayer(hitbox);
 
     Matrix4D transform = glm::translate(Matrix4D(1.0f), positionModel);
@@ -243,9 +244,9 @@ void Player::animate() {
 }
 
 void Player::render() {
-    glDisable(GL_CULL_FACE);
+    disableCullFace();
     _modelDrawer.draw(_model);
-    glEnable(GL_CULL_FACE);
+    enableCullFace();
     _hitboxDrawer.setDrawCuboidData(hitbox, ColorRGB(1.0f, 0.0f, 0.0f));
     _hitboxDrawer.draw();
 }

@@ -16,9 +16,14 @@ namespace wgame {
 GLFWwindow * System::_frame = nullptr;
 Point2D System::_mousePosition = Point2D(0.0f);
 Point2D System::_lastMousePosition = Point2D(0.0f);
+float System::_sensibility = DEFAULT_SENSIBILITY;
 
 void System::initContext(GLFWwindow * frame) {
     _frame = frame;
+}
+
+float System::getSensibility() {
+    return _sensibility;
 }
 
 void System::record() {

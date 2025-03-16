@@ -24,6 +24,8 @@ public:
 
 void cullClockwise();
 void cullCounterClockwise();
+void enableCullFace();
+void disableCullFace();
 
 }
 
