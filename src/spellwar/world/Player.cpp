@@ -125,7 +125,23 @@ bool Player::onPlatform() const {
 void Player::swapPlatform(Platform * platform, const Point3D & intersectPoint) {
     Hitbox destinationHitbox = hitbox;
     Hitbox platformHitbox = platform -> getHitbox();
+
+    Matrix3D A = _currentPlatform -> getHitbox().orientation;
+    Matrix3D B = hitbox.orientation;
+    Matrix3D R = B * glm::inverse(A);
+    Quaternion q = glm::quat_cast(R);
+    Vector3D euler = glm::eulerAngles(q);
+
     destinationHitbox.orientation = platformHitbox.orientation;
+    if (glm::dot(B[2], platform->getHitbox().orientation[2]) < -0.5f) {
+        euler.y += PI;
+    } else if (glm::dot(B[2], platform->getHitbox().orientation[0]) < -0.5f) {
+        euler.y += PI / 2.0f;
+    } else if (glm::dot(B[2], platform->getHitbox().orientation[0]) > 0.5f) {
+        euler.y -= PI / 2.0f;
+    }
+    destinationHitbox.rotateY(glm::degrees(euler.y));
+
     destinationHitbox.position = intersectPoint;
     destinationHitbox.move(this->hitbox.size.y * 0.5f, AXIS_Y);
     _currentPlatform = platform;

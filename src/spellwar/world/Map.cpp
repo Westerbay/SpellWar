@@ -91,8 +91,8 @@ void Map::constructPlatform(
         Vector3D rotationAxis = glm::cross(platform.orientation[1], platformToCenter);
         if (glm::length(rotationAxis) > 0.0001f) {
             rotationAxis = glm::normalize(rotationAxis);
-            glm::mat4 rotation = glm::rotate(glm::mat4(1.0f), theta, rotationAxis);
-            platform.orientation = glm::mat3(rotation) * platform.orientation;
+            Matrix4D rotation = glm::rotate(Matrix4D(1.0f), theta, rotationAxis);
+            platform.orientation = Matrix3D(rotation) * platform.orientation;
         }
     }                 
     hitboxPlatform = platform;            
