@@ -34,7 +34,7 @@ void Light::renderBackground() {
     model = glm::rotate(model, glm::radians(_angle * SUN_ROTATION), AXIS_Y);
     model = glm::scale(model, Vector3D(LIGHT_SIZE));
     _sun.setTransform(model);
-    _drawer.drawStatic(_sun);
+    _drawer.draw(_sun, Drawer::BACKGROUND);
 }
 
 Light::Sun::Sun() : StaticModelGLTF(SUN_ASSET) {}

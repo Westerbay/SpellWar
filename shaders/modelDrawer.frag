@@ -1,20 +1,24 @@
 #version 430 core
 
+#define BACKGROUND_MODE 0
+#define WORLD_MODE 1
+#define HUD_MODE 2
+
 struct LightInfo {
     vec4 cameraPosition; 
     vec4 position;
     vec4 color;    
-    int display;
-    float ambient;
-    float specularFactor; 
-    int specularExponent;
+    bool display;
+    float defaultAmbient;
+    float defaultSpecularFactor; 
+    int defaultSpecularExponent;
 };
 
 layout(std140, binding = 1) uniform LightBlock {
     LightInfo light;
 };
 
-in vec3 currentPosition;
+in vec3 fragPosition;
 in vec3 fragTangent;
 in vec3 fragBitangent;
 in vec3 fragNormal;
@@ -34,6 +38,7 @@ uniform float metallicFactor;
 uniform float roughnessFactor;  
 
 uniform bool activeLight;
+uniform int drawMode;
 
 
 const vec3 F0_DIELECTRIC = vec3(0.04);
@@ -72,7 +77,7 @@ void main() {
     vec4 baseColor = texture(textureDiffuse, texCoord0) * baseColorFactor;
     if (baseColor.a <= alphaThreshold) discard;
 
-    if (light.display != 0 && activeLight) {
+    if (light.display && activeLight && drawMode == WORLD_MODE) {
 
         vec2 metallicRoughness = hasMetallicRoughness ? texture(textureMetallicRoughness, texCoord0).bg : vec2(0.0);    
         float metallic = metallicRoughness.r * metallicFactor;
@@ -80,8 +85,8 @@ void main() {
         
         vec3 normal = hasNormalMap ? getNormalFromMap() : normalize(fragNormal);
 
-        vec3 lightDir = normalize(light.position.xyz - currentPosition);
-        vec3 viewDir = normalize(light.cameraPosition.xyz - currentPosition);
+        vec3 lightDir = normalize(light.position.xyz - fragPosition);
+        vec3 viewDir = normalize(light.cameraPosition.xyz - fragPosition);
         vec3 halfVec = normalize(lightDir + viewDir);
 
         float NdotL = max(dot(normal, lightDir), 0.0);
@@ -101,7 +106,7 @@ void main() {
         vec3 lightColor = light.color.rgb;
         vec3 color = (diffuse + specular) * lightColor * NdotL;
         
-        color += baseColor.rgb * light.ambient;
+        color += baseColor.rgb * light.defaultAmbient;
 
         fragColor = vec4(color, baseColor.a);
     } 

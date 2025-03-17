@@ -1,5 +1,14 @@
 #version 430 core
 
+
+#define BACKGROUND_MODE 0
+#define WORLD_MODE 1
+#define HUD_MODE 2
+
+#define MAX_JOINTS 1000
+#define MAX_TRANSFORMS 10000
+
+
 layout(location = 0) in vec3 aPos;
 layout(location = 2) in vec3 aNormal;
 layout(location = 3) in vec2 aTexCoord0;
@@ -13,24 +22,35 @@ layout(std140, binding = 0) uniform CameraMatrices {
 };
 
 layout(std140, binding = 2) uniform JointsBlock {
-    mat4 jointsMatrices[1000];
+    mat4 jointsMatrices[MAX_JOINTS];
 };
 
 layout(std430, binding = 5) buffer TransformsBlock {
-    mat4 transformsModel[10000];
+    mat4 transformsModel[MAX_TRANSFORMS];
 };
 
-out vec3 currentPosition;
+out vec3 fragPosition;
 out vec3 fragNormal;
-out vec2 texCoord0;
 out vec3 fragTangent;
 out vec3 fragBitangent;
+out vec2 texCoord0;
 
 uniform bool isAnimated;
-uniform int drawInstanced;
-uniform mat4 model;
-
 uniform bool hasNormalMap;
+
+uniform mat4 model;
+uniform int drawInstanced;
+uniform int drawMode;
+
+vec4 getGLPosition(vec3 position, int mode) {
+    if (mode == BACKGROUND_MODE) {
+        return cameraMatrixStatic * vec4(position, 1.0);
+    }
+    if (mode == WORLD_MODE) {
+        return cameraMatrixDynamic * vec4(position, 1.0);
+    }
+    return vec4(position, 1.0);
+}
 
 void main() {
 
@@ -47,15 +67,14 @@ void main() {
             skinningMatrix += aWeight[i] * jointsMatrices[aJoint[i]];
         }
         fragNormal = transpose(inverse(mat3(skinningMatrix))) * aNormal;
-        fragNormal = mat3(transpose(inverse(transform))) * fragNormal;
-        currentPosition = vec3(transform * skinningMatrix * vec4(aPos, 1.0));
-        gl_Position = cameraMatrixDynamic * transform * skinningMatrix * vec4(aPos, 1.0);
+        fragNormal = transpose(inverse(mat3(transform))) * fragNormal;
+        fragPosition = vec3(transform * skinningMatrix * vec4(aPos, 1.0));
     } else {
         fragNormal = transpose(inverse(mat3(transform))) * aNormal;
-        currentPosition = vec3(transform * vec4(aPos, 1.0));
-        gl_Position = cameraMatrixDynamic * transform * vec4(aPos, 1.0);
+        fragPosition = vec3(transform * vec4(aPos, 1.0));
     }    
 
+    gl_Position = getGLPosition(fragPosition, drawMode);
     texCoord0 = aTexCoord0;
 
     if (hasNormalMap) {
