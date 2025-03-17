@@ -12,18 +12,18 @@
 
 namespace wgame {
 
-std::weak_ptr<ColorDrawer::ColorDrawerShader> ColorDrawer::_uniqueColorShader;
+std::weak_ptr<ColorDrawer::ColorDrawerShader> ColorDrawer::_uniqueShader;
 
 ColorDrawer::ColorDrawer() {
-    _shaderColor = _uniqueColorShader.lock();
-    if (!_shaderColor) {
-        _shaderColor = std::make_shared<ColorDrawerShader>();
-        _uniqueColorShader = _shaderColor;
+    _shader = _uniqueShader.lock();
+    if (!_shader) {
+        _shader = std::make_shared<ColorDrawerShader>();
+        _uniqueShader = _shader;
     }
 }
 
 void ColorDrawer::setDrawCuboidData(const Cuboid & cuboid, const ColorRGB & color) {
-    _vaos.resize(1);
+    vaos.resize(1);
     std::vector<Point3D> vertices = cuboid.getVertices();
     std::vector<ColorRGB> colors = {
         color, color, color, color,
@@ -34,9 +34,9 @@ void ColorDrawer::setDrawCuboidData(const Cuboid & cuboid, const ColorRGB & colo
         4, 5, 5, 6, 6, 7, 7, 4, 
         1, 5, 2, 6, 0, 4, 3, 7        
     };
-    _vaos[0].setEBO(elements);
-    _vaos[0].setVBO(VBO_VERTEX, vertices);
-    _vaos[0].setVBO(VBO_COLOR, colors);
+    vaos[0].setEBO(elements);
+    vaos[0].setVBO(VBO_VERTEX, vertices);
+    vaos[0].setVBO(VBO_COLOR, colors);
 }
 
 void ColorDrawer::setFillCuboidData(
@@ -46,7 +46,7 @@ void ColorDrawer::setFillCuboidData(
     setFillCuboidData(cuboid);
     for (int i = 0; i < 6; i ++) {
         std::vector<Vector3D> vboColors = {colors[i], colors[i], colors[i], colors[i]};
-        _vaos[i].setVBO(VBO_COLOR, vboColors);
+        vaos[i].setVBO(VBO_COLOR, vboColors);
     }
 }
 
@@ -57,7 +57,7 @@ void ColorDrawer::setFillSphereData(
 ) {
     std::vector<ColorRGB> colors(stacks * slices, color);    
     setFillSphereData(sphere, stacks, slices);
-    _vaos[0].setVBO(VBO_COLOR, colors);
+    vaos[0].setVBO(VBO_COLOR, colors);
 }
 
 void ColorDrawer::setFillSphereData(
@@ -71,38 +71,44 @@ void ColorDrawer::setFillSphereData(
 
     sphere.generateSphere(elements, normals, vertices, stacks, slices);
 
-    _vaos.resize(1);
-    _vaos[0].setEBO(elements);
-    _vaos[0].setVBO(VBO_VERTEX, vertices);
-    _vaos[0].setVBO(VBO_NORMAL, normals);
+    vaos.resize(1);
+    vaos[0].setEBO(elements);
+    vaos[0].setVBO(VBO_VERTEX, vertices);
+    vaos[0].setVBO(VBO_NORMAL, normals);
 }
 
 void ColorDrawer::setFillCuboidData(const Cuboid & cuboid) {
     std::vector<std::vector<Point3D>> vertices = cuboid.getVerticesPerFace();
     std::vector<std::vector<Vector3D>> normals = cuboid.getNormalsPerFace();
     std::vector<std::vector<unsigned>> elements = cuboid.getElementsPerFace();    
-    _vaos.resize(6);
+    vaos.resize(6);
     for (int i = 0; i < 6; i ++) {
-        _vaos[i].setVBO(VBO_VERTEX, vertices[i]);
-        _vaos[i].setVBO(VBO_NORMAL, normals[i]);
-        _vaos[i].setEBO(elements[i]);
+        vaos[i].setVBO(VBO_VERTEX, vertices[i]);
+        vaos[i].setVBO(VBO_NORMAL, normals[i]);
+        vaos[i].setEBO(elements[i]);
     }
 }
 
-void ColorDrawer::draw(const Matrix4D & model) {
-    _shaderColor -> bind();
-    _shaderColor -> setUniform("model", model);
-    _vaos[0].draw(DRAW_LINES);
-    _shaderColor -> unbind();
+void ColorDrawer::draw(const Matrix4D & model, Mode mode) {
+    _shader -> bind();
+    _shader -> setUniform("model", model);
+    _shader -> setUniform("activeLight", activeLight);
+    _shader -> setUniform("drawMode", (int) mode);
+    _shader -> setUniform("drawInstanced", false);
+    vaos[0].draw(DRAW_LINES);
+    _shader -> unbind();
 }
 
-void ColorDrawer::fill(const Matrix4D & model) {
-    _shaderColor -> bind();
-    _shaderColor -> setUniform("model", model);
-    for (VertexArrayObject & vao: _vaos) {
+void ColorDrawer::fill(const Matrix4D & model, Mode mode) {
+    _shader -> bind();
+    _shader -> setUniform("model", model);
+    _shader -> setUniform("activeLight", activeLight);
+    _shader -> setUniform("drawMode", (int) mode);
+    _shader -> setUniform("drawInstanced", false);
+    for (VertexArrayObject & vao: vaos) {
         vao.draw(DRAW_TRIANGLES);
     }  
-    _shaderColor -> unbind();
+    _shader -> unbind();
 }
 
 ColorDrawer::ColorDrawerShader::ColorDrawerShader() : 

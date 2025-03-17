@@ -12,11 +12,13 @@
 
 
 #include "../opengl/Shader.hpp"
+#include "../opengl/VertexArrayObject.hpp"
 #include "../opengl/ShaderStorageBufferObject.hpp"
 #include "../geometry/Geometry.hpp"
 
 #include <memory>
 #include <map>
+#include <vector>
 
 #define BINDING_POINT_TRANSFORMS 5
 
@@ -36,10 +38,11 @@ public:
 protected:
     std::map<int, std::unique_ptr<ShaderStorageBufferObject>> instances;
 	std::map<int, size_t> numberOfInstances;
+    std::vector<VertexArrayObject> vaos;
     bool activeLight = true;
 };
-        
-#endif
 
 }
+
+#endif
 

@@ -10,23 +10,17 @@
 #ifndef __WG_COLOR_DRAWER_H__
 #define __WG_COLOR_DRAWER_H__
 
-#include "../opengl/VertexArrayObject.hpp"
-#include "../opengl/Shader.hpp"
+#include "Drawer.hpp"
 #include "../geometry/Cuboid.hpp"
 #include "../geometry/Sphere.hpp"
-
-#include <memory>
 
 #define COLOR_DRAWER_VERTEX_SHADER_PATH "shaders/colorDrawer.vert"
 #define COLOR_DRAWER_FRAGMENT_SHADER_PATH "shaders/colorDrawer.frag"
 
-#define LIGHT_VERTEX_SHADER_PATH "shaders/lightDrawer.vert"
-#define LIGHT_FRAGMENT_SHADER_PATH "shaders/lightDrawer.frag"
-
 
 namespace wgame {
 
-class ColorDrawer {
+class ColorDrawer : public Drawer {
 public:
     ColorDrawer();
     void setDrawCuboidData(
@@ -48,17 +42,16 @@ public:
         unsigned int stacks, 
         unsigned int slices
     );
-    void draw(const Matrix4D & model = Matrix4D(1.0f));    
-    void fill(const Matrix4D & model = Matrix4D(1.0f));
+    void draw(const Matrix4D & model = Matrix4D(1.0f), Mode mode = WORLD);    
+    void fill(const Matrix4D & model = Matrix4D(1.0f), Mode mode = WORLD);
 public:
     class ColorDrawerShader : public Shader {
     public:
         ColorDrawerShader();
     };
 private:
-    static std::weak_ptr<ColorDrawerShader> _uniqueColorShader;
-    std::shared_ptr<ColorDrawerShader> _shaderColor;
-    std::vector<VertexArrayObject> _vaos;
+    static std::weak_ptr<ColorDrawerShader> _uniqueShader;
+    std::shared_ptr<ColorDrawerShader> _shader;
 };
 
 }

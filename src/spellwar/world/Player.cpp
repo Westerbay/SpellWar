@@ -15,7 +15,6 @@ Player::Player(Map * map) : GameObject(), _map(map) {
     _speed = SPEED;
     _runningFactor = RUNNING_FACTOR;
     _state = IDLE;
-    _model.setActiveLight(false);
     _model.setTimeAcceleration(ANIMATION_ACCELERATION);
     hitbox.size = HITBOX_SIZE;
 
@@ -34,6 +33,9 @@ Player::Player(Map * map) : GameObject(), _map(map) {
         0.0f, 
         false
     };
+
+    _hitboxDrawer.setActiveLight(false);
+    _modelDrawer.setActiveLight(false);
 }
 
 GameObject * Player::getCameraObject() {
@@ -102,6 +104,9 @@ Vector3D Player::getMovement() const {
             break;
         case BACK:
             movement.z = -_speed;
+            break;
+        case IDLE:
+        case STRAFE:
             break;
     }
     if (_direction != NONE) {        
