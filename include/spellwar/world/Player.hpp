@@ -64,7 +64,8 @@ public:
     bool onPlatform() const;
     Platform * findBestAlignedPlatform(Point3D & destination);
     void update() override;
-    void render() override;    
+    void render() override; 
+    void renderHUD() override;   
 public:
     class FrostModel : public AnimatedModelGLTF {
     public:
@@ -98,6 +99,8 @@ private:
     FrostModel _model;
     ModelDrawer _modelDrawer;
     ColorDrawer _hitboxDrawer;
+    ColorDrawer _visionIndicator;
+    Matrix4D _transformHUD;
 
     State _state;
     Direction _direction;

@@ -1,5 +1,9 @@
 #version 430 core
 
+#define BACKGROUND_MODE 0
+#define WORLD_MODE 1
+#define HUD_MODE 2
+
 struct LightInfo {
     vec4 cameraPosition; 
     vec4 position;
@@ -20,8 +24,10 @@ in vec3 color;
 
 out vec4 fragColor;
 
+uniform int drawMode;
+
 void main() {
-    if (light.display) {
+    if (light.display && drawMode == WORLD_MODE) {
         vec3 normal = normalize(fragNormal);
         vec3 lightDirection = normalize(light.position.xyz - fragPosition);
         float diffuse = max(dot(normal, lightDirection), 0.0);

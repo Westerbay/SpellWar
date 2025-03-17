@@ -36,6 +36,17 @@ Player::Player(Map * map) : GameObject(), _map(map) {
 
     _hitboxDrawer.setActiveLight(false);
     _modelDrawer.setActiveLight(false);
+
+    Sphere sphere(Point3D(0.0f), 0.004f);
+    _visionIndicator.setFillSphereData(
+        sphere, ColorRGB(1.0f), 40, 40
+    );
+    _transformHUD = glm::perspective(
+        glm::radians(60.0f), 
+        (float) 16 / 9,
+         0.01f, 
+         100.0f
+    );
 }
 
 GameObject * Player::getCameraObject() {
@@ -302,6 +313,10 @@ void Player::render() {
     enableCullFace();
     _hitboxDrawer.setDrawCuboidData(_collideHitbox, ColorRGB(1.0f, 0.0f, 0.0f));
     _hitboxDrawer.draw();
+}
+
+void Player::renderHUD() {
+    _visionIndicator.fill(_transformHUD, Drawer::HUD);
 }
 
 

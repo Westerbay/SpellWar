@@ -1,5 +1,9 @@
 #version 430 core
 
+#define BACKGROUND_MODE 0
+#define WORLD_MODE 1
+#define HUD_MODE 2
+
 struct LightInfo {
     vec4 cameraPosition; 
     vec4 position;
@@ -30,6 +34,8 @@ uniform float heightScale;
 uniform bool activeParallaxMapping;
 
 uniform bool activeLight;
+
+uniform int drawMode;
 
 
 vec2 parallaxMapping(vec2 texCoords, vec3 viewDir) {
@@ -63,7 +69,7 @@ vec2 parallaxMapping(vec2 texCoords, vec3 viewDir) {
 }
 
 void main() {
-    if (light.display && activeLight) {
+    if (light.display && activeLight && drawMode == WORLD_MODE) {
         vec3 normal;
         vec2 newTexCoord;
         vec3 viewDirection = normalize(tangentViewPos - tangentFragPos);
