@@ -12,20 +12,13 @@
 
 namespace wgame {
 
-std::weak_ptr<TextureDrawer::TextureDrawerShader> TextureDrawer::_uniqueTextureShader;
-std::weak_ptr<TextureDrawer::ParallaxDrawerShader> TextureDrawer::_uniqueParallaxShader;
+std::weak_ptr<TextureDrawer::TextureDrawerShader> TextureDrawer::_uniqueShader;
 
 TextureDrawer::TextureDrawer() {
-    _textureShader = _uniqueTextureShader.lock();
-    if (!_textureShader) {
-        _textureShader = std::make_shared<TextureDrawerShader>();
-        _uniqueTextureShader = _textureShader;
-    }
-
-    _parallaxShader = _uniqueParallaxShader.lock();
-    if (!_parallaxShader) {
-        _parallaxShader = std::make_shared<ParallaxDrawerShader>();
-        _uniqueParallaxShader = _parallaxShader;
+    _shader = _uniqueShader.lock();
+    if (!_shader) {
+        _shader = std::make_shared<TextureDrawerShader>();
+        _uniqueShader = _shader;
     }
 }
 
@@ -37,61 +30,74 @@ void TextureDrawer::setCuboidData(
     std::vector<std::vector<Vector3D>> normals = cuboid.getNormalsPerFace();
     std::vector<std::vector<Vector3D>> tangents = cuboid.getTangentsPerFace();
     std::vector<std::vector<unsigned>> elements = cuboid.getElementsPerFace();
-    _vaos.resize(6);
-    for (int i = 0; i < 6; i ++) {
-        _vaos[i].setVBO(VBO_VERTEX, vertices[i]);
-        _vaos[i].setVBO(VBO_NORMAL, normals[i]);
-        _vaos[i].setVBO(VBO_TEXCOORD_0, texCoords[i]);
-        _vaos[i].setVBO(VBO_TANGENTS, tangents[i]);
-        _vaos[i].setEBO(elements[i]);
+    vaos.resize(6);
+    for (size_t i = 0; i < vaos.size(); i ++) {
+        vaos[i].setVBO(VBO_VERTEX, vertices[i]);
+        vaos[i].setVBO(VBO_NORMAL, normals[i]);
+        vaos[i].setVBO(VBO_TEXCOORD_0, texCoords[i]);
+        vaos[i].setVBO(VBO_TANGENTS, tangents[i]);
+        vaos[i].setEBO(elements[i]);
     }
 }
 
-void TextureDrawer::draw(const std::vector<Texture2D *> & textures) {
-    _textureShader -> bind();    
-    _textureShader -> setUniform("colorSampler", 0);
+void TextureDrawer::draw(
+    const std::vector<Texture2D *> & textures, 
+    const Matrix4D & model, 
+    Mode mode
+) {
+    _shader -> bind();    
+    _shader -> setUniform("model", model);
+    _shader -> setUniform("activeLight", activeLight);
+    _shader -> setUniform("drawMode", (int) mode);
+    _shader -> setUniform("drawInstanced", false);
+    _shader -> setUniform("diffuseMap", 0);
+    _shader -> setUniform("activeParallaxMapping", false); 
     glActiveTexture(GL_TEXTURE0);  
-    for (size_t i = 0; i < _vaos.size(); i ++) {              
+    for (size_t i = 0; i < vaos.size(); i ++) {              
         textures[i] -> bind();
-        _vaos[i].draw(DRAW_TRIANGLES);
+        vaos[i].draw(DRAW_TRIANGLES);
         textures[i] -> unbind();
     }
-    _textureShader -> unbind();
+    _shader -> unbind();
 }
 
 void TextureDrawer::draw(
     const std::vector<Texture2D *> & diffuses,
     const std::vector<Texture2D *> & normals,
     const std::vector<Texture2D *> & heights,
-    float heightScale
+    float heightScale,
+    const Matrix4D & model, 
+    Mode mode
 ) {
-    _parallaxShader -> bind();  
-    _parallaxShader -> setUniform("diffuseMap", 0);  
-    _parallaxShader -> setUniform("normalMap", 1);
-    _parallaxShader -> setUniform("depthMap", 2);   
-    _parallaxShader -> setUniform("heightScale", heightScale);  
-    _parallaxShader -> setUniform("model", Matrix4D(1.0f));
-    for (size_t i = 0; i < _vaos.size(); i ++) {    
+    _shader -> bind();  
+    _shader -> setUniform("model", model);
+    _shader -> setUniform("activeLight", activeLight);
+    _shader -> setUniform("drawMode", (int) mode);
+    _shader -> setUniform("drawInstanced", false);
+    _shader -> setUniform("activeParallaxMapping", true);  
+    _shader -> setUniform("diffuseMap", 0);  
+    _shader -> setUniform("normalMap", 1);
+    _shader -> setUniform("depthMap", 2);   
+    _shader -> setUniform("heightScale", heightScale);  
+    _shader -> setUniform("model", Matrix4D(1.0f));
+    for (size_t i = 0; i < vaos.size(); i ++) {    
         glActiveTexture(GL_TEXTURE0);                
         diffuses[i] -> bind();
         glActiveTexture(GL_TEXTURE1);                   
         normals[i] -> bind();
         glActiveTexture(GL_TEXTURE2);                
         heights[i] -> bind();
-        _vaos[i].draw(DRAW_TRIANGLES);
+        vaos[i].draw(DRAW_TRIANGLES);
         heights[i] -> unbind();
         normals[i] -> unbind();
         diffuses[i] -> unbind();
     }
-    _parallaxShader -> unbind();
+    _shader -> unbind();
 }
  
 TextureDrawer::TextureDrawerShader::TextureDrawerShader() : 
 Shader(TEXTURE_DRAWER_VERTEX_SHADER_PATH, TEXTURE_DRAWER_FRAGMENT_SHADER_PATH) {}
  
-TextureDrawer::ParallaxDrawerShader::ParallaxDrawerShader() :
-Shader(PARALLAX_DRAWER_VERTEX_SHADER_PATH, PARALLAX_DRAWER_FRAGMENT_SHADER_PATH) {}
-
 }
  
  
