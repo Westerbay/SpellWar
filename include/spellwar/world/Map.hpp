@@ -15,6 +15,10 @@
 
 #define TEX_SCALE 10.0f
 
+#define PLATFORM_DIFFUSE "assets/materials/platform/diffuse.bmp"
+#define PLATFORM_NORMAL "assets/materials/platform/normal.bmp"
+#define PLATFORM_HEIGHT "assets/materials/platform/height.bmp"
+
 
 using namespace wgame;
 
@@ -40,7 +44,9 @@ private:
     std::vector<std::unique_ptr<Decoration>> _decorations;
 	std::vector<Platform> _platforms;    
 private:
-	Texture2D _diffuse;
+	Texture2D _diffuse;    
+    Texture2D _normal;
+    Texture2D _height;
     ModelDrawer _modelDrawer;
     ColorDrawer _hitboxDrawer; 
     std::vector<TextureDrawer> _platformDrawers;       

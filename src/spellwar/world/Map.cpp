@@ -11,11 +11,23 @@
 
 
 Map::Map(const Hitbox & hitbox) : GameObject(hitbox) {
-    Image image("assets/moon.bmp");
+    Image image(PLATFORM_DIFFUSE);
     _diffuse.setType(TEXTURE_2D);
     _diffuse.setInterpolationMode(GL_LINEAR);
     _diffuse.setRepeatMode(GL_REPEAT);
-    _diffuse.setData(image);
+    _diffuse.setData(image);    
+
+    Image imageNormal(PLATFORM_NORMAL);
+    _normal.setType(TEXTURE_2D);
+    _normal.setInterpolationMode(GL_LINEAR);
+    _normal.setRepeatMode(GL_REPEAT);
+    _normal.setData(imageNormal);
+
+    Image imageHeight(PLATFORM_HEIGHT);
+    _height.setType(TEXTURE_2D);
+    _height.setInterpolationMode(GL_LINEAR);
+    _height.setRepeatMode(GL_REPEAT);
+    _height.setData(imageHeight);
     
     _decorations.push_back(std::make_unique<PinkTree>());
     _decorations.push_back(std::make_unique<FantasyPlant>());
@@ -125,6 +137,20 @@ void Map::render() {
             &_diffuse,
             &_diffuse,
             &_diffuse
+        }, {
+            &_normal,
+            &_normal,
+            &_normal,
+            &_normal,
+            &_normal,
+            &_normal
+        }, {
+            &_height,
+            &_height,
+            &_height,
+            &_height,
+            &_height,
+            &_height
         });
     }  
 		
