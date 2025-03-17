@@ -31,20 +31,20 @@ void GameLight::setLightColor(const Vector3D & lightColor) {
     _lightInfo.color = Vector4D(lightColor, 1.0f);
 }
 
-void GameLight::setDisplayLight(int displayLight) {
+void GameLight::setDisplayLight(bool displayLight) {
     _lightInfo.display = displayLight;
 }
 
-void GameLight::setAmbientLighting(float ambient) {
-    _lightInfo.ambient = ambient;
+void GameLight::setDefaultAmbientLighting(float ambient) {
+    _lightInfo.defaultAmbient = ambient;
 }
 
-void GameLight::setSpecularFactor(float specularFactor) {
-    _lightInfo.specularFactor = specularFactor;
+void GameLight::setDefaultSpecularFactor(float specularFactor) {
+    _lightInfo.defaultSpecularFactor = specularFactor;
 }
 
-void GameLight::setSpecularExponent(int specularExponent) {
-    _lightInfo.specularExponent = specularExponent;
+void GameLight::setDefaultSpecularExponent(int specularExponent) {
+    _lightInfo.defaultSpecularExponent = specularExponent;
 }
 
 void GameLight::apply(const Point3D & cameraPosition) {

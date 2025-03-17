@@ -13,6 +13,14 @@ Light::Light(GameLight * gameLight) : GameObject() {
     _gameLight = gameLight;
     _angle = 0.0f;
     _color = ColorRGB(1.0f, 1.0f, 1.0f);
+    
+
+    _gameLight -> setDisplayLight(true);
+    _gameLight -> setPosition(LIGHT_POSITION);
+    _gameLight -> setDefaultAmbientLighting(DEFAULT_AMBIENT);
+    _gameLight -> setDefaultSpecularFactor(DEFAULT_SPECULAR_FACTOR);
+    _gameLight -> setDefaultSpecularExponent(DEFAULT_SPECULAR_EXPONENT);
+
     update();
 }
 

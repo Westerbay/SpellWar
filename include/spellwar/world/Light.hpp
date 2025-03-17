@@ -16,6 +16,11 @@
 #define LIGHT_SIZE 0.003f
 #define LIGHT_DISTANCE_TO_WORLD 100000.0f
 
+#define LIGHT_POSITION Point3D(0.0f, 500.0f, 0.0f)
+#define DEFAULT_AMBIENT 0.25f
+#define DEFAULT_SPECULAR_FACTOR 0.3f
+#define DEFAULT_SPECULAR_EXPONENT 4
+
 #define SUN_ROTATION 5.0f
 #define SUN_ASSET "assets/model/sun/scene.gltf"
 

@@ -22,10 +22,10 @@ struct LightInfo {
     Point4D cameraPosition; 
     Point4D position; 
     Vector4D color;
-    int display;
-    float ambient;
-    float specularFactor; 
-    int specularExponent;
+    bool display;
+    float defaultAmbient;
+    float defaultSpecularFactor; 
+    int defaultSpecularExponent;
 };
 
 class GameLight {
@@ -33,10 +33,10 @@ public:
     GameLight();
     void setPosition(const Point3D & position);
     void setLightColor(const Vector3D & lightColor);
-    void setDisplayLight(int displayLight);
-    void setAmbientLighting(float ambient);
-    void setSpecularFactor(float specularFactor);
-    void setSpecularExponent(int specularExponent);
+    void setDisplayLight(bool displayLight);
+    void setDefaultAmbientLighting(float ambient);
+    void setDefaultSpecularFactor(float specularFactor);
+    void setDefaultSpecularExponent(int specularExponent);
     void apply(const Point3D & cameraPosition);
 private:
     LightInfo _lightInfo;
