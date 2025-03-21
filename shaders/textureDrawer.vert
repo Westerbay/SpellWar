@@ -9,6 +9,13 @@ layout(location = 2) in vec3 aNormal;
 layout(location = 3) in vec2 aTexCoord;
 layout(location = 7) in vec3 aTangent;
 
+
+struct CameraMatrices {
+    mat4 background;
+    mat4 world;   
+    mat4 HUD; 
+};
+
 struct LightInfo {
     vec4 cameraPosition; 
     vec4 position;
@@ -19,14 +26,14 @@ struct LightInfo {
     int defaultSpecularExponent;
 };
 
+layout(std140, binding = 0) uniform CameraBlock {
+    CameraMatrices cameraMatrices;
+};
+
 layout(std140, binding = 1) uniform LightBlock {
     LightInfo light;
 };
 
-layout(std140, binding = 0) uniform CameraMatrices {
-    mat4 cameraMatrixStatic;
-    mat4 cameraMatrixDynamic;
-};
 
 out vec3 fragNormal;
 out vec2 texCoord;
@@ -41,12 +48,12 @@ uniform bool activeParallaxMapping;
 
 vec4 getGLPosition(vec3 position, int mode) {
     if (mode == BACKGROUND_MODE) {
-        return cameraMatrixStatic * vec4(position, 1.0);
+        return cameraMatrices.background * vec4(position, 1.0);
     }
     if (mode == WORLD_MODE) {
-        return cameraMatrixDynamic * vec4(position, 1.0);
+        return cameraMatrices.world * vec4(position, 1.0);
     }
-    return vec4(position, 1.0);
+    return cameraMatrices.HUD * vec4(position, 1.0);
 }
 
 void main() {

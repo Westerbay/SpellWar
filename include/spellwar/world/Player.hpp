@@ -100,7 +100,6 @@ private:
     ModelDrawer _modelDrawer;
     ColorDrawer _hitboxDrawer;
     ColorDrawer _visionIndicator;
-    Matrix4D _transformHUD;
 
     State _state;
     Direction _direction;

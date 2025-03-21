@@ -8,9 +8,14 @@ layout(location = 0) in vec3 aPos;
 layout(location = 1) in vec3 aColor;
 layout(location = 2) in vec3 aNormal;
 
-layout(std140, binding = 0) uniform CameraMatrices {
-    mat4 cameraMatrixStatic;
-    mat4 cameraMatrixDynamic;
+struct CameraMatrices {
+    mat4 background;
+    mat4 world;   
+    mat4 HUD; 
+};
+
+layout(std140, binding = 0) uniform CameraBlock {
+    CameraMatrices cameraMatrices;
 };
 
 out vec3 fragPosition;
@@ -23,12 +28,12 @@ uniform int drawMode;
 
 vec4 getGLPosition(vec3 position, int mode) {
     if (mode == BACKGROUND_MODE) {
-        return cameraMatrixStatic * vec4(position, 1.0);
+        return cameraMatrices.background * vec4(position, 1.0);
     }
     if (mode == WORLD_MODE) {
-        return cameraMatrixDynamic * vec4(position, 1.0);
+        return cameraMatrices.world * vec4(position, 1.0);
     }
-    return vec4(position, 1.0);
+    return cameraMatrices.HUD * vec4(position, 1.0);
 }
 
 void main() {

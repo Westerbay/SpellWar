@@ -25,8 +25,9 @@
 namespace wgame {
 
 struct CameraMatrices {
-    Matrix4D cameraMatrixStatic;
-    Matrix4D cameraMatrixDynamic;    
+    Matrix4D background;
+    Matrix4D world;   
+    Matrix4D HUD; 
 };
 
 class GameCamera : public GameObject {
@@ -45,7 +46,7 @@ private:
     float _nearPlane;
     float _farPlane;
     GameObject * _attachedObject;
-    CameraMatrices _matrices;
+    CameraMatrices _cameraMatrices;
 };
 
 }

@@ -8,6 +8,11 @@
 #define MAX_JOINTS 1000
 #define MAX_TRANSFORMS 10000
 
+struct CameraMatrices {
+    mat4 background;
+    mat4 world;   
+    mat4 HUD; 
+};
 
 layout(location = 0) in vec3 aPos;
 layout(location = 2) in vec3 aNormal;
@@ -16,9 +21,8 @@ layout(location = 5) in ivec4 aJoint;
 layout(location = 6) in vec4 aWeight;
 layout(location = 7) in vec3 aTangent;
 
-layout(std140, binding = 0) uniform CameraMatrices {
-    mat4 cameraMatrixStatic;
-    mat4 cameraMatrixDynamic;
+layout(std140, binding = 0) uniform CameraBlock {
+    CameraMatrices cameraMatrices;
 };
 
 layout(std140, binding = 2) uniform JointsBlock {
@@ -44,12 +48,12 @@ uniform int drawMode;
 
 vec4 getGLPosition(vec3 position, int mode) {
     if (mode == BACKGROUND_MODE) {
-        return cameraMatrixStatic * vec4(position, 1.0);
+        return cameraMatrices.background * vec4(position, 1.0);
     }
     if (mode == WORLD_MODE) {
-        return cameraMatrixDynamic * vec4(position, 1.0);
+        return cameraMatrices.world * vec4(position, 1.0);
     }
-    return vec4(position, 1.0);
+    return cameraMatrices.HUD * vec4(position, 1.0);
 }
 
 void main() {

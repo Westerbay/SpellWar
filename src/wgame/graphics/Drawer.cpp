@@ -18,7 +18,7 @@ void Drawer::setActiveLight(bool activeLight) {
 
 void Drawer::configureInstances(const std::vector<Matrix4D> & transforms, int id) {
     if (instances.find(id) == instances.end()) {
-        instances[id] = std::make_unique<ShaderStorageBufferObject>();
+        instances[id] = std::make_shared<ShaderStorageBufferObject>();
     }
     instances[id] -> configure(transforms.size() * sizeof(Matrix4D));
     instances[id] -> setData(transforms.data(), transforms.size() * sizeof(Matrix4D));

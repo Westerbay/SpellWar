@@ -17,7 +17,7 @@ GameCamera::GameCamera() {
     _nearPlane = DEFAULT_NEAR_PLANE;
     _farPlane = DEFAULT_FAR_PLANE;
     _attachedObject = nullptr;
-    _matrices = {Matrix4D(1.0f), Matrix4D(1.0f)};
+    _cameraMatrices = {Matrix4D(1.0f), Matrix4D(1.0f), Matrix4D(1.0f)};
     _ubo.configure(sizeof(CameraMatrices));
     _ubo.setBindingPoint(CAMERA_MATRICES_POINT);
 }
@@ -43,7 +43,7 @@ void GameCamera::attachGameObject(GameObject * gameObject) {
 }
 
 void GameCamera::apply() const {
-    _ubo.setData(&_matrices, sizeof(CameraMatrices));
+    _ubo.setData(&_cameraMatrices, sizeof(CameraMatrices));
 }
 
 void GameCamera::update() {
@@ -63,8 +63,10 @@ void GameCamera::update() {
     );
     Matrix4D view = glm::lookAt(position, position + orientation[2], orientation[1]);
     
-    _matrices.cameraMatrixDynamic = projection * view;
-    _matrices.cameraMatrixStatic = projection * Matrix4D(Matrix3D(view));
+    _cameraMatrices.world = projection * view;
+    _cameraMatrices.background = projection * Matrix4D(Matrix3D(view));
+    _cameraMatrices.HUD = Matrix4D(1.0f);
+    _cameraMatrices.HUD[0][0] = (float) hitbox.size.y / hitbox.size.x;
 }
 
 }

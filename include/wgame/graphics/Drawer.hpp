@@ -36,7 +36,7 @@ public:
     void setActiveLight(bool activeLight);
     void configureInstances(const std::vector<Matrix4D> & transforms, int id);
 protected:
-    std::map<int, std::unique_ptr<ShaderStorageBufferObject>> instances;
+    std::map<int, std::shared_ptr<ShaderStorageBufferObject>> instances;
 	std::map<int, size_t> numberOfInstances;
     std::vector<VertexArrayObject> vaos;
     bool activeLight = true;

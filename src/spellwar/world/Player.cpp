@@ -37,15 +37,9 @@ Player::Player(Map * map) : GameObject(), _map(map) {
     _hitboxDrawer.setActiveLight(false);
     _modelDrawer.setActiveLight(false);
 
-    Sphere sphere(Point3D(0.0f), 0.004f);
+    Sphere sphere(Point3D(0.0f), 0.01f);
     _visionIndicator.setFillSphereData(
         sphere, ColorRGB(1.0f), 40, 40
-    );
-    _transformHUD = glm::perspective(
-        glm::radians(60.0f), 
-        (float) 16 / 9,
-         0.01f, 
-         100.0f
     );
 }
 
@@ -316,7 +310,7 @@ void Player::render() {
 }
 
 void Player::renderHUD() {
-    _visionIndicator.fill(_transformHUD, Drawer::HUD);
+    _visionIndicator.fill(Matrix4D(1.0f), Drawer::HUD);
 }
 
 
