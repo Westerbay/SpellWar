@@ -14,6 +14,7 @@ Platform::Platform(const Hitbox & hitbox) : GameObject(hitbox) {
     _playerSpawn.move(hitbox.size.y * 0.5f, AXIS_Y);
     _playerSpawn.size = Vector3D(1.0f, 2.0f, 1.0f);
     _decorationHitboxes.push_back(_playerSpawn);
+    _maxHeightStalagmite = 0; 
 }
 
 Hitbox Platform::getPlayerSpawn() const {
@@ -21,8 +22,9 @@ Hitbox Platform::getPlayerSpawn() const {
 }
 
 void Platform::generateStalagmite(
+    StaticCollision & collision,
     std::vector<Matrix4D> & transforms,
-    const Decoration & decoration
+    Decoration & decoration
 ) {
 	
 	DecorationInfo info = decoration.getDecorationInfo();	
@@ -50,6 +52,8 @@ void Platform::generateStalagmite(
 		hitboxDecoration.position = hitbox.position;
 		hitboxDecoration.position += hitbox.orientation[1] * hitboxDecoration.size.y * -0.5f;
 		hitboxDecoration.move(translate);	
+
+        _maxHeightStalagmite = glm::max(_maxHeightStalagmite, hitboxDecoration.size.y);
         if (!hitboxDecoration.collidesList(stalagmiteHitbox)) {
             nb ++;
             tries = 0;
@@ -61,8 +65,9 @@ void Platform::generateStalagmite(
 }
 
 void Platform::generateDecoration(
+    StaticCollision & collision,
     std::vector<Matrix4D> & transforms, 
-    const Decoration & decoration
+    Decoration & decoration
 ) {
 	DecorationInfo info = decoration.getDecorationInfo();
     if (!P(info.probability)) {
@@ -100,6 +105,11 @@ void Platform::generateDecoration(
 		if (numberOfTries < MAX_ATTEMPTS_DECORATION) {
 			transforms.push_back(transform);
 			_decorationHitboxes.push_back(hitboxDecoration);
+            if (decoration.getCollideSize() != Vector3D(0.0f)) {
+                hitboxDecoration.size /= info.size;
+                hitboxDecoration.size *= decoration.getCollideSize();
+                collision.insert(hitboxDecoration);
+            }
 		}
 	} 
 }
@@ -108,4 +118,10 @@ std::vector<Hitbox> & Platform::getDecorationHitboxes() {
 	return _decorationHitboxes;
 }
 
+Hitbox Platform::getExtendedHitbox() const {
+    Hitbox extendedHitbox = hitbox;
+    extendedHitbox.size.y += _maxHeightStalagmite;
+    extendedHitbox.move(-_maxHeightStalagmite * 0.5f, AXIS_Y);
+    return extendedHitbox;
+}
 

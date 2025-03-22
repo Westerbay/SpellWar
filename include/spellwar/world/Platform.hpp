@@ -28,17 +28,20 @@ public:
     Hitbox getPlayerSpawn() const;
     std::vector<Hitbox> & getDecorationHitboxes();  
     void generateStalagmite(
+        StaticCollision & collision,
         std::vector<Matrix4D> & transforms,
-        const Decoration & decoration
+        Decoration & decoration
     );
     void generateDecoration(
+        StaticCollision & collision,
         std::vector<Matrix4D> & transforms, 
-        const Decoration & decoration
-    );	
-    bool collideWith(GameObject * object) const;  
+        Decoration & decoration
+    );
+    Hitbox getExtendedHitbox() const;
 private:
     std::vector<Hitbox> _decorationHitboxes;
     std::vector<Hitbox> _collideHitboxex;
+    float _maxHeightStalagmite;
     Hitbox _playerSpawn;
 };
 

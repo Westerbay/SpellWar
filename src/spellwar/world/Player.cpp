@@ -27,6 +27,7 @@ Player::Player(Map * map) : GameObject(), _map(map) {
 
     _jumping = false;
     _leap = false;
+    _trySwap = false;
     _swapAnimation = {
         hitbox,
         hitbox,
@@ -52,7 +53,7 @@ void Player::update() {
     move();
     updateCollideHitbox();
     orientation();
-    animate();    
+    animate();   
 }
 
 void Player::state() {
@@ -134,7 +135,8 @@ bool Player::onPlatform() const {
     return platformHitbox.contains(playerHitbox.position);
 }
 
-void Player::swapPlatform(Platform * platform, const Point3D & intersectPoint) {
+bool Player::swapPlatform(Platform * platform, const Point3D & intersectPoint) {
+    _trySwap = true;
     Hitbox destinationHitbox = hitbox;
     Hitbox platformHitbox = platform -> getHitbox();
 
@@ -153,16 +155,31 @@ void Player::swapPlatform(Platform * platform, const Point3D & intersectPoint) {
         euler.y -= PI / 2.0f;
     }
     destinationHitbox.rotateY(glm::degrees(euler.y));
-
     destinationHitbox.position = intersectPoint;
-    destinationHitbox.move(this->hitbox.size.y * 0.5f, AXIS_Y);
-    _currentPlatform = platform;
-    _swapAnimation = {
+    destinationHitbox.move(hitbox.size.y * 0.5f, AXIS_Y);
+
+    PlatformAnimation swapAnimation = {
         destinationHitbox,
         hitbox,
         0.0f,
         true
     };
+
+    Matrix3D pathOrientation = swapAnimation.destinationHitbox.orientation - swapAnimation.startHitbox.orientation;
+    Vector3D path = swapAnimation.destinationHitbox.position - swapAnimation.startHitbox.position;
+    Hitbox precalculatedHitbox = hitbox;
+    precalculatedHitbox.size.y *= 0.9f;
+    for (int i = 0; i < 10; i ++) {
+        precalculatedHitbox.position += path * 0.1f;    
+        precalculatedHitbox.orientation += pathOrientation * 0.1f;
+        if (_map -> collide(precalculatedHitbox)) {            
+            return false;
+        }
+    } 
+
+    _swapAnimation = swapAnimation;
+    _currentPlatform = platform;
+    return true;
 }
 
 Platform * Player::findBestAlignedPlatform(Point3D & destination) {
@@ -201,6 +218,9 @@ Platform * Player::findBestAlignedPlatform(Point3D & destination) {
 }
 
 void Player::move() {   
+    if (!_jumping) {
+        _trySwap = false;
+    }
     if (_swapAnimation.isSwapping) {
         if (_swapAnimation.keyFrame > 1.0f) {
             _swapAnimation.isSwapping = false;
@@ -214,24 +234,31 @@ void Player::move() {
         }
     } else {
         Vector3D movement = getMovement();
-        Point3D lastPosition = hitbox.position; 
-        hitbox.move(movement);
-        if (!onPlatform()) {
-            if (canSwap()) {
-                Point3D destination;
-                Platform * destPlat = findBestAlignedPlatform(destination);
-                if (!destPlat) {
-                    hitbox.position = lastPosition; 
+        Vector3D directions[] = {AXIS_X, AXIS_Z};
+        for (Vector3D direction: directions) {
+            Point3D lastPosition = hitbox.position;         
+            hitbox.move(movement * direction);
+            Hitbox deviatedHitbox = hitbox;
+            deviatedHitbox.move(0.001f, AXIS_Y);
+            if (_map -> collide(deviatedHitbox)) {
+                hitbox.position = lastPosition;
+            } 
+            else if (!onPlatform()) {
+                if (canSwap()) {
+                    Point3D destination;
+                    Platform * destPlat = findBestAlignedPlatform(destination);
+                    if (destPlat && swapPlatform(destPlat, destination)) {
+                        return;
+                    }
+                    else {
+                        hitbox.position = lastPosition;
+                    }
                 }
                 else {
-                    swapPlatform(destPlat, destination);
-                }
+                    hitbox.position = lastPosition;   
+                }             
             }
-            else {
-                _state = IDLE;
-                hitbox.position = lastPosition;   
-            }             
-        }    
+        }        
     }     
 }
 
@@ -262,11 +289,13 @@ void Player::orientation() {
     Vector3D positionModel = hitbox.position;
     positionModel -= hitbox.orientation[1] * hitbox.size.y * 0.5f;
 
-    Vector2D mouseMovement = _system.getMouseMovement();
-    hitbox.rotateY(mouseMovement.x * _system.getSensibility());
-    _camera.increaseAngle(mouseMovement.y * _system.getSensibility());
-    _camera.updatePlayer(_collideHitbox);
+    if (!_swapAnimation.isSwapping) {
+        Vector2D mouseMovement = _system.getMouseMovement();
+        hitbox.rotateY(mouseMovement.x * _system.getSensibility());
+        _camera.increaseAngle(mouseMovement.y * _system.getSensibility());
+    }    
 
+    _camera.updatePlayer(_collideHitbox);
     Matrix4D transform = glm::translate(Matrix4D(1.0f), positionModel);
     transform *= Matrix4D(hitbox.orientation);
     _model.setTransform(transform);
@@ -305,14 +334,11 @@ void Player::render() {
     disableCullFace();
     _modelDrawer.draw(_model);
     enableCullFace();
-    _hitboxDrawer.setDrawCuboidData(_collideHitbox, ColorRGB(1.0f, 0.0f, 0.0f));
-    _hitboxDrawer.draw();
 }
 
 void Player::renderHUD() {
     _visionIndicator.fill(Matrix4D(1.0f), Drawer::HUD);
 }
-
 
 Player::FrostModel::FrostModel() : AnimatedModelGLTF(FROST_MODEL) {}
 
@@ -343,7 +369,7 @@ bool Player::intersectionPlatform(
 }
 
 bool Player::canSwap() {
-    bool ok = _jumping && !_swapAnimation.isSwapping;
+    bool ok = !_trySwap && _jumping && !_swapAnimation.isSwapping;
     ok &= _model.getCurrentAnimation() == "Jump";
     ok &= _model.getAnimationProgress() < JUMP_START_ANIM + MIN_SWAP_ANIMATION_KEYFRAME;
     return ok;

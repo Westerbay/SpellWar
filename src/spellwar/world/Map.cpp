@@ -33,6 +33,14 @@ Map::Map(const Hitbox & hitbox) : GameObject(hitbox) {
     _decorations.push_back(std::make_unique<FantasyPlant>());
     _decorations.push_back(std::make_unique<Rock>());
     _decorations.push_back(std::make_unique<WaterPlant>());
+
+    Hitbox collisionHitbox = hitbox;
+    collisionHitbox.size *= 1.5f;
+    _collision = std::make_shared<StaticCollision>(collisionHitbox);
+}
+
+bool Map::collide(const Hitbox & hitbox) {
+    return _collision -> collidesWith(hitbox);
 }
 
 void Map::generatePlatform(
@@ -61,11 +69,11 @@ void Map::generatePlatform(
         if (!hitboxPlatform.collidesList(_platformHitboxes)) {
             _platforms.push_back(platform);
             _platformHitboxes.push_back(platform); 
-            _platforms.back().generateStalagmite(stalagmiteTransform, _stalagmite);
-            
+            _platforms.back().generateStalagmite(*_collision, stalagmiteTransform, _stalagmite);
+            _collision -> insert(_platforms.back().getExtendedHitbox());
             for (size_t i = 0; i < _decorations.size(); i ++) {
             	DecorationInfo info = _decorations[i] -> getDecorationInfo();
-            	_platforms.back().generateDecoration(decorationTransforms[info.id], *_decorations[i]);
+            	_platforms.back().generateDecoration(*_collision, decorationTransforms[info.id], *_decorations[i]);
             }
             tries = 0;
         }         
@@ -160,10 +168,18 @@ void Map::render() {
     	_modelDrawer.drawInstanced(*_decorations[i], info.id);
     }
     _modelDrawer.drawInstanced(_stalagmite, _stalagmite.getDecorationInfo().id);
-    cullCounterClockwise();        
+    cullCounterClockwise();     
+    
+    // for (Platform & plat: _platforms) {
+    //     _hitboxDrawer.setDrawCuboidData(plat.getExtendedHitbox(), ColorRGB(1.0f, 0.0f , 0.0f));
+    //     _hitboxDrawer.draw();
+    //     for (Hitbox & hitb: plat.getDecorationHitboxes()) {
+    //         _hitboxDrawer.setDrawCuboidData(hitb, ColorRGB(1.0f, 0.0f , 0.0f));
+    //         _hitboxDrawer.draw();
+    //     }
+    // }
 }
 
 std::vector<Platform> & Map::getPlatforms() {
     return _platforms;
 }
-

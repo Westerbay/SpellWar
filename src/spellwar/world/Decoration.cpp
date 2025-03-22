@@ -47,8 +47,8 @@ DecorationInfo PinkTree::getDecorationInfo() const {
 	DecorationInfo info;
 	info.id = 1;
 	info.size = Vector3D(4.0f, 19.0f, 4.0f);
-	info.minScale = 0.5f;
-	info.maxScale = 1.0f;
+	info.minScale = 0.3f;
+	info.maxScale = 0.9f;
 	info.minInstances = 1;
 	info.maxInstances = 2;
 	info.probability = 0.7f;
@@ -56,7 +56,7 @@ DecorationInfo PinkTree::getDecorationInfo() const {
 }
 
 Vector3D PinkTree::getCollideSize() const {
-	return Vector3D(1.0f, 19.0f, 1.0f);
+	return Vector3D(0.6f, 19.0f, 0.6f);
 }
 
 
@@ -95,7 +95,8 @@ DecorationInfo Rock::getDecorationInfo() const {
 }
 
 Vector3D Rock::getCollideSize() const {
-	return getDecorationInfo().size;
+	Vector3D size = getDecorationInfo().size;
+	return size;
 }
 
 /* WaterPlant */

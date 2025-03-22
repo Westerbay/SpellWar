@@ -60,7 +60,7 @@ public:
 public:
     Player(Map * map);    
     GameObject * getCameraObject();
-    void swapPlatform(Platform * platform, const Point3D & destination);
+    bool swapPlatform(Platform * platform, const Point3D & destination);
     bool onPlatform() const;
     Platform * findBestAlignedPlatform(Point3D & destination);
     void update() override;
@@ -105,6 +105,7 @@ private:
     Direction _direction;
     bool _jumping;
     bool _leap;
+    bool _trySwap;
     PlatformAnimation _swapAnimation;
 };
 

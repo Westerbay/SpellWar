@@ -33,6 +33,7 @@ public:
     );    
     void render() override;	
     std::vector<Platform> & getPlatforms();
+    bool collide(const Hitbox & hitbox);
 private:
     void constructPlatform(
         Cuboid & platform, Hitbox & hitboxPlatform,
@@ -43,6 +44,7 @@ private:
 	Stalagmite _stalagmite;
     std::vector<std::unique_ptr<Decoration>> _decorations;
 	std::vector<Platform> _platforms;    
+    std::shared_ptr<StaticCollision> _collision;
 private:
 	Texture2D _diffuse;    
     Texture2D _normal;
