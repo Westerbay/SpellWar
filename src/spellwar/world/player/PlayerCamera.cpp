@@ -7,11 +7,15 @@
  */
 
 
-#include <spellwar/world/PlayerCamera.hpp>
+#include <spellwar/world/player/PlayerCamera.hpp>
 
 PlayerCamera::PlayerCamera() {
     _offsetFromPlayer = OFFSET_FROM_PLAYER;
     _angle = 0;
+}
+
+float PlayerCamera::getAngle() const {
+    return _angle;
 }
 
 void PlayerCamera::increaseAngle(float delta) {

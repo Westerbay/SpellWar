@@ -7,7 +7,7 @@
  */
 
 
-#include <spellwar/world/Background.hpp>
+#include <spellwar/world/map/Background.hpp>
 
 
 Background::Background() : GameObject() {

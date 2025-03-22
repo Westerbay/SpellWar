@@ -7,7 +7,7 @@
  */
 
 
-#include <spellwar/world/Light.hpp>
+#include <spellwar/world/map/Light.hpp>
 
 Light::Light(GameLight * gameLight) : GameObject() {
     _gameLight = gameLight;

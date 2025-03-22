@@ -12,26 +12,20 @@
 
 #include <wgame/wgame.hpp>
 #include "PlayerCamera.hpp"
-#include "Map.hpp"
+#include "PlayerModel.hpp"
+#include "PlayerHUD.hpp"
+#include "PlayerMotion.hpp"
+#include "PlayerInputs.hpp"
+#include "../map/Map.hpp"
 
 #include <limits>
 
-#define FROST_MODEL "assets/model/player/frost.glb"
 
-#define SPEED 0.08f
-#define RUNNING_FACTOR 2.0f
-#define ANIMATION_ACCELERATION 1.5f
 #define MAX_JUMP_DISTANCE 70.0f
 #define SWAP_ANIMATION_KEYFRAME 0.014f
 #define MIN_SWAP_ANIMATION_KEYFRAME 0.1f
 
 #define HITBOX_SIZE Vector3D(0.7f, 1.65f, 0.7f)
-
-#define JUMP_START_PROGRESS 0.20f
-#define JUMP_END_PROGRESS 0.65f
-#define JUMP_START_ANIM 0.20f
-#define JUMP_END_ANIM 0.80f
-#define JUMP_HEIGHT 0.65f 
 
 
 using namespace wgame;
@@ -39,11 +33,17 @@ using namespace wgame;
 struct PlatformAnimation {
     Hitbox destinationHitbox;
     Hitbox startHitbox;
+    float angle;
     float keyFrame;
     bool isSwapping;
 };
 
 class Player : public GameObject {
+public:
+    friend class PlayerModel;
+    friend class PlayerHUD;
+    friend class PlayerMotion;
+    friend class PlayerInputs;
 public:
     enum State {
         RUNNING,
@@ -60,25 +60,12 @@ public:
 public:
     Player(Map * map);    
     GameObject * getCameraObject();
-    bool swapPlatform(Platform * platform, const Point3D & destination);
-    bool onPlatform() const;
-    Platform * findBestAlignedPlatform(Point3D & destination);
+    bool onPlatform() const;    
     void update() override;
     void render() override; 
-    void renderHUD() override;   
-public:
-    class FrostModel : public AnimatedModelGLTF {
-    public:
-        FrostModel();
-    };
+    void renderHUD() override;       
 private:
-    void state();
-    void move();
-    void updateCollideHitbox();
-    void orientation();
-    void animate();  
-    bool canSwap();  
-    Vector3D getMovement() const;
+    Platform * findBestAlignedPlatform(Point3D & destination);
     bool intersectionPlatform(
         const Point3D & gazePosition, 
         const Vector3D & gazeVector,  
@@ -86,27 +73,25 @@ private:
         const Vector3D & normal,
         Point3D & intersection
     );
+    bool canSwap();  
 private: 
+    PlayerModel _playerModel;
+    PlayerHUD _playerHUD;
+    PlayerMotion _playerMotion;
+    PlayerInputs _playerInputs;
+    PlayerCamera _camera;
 
     Map * _map;
     Platform * _currentPlatform;
 
     Hitbox _collideHitbox;
-    float _speed;
-    float _runningFactor;
-    System _system;
-    PlayerCamera _camera;
-    FrostModel _model;
-    ModelDrawer _modelDrawer;
-    ColorDrawer _hitboxDrawer;
-    ColorDrawer _visionIndicator;
-
     State _state;
     Direction _direction;
+    PlatformAnimation _swapAnimation;
+
     bool _jumping;
     bool _leap;
     bool _trySwap;
-    PlatformAnimation _swapAnimation;
 };
 
 

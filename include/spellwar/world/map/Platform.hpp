@@ -40,7 +40,6 @@ public:
     Hitbox getExtendedHitbox() const;
 private:
     std::vector<Hitbox> _decorationHitboxes;
-    std::vector<Hitbox> _collideHitboxex;
     float _maxHeightStalagmite;
     Hitbox _playerSpawn;
 };

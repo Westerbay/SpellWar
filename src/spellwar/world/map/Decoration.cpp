@@ -7,7 +7,7 @@
  */
 
 
-#include <spellwar/world/Decoration.hpp>
+#include <spellwar/world/map/Decoration.hpp>
 
 
 Decoration::Decoration(const std::string & filepath) : StaticModelGLTF(filepath) {}

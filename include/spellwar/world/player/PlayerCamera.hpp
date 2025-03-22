@@ -21,6 +21,7 @@ using namespace wgame;
 class PlayerCamera : public GameObject {
 public:
     PlayerCamera();
+    float getAngle() const;
     void increaseAngle(float delta);    
     void updatePlayer(const Hitbox & playerHitbox);  
     Vector3D getGaze() const;    

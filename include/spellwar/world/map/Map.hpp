@@ -12,17 +12,14 @@
 
 #include <wgame/wgame.hpp>
 #include "Platform.hpp"
-
-#define TEX_SCALE 10.0f
-
-#define PLATFORM_DIFFUSE "assets/materials/platform/diffuse.bmp"
-#define PLATFORM_NORMAL "assets/materials/platform/normal.bmp"
-#define PLATFORM_HEIGHT "assets/materials/platform/height.bmp"
+#include "MapView.hpp"
 
 
 using namespace wgame;
 
 class Map : public GameObject {
+public:
+    friend class MapView;
 public:
     Map(const Hitbox & hitbox);
     void generatePlatform(
@@ -39,19 +36,13 @@ private:
         Cuboid & platform, Hitbox & hitboxPlatform,
         const Vector3D & minSize, const Vector3D & maxSize
     );
-    void setUpPlatformTextures();
 private:
+    MapView _mapView;
 	Stalagmite _stalagmite;
     std::vector<std::unique_ptr<Decoration>> _decorations;
 	std::vector<Platform> _platforms;    
-    std::shared_ptr<StaticCollision> _collision;
-private:
-	Texture2D _diffuse;    
-    Texture2D _normal;
-    Texture2D _height;
-    ModelDrawer _modelDrawer;
-    ColorDrawer _hitboxDrawer; 
-    std::vector<TextureDrawer> _platformDrawers;       
+    std::shared_ptr<StaticCollision> _collision;	       
 };
+
 
 #endif

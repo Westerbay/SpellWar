@@ -10,10 +10,10 @@
 #ifndef __WORLD__
 #define __WORLD__
 
-#include "Player.hpp"
-#include "Background.hpp"
-#include "Map.hpp"
-#include "Light.hpp"
+#include "player/Player.hpp"
+#include "map/Background.hpp"
+#include "map/Map.hpp"
+#include "map/Light.hpp"
 
 #include <wgame/wgame.hpp>
 

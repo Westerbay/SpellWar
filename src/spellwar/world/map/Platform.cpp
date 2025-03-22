@@ -7,7 +7,7 @@
  */
 
 
-#include <spellwar/world/Platform.hpp>
+#include <spellwar/world/map/Platform.hpp>
 
 Platform::Platform(const Hitbox & hitbox) : GameObject(hitbox) {
     _playerSpawn = hitbox;
@@ -28,7 +28,7 @@ void Platform::generateStalagmite(
 ) {
 	
 	DecorationInfo info = decoration.getDecorationInfo();	
-    std::vector<Cuboid> stalagmiteHitbox;
+    std::vector<Hitbox> stalagmiteHitbox;
     Hitbox hitboxDecoration;
     
     unsigned limit = (unsigned)(hitbox.size.x * hitbox.size.z);
@@ -59,7 +59,6 @@ void Platform::generateStalagmite(
             tries = 0;
             stalagmiteHitbox.push_back(hitboxDecoration);
             transforms.push_back(transform); 
-            _decorationHitboxes.push_back(hitboxDecoration);
         }                
     }
 }
