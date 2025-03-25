@@ -15,9 +15,9 @@
 
 #define PROBABILITY_ROTATE 0.6f
 #define HEIGHT_ROTATE_RATIO 0.3f
-#define X_Z_GAP 8
-#define Y_GAP 25
-#define MAX_ATTEMPTS 20
+#define X_Z_GAP 5
+#define Y_GAP 20
+#define MAX_ATTEMPTS 40
 
 
 using namespace wgame;
