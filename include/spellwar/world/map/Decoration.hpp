@@ -12,7 +12,7 @@
 
 #include <wgame/wgame.hpp>
 
-#define STALAGMITE_MODEL "assets/model/decoration/stalagmite/scene.gltf"
+#define STALAGMITE_MODEL "assets/model/decoration/stalagmite/stalagmite.glb"
 #define TREE_MODEL "assets/model/decoration/pinkTree/scene.gltf"
 #define FANTASY_PLANT_MODEL "assets/model/decoration/fantasyPlant/scene.gltf"
 #define ROCK_MODEL "assets/model/decoration/rock/scene.gltf"
