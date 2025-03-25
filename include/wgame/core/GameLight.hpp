@@ -22,7 +22,7 @@ struct LightInfo {
     Point4D cameraPosition; 
     Point4D position; 
     Vector4D color;
-    bool display;
+    int display;
     float defaultAmbient;
     float defaultSpecularFactor; 
     int defaultSpecularExponent;
