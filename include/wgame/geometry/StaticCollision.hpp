@@ -14,8 +14,8 @@
 
 #include <memory>
 
-#define DEFAULT_MAX_DEPTH 4
-#define DEFAULT_MAX_OBJECTS 4
+#define DEFAULT_MAX_DEPTH 2
+#define DEFAULT_MAX_OBJECTS 0
 
 namespace wgame {
 

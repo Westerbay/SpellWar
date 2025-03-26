@@ -14,6 +14,7 @@
 #include "map/Background.hpp"
 #include "map/Map.hpp"
 #include "map/Light.hpp"
+#include "biome/Space.hpp"
 
 #include <wgame/wgame.hpp>
 

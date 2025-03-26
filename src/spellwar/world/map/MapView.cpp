@@ -10,26 +10,6 @@
 #include <spellwar/world/map/Map.hpp>
 
 
-MapView::MapView() {
-    Image image(PLATFORM_DIFFUSE);
-    _diffuse.setType(TEXTURE_2D);
-    _diffuse.setInterpolationMode(GL_LINEAR);
-    _diffuse.setRepeatMode(GL_REPEAT);
-    _diffuse.setData(image);    
-
-    Image imageNormal(PLATFORM_NORMAL);
-    _normal.setType(TEXTURE_2D);
-    _normal.setInterpolationMode(GL_LINEAR);
-    _normal.setRepeatMode(GL_REPEAT);
-    _normal.setData(imageNormal);
-
-    Image imageHeight(PLATFORM_HEIGHT);
-    _height.setType(TEXTURE_2D);
-    _height.setInterpolationMode(GL_LINEAR);
-    _height.setRepeatMode(GL_REPEAT);
-    _height.setData(imageHeight);
-}
-
 void MapView::initViews(
     Map * map,
     std::vector<Matrix4D> & stalagmiteTransform,
@@ -40,7 +20,7 @@ void MapView::initViews(
 	}
     _modelDrawer.configureInstances(
         stalagmiteTransform, 
-        map -> _stalagmite.getDecorationInfo().id
+        map -> _biome -> getStalagmite().getDecorationInfo().id
     );
     setUpPlatformTextures(map);
 }
@@ -61,37 +41,42 @@ void MapView::setUpPlatformTextures(Map * map) {
 }
 
 void MapView::render(Map * map) {
+    std::vector<Decoration *> & decorations = map -> _biome -> getDecorations();    
+
     for (TextureDrawer & drawer: _platformDrawers) {
         drawer.draw({
-            &_diffuse,
-            &_diffuse,
-            &_diffuse,
-            &_diffuse,
-            &_diffuse,
-            &_diffuse
+            map -> _biome -> getDiffusePlatform(),
+            map -> _biome -> getDiffusePlatform(),
+            map -> _biome -> getDiffusePlatform(),
+            map -> _biome -> getDiffusePlatform(),
+            map -> _biome -> getDiffusePlatform(),
+            map -> _biome -> getDiffusePlatform()
         }, {
-            &_normal,
-            &_normal,
-            &_normal,
-            &_normal,
-            &_normal,
-            &_normal
+            map -> _biome -> getNormalPlatform(),
+            map -> _biome -> getNormalPlatform(),
+            map -> _biome -> getNormalPlatform(),
+            map -> _biome -> getNormalPlatform(),
+            map -> _biome -> getNormalPlatform(),
+            map -> _biome -> getNormalPlatform()
         }, {
-            &_height,
-            &_height,
-            &_height,
-            &_height,
-            &_height,
-            &_height
+            map -> _biome -> getHeightPlatform(),
+            map -> _biome -> getHeightPlatform(),
+            map -> _biome -> getHeightPlatform(),
+            map -> _biome -> getHeightPlatform(),
+            map -> _biome -> getHeightPlatform(),
+            map -> _biome -> getHeightPlatform()
         });
     }  
 		
     cullClockwise();    
-    for (size_t i = 0; i < map -> _decorations.size(); i ++) {
-    	DecorationInfo info = map -> _decorations[i] -> getDecorationInfo();
-    	_modelDrawer.drawInstanced(*map -> _decorations[i], info.id);
+    for (size_t i = 0; i < decorations.size(); i ++) {
+    	DecorationInfo info = decorations[i] -> getDecorationInfo();
+    	_modelDrawer.drawInstanced(*decorations[i], info.id);
     }
-    _modelDrawer.drawInstanced(map -> _stalagmite, map -> _stalagmite.getDecorationInfo().id);
+    _modelDrawer.drawInstanced(
+        map -> _biome -> getStalagmite(), 
+        map -> _biome -> getStalagmite().getDecorationInfo().id
+    );
     cullCounterClockwise();     
     
     // for (Platform & plat: map -> _platforms) {

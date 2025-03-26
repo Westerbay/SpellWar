@@ -9,11 +9,11 @@
 
 #include <spellwar/world/map/Light.hpp>
 
-Light::Light(GameLight * gameLight) : GameObject() {
+Light::Light(GameLight * gameLight, StaticModelGLTF * sun, float scale) : GameObject() {
     _gameLight = gameLight;
+    _scale = scale;
     _angle = 0.0f;
-    _color = ColorRGB(1.0f, 1.0f, 1.0f);
-    
+    _color = ColorRGB(1.0f, 1.0f, 1.0f);    
 
     _gameLight -> setDisplayLight(true);
     _gameLight -> setPosition(LIGHT_POSITION);
@@ -21,6 +21,7 @@ Light::Light(GameLight * gameLight) : GameObject() {
     _gameLight -> setDefaultSpecularFactor(DEFAULT_SPECULAR_FACTOR);
     _gameLight -> setDefaultSpecularExponent(DEFAULT_SPECULAR_EXPONENT);
 
+    _sun = sun;
     update();
 }
 
@@ -40,10 +41,8 @@ void Light::renderBackground() {
     Matrix4D model(1.0f); 
     model = glm::translate(model, hitbox.position);
     model = glm::rotate(model, glm::radians(_angle * SUN_ROTATION), AXIS_Y);
-    model = glm::scale(model, Vector3D(LIGHT_SIZE));
-    _sun.setTransform(model);
-    _drawer.draw(_sun, Drawer::BACKGROUND);
+    model = glm::scale(model, Vector3D(_scale));
+    _sun -> setTransform(model);
+    _drawer.draw(*_sun, Drawer::BACKGROUND);
 }
-
-Light::Sun::Sun() : StaticModelGLTF(SUN_ASSET) {}
 

@@ -17,7 +17,14 @@ using namespace wgame;
  
 class Background : public GameObject {
 public:
-    Background();
+    Background(
+        const char * cubeMapPX,
+        const char * cubeMapNX,
+        const char * cubeMapPY,
+        const char * cubeMapNY,
+        const char * cubeMapPZ,
+        const char * cubeMapNZ
+    );
     void renderBackground() override;
 private:
     CubeMapDrawer _cubeMap;

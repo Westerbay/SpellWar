@@ -11,11 +11,11 @@
 
 
 World::World(GameCamera * camera, GameLight * light) : GameObjectGroup() {
-    add(new Background());
-    add(new Light(light));
+    AbstractBiome * biome = new Space(light);
+    add(biome);
 
     Hitbox mapHitbox(Point3D(0.0f), MAP_SIZE);
-    Map * map = new Map(mapHitbox);
+    Map * map = new Map(mapHitbox, biome);
     map -> generatePlatform(
         MAX_NUMBER_OF_PLATFORMS, 
         MIN_PLATFORM_SIZE, 

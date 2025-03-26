@@ -12,9 +12,6 @@
 
 #include <wgame/wgame.hpp>
 
-#define PLATFORM_DIFFUSE "assets/materials/platform/diffuse.bmp"
-#define PLATFORM_NORMAL "assets/materials/platform/normal.bmp"
-#define PLATFORM_HEIGHT "assets/materials/platform/height.bmp"
 
 #define TEX_SCALE 10.0f
 
@@ -25,7 +22,6 @@ class Map;
 
 class MapView {
 public:
-    MapView();
     void initViews(
         Map * map,
         std::vector<Matrix4D> & stalagmiteTransform,
@@ -34,9 +30,6 @@ public:
     void setUpPlatformTextures(Map * map);
     void render(Map * map);
 private:
-    Texture2D _diffuse;    
-    Texture2D _normal;
-    Texture2D _height;
     ModelDrawer _modelDrawer;
     ColorDrawer _hitboxDrawer; 
     std::vector<TextureDrawer> _platformDrawers;

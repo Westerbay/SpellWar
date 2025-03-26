@@ -40,14 +40,14 @@ Vector3D Stalagmite::getCollideSize() const {
 }
 
 Matrix4D Stalagmite::getTransform() const {
-	return glm::translate(Matrix4D(1.0f), Vector3D(0.0f, 0.5f, 0.0f));
+	return glm::translate(Matrix4D(1.0f), Vector3D(0.0f, 0.46f, 0.0f));
 }
 
 
-/* Pink Tree */
-PinkTree::PinkTree() : Decoration(TREE_MODEL) {}
+/* Red Tree */
+RedTree::RedTree() : Decoration(RED_TREE_MODEL) {}
 
-DecorationInfo PinkTree::getDecorationInfo() const {
+DecorationInfo RedTree::getDecorationInfo() const {
 	DecorationInfo info;
 	info.id = 1;
 	info.size = Vector3D(4.0f, 19.0f, 4.0f);
@@ -59,7 +59,7 @@ DecorationInfo PinkTree::getDecorationInfo() const {
 	return info;
 }
 
-Vector3D PinkTree::getCollideSize() const {
+Vector3D RedTree::getCollideSize() const {
 	return Vector3D(0.6f, 19.0f, 0.6f);
 }
 

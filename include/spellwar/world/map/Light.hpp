@@ -13,7 +13,6 @@
 #include <wgame/wgame.hpp>
 
 #define STEP_TIME 0.01f
-#define LIGHT_SIZE 0.003f
 #define LIGHT_DISTANCE_TO_WORLD 100000.0f
 
 #define LIGHT_POSITION Point3D(0.0f, 500.0f, 0.0f)
@@ -22,27 +21,22 @@
 #define DEFAULT_SPECULAR_EXPONENT 4
 
 #define SUN_ROTATION 5.0f
-#define SUN_ASSET "assets/model/sun/scene.gltf"
 
 
 using namespace wgame;
 
 class Light : public GameObject {
 public:
-    Light(GameLight * gameLight);
+    Light(GameLight * gameLight, StaticModelGLTF * _sun, float scale);
     void update() override;
     void renderBackground() override;
-public:
-	class Sun : public StaticModelGLTF {
-	public:
-		Sun();
-	};
 private:
-    Sun _sun;
+    StaticModelGLTF * _sun;
     ModelDrawer _drawer;
     ColorRGB _color;
     GameLight * _gameLight;
     float _angle;
+    float _scale;
 };
 
 #endif

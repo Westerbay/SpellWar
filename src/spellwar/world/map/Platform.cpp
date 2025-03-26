@@ -25,8 +25,7 @@ void Platform::generateStalagmite(
     StaticCollision & collision,
     std::vector<Matrix4D> & transforms,
     Decoration & decoration
-) {
-	
+) {	
 	DecorationInfo info = decoration.getDecorationInfo();	
     std::vector<Hitbox> stalagmiteHitbox;
     Hitbox hitboxDecoration;
@@ -61,7 +60,7 @@ void Platform::generateStalagmite(
             nb ++;
             tries = 0;
             stalagmiteHitbox.push_back(hitboxDecoration);
-            //collision.insert(hitboxDecoration);
+            collision.insert(hitboxDecoration);
             _decorationHitboxes.push_back(hitboxDecoration);
             transforms.push_back(transform); 
         }                

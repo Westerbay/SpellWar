@@ -10,14 +10,21 @@
 #include <spellwar/world/map/Background.hpp>
 
 
-Background::Background() : GameObject() {
+Background::Background(
+    const char * cubeMapPX,
+    const char * cubeMapNX,
+    const char * cubeMapPY,
+    const char * cubeMapNY,
+    const char * cubeMapPZ,
+    const char * cubeMapNZ
+) : GameObject() {
     _cubeMap.setFaces(
-        Image("assets/background/px.png", false),
-        Image("assets/background/nx.png", false),
-        Image("assets/background/py.png", false),
-        Image("assets/background/ny.png", false),
-        Image("assets/background/pz.png", false),
-        Image("assets/background/nz.png", false)
+        Image(cubeMapPX, false),
+        Image(cubeMapNX, false),
+        Image(cubeMapPY, false),
+        Image(cubeMapNY, false),
+        Image(cubeMapPZ, false),
+        Image(cubeMapNZ, false)
     );
 }
 

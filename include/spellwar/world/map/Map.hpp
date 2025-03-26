@@ -13,6 +13,7 @@
 #include <wgame/wgame.hpp>
 #include "Platform.hpp"
 #include "MapView.hpp"
+#include "AbstractBiome.hpp"
 
 
 using namespace wgame;
@@ -21,7 +22,7 @@ class Map : public GameObject {
 public:
     friend class MapView;
 public:
-    Map(const Hitbox & hitbox);
+    Map(const Hitbox & hitbox, AbstractBiome * biome);
     void generatePlatform(
         size_t maxNumberOfPlatforms,
         const Vector3D & minSize,
@@ -38,8 +39,7 @@ private:
     );
 private:
     MapView _mapView;
-	Stalagmite _stalagmite;
-    std::vector<std::unique_ptr<Decoration>> _decorations;
+    AbstractBiome * _biome;
 	std::vector<Platform> _platforms;    
     std::shared_ptr<StaticCollision> _collision;	       
 };

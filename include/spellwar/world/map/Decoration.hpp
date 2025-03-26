@@ -13,7 +13,7 @@
 #include <wgame/wgame.hpp>
 
 #define STALAGMITE_MODEL "assets/model/decoration/stalagmite/scene.gltf"
-#define TREE_MODEL "assets/model/decoration/pinkTree/scene.gltf"
+#define RED_TREE_MODEL "assets/model/decoration/redTree/scene.gltf"
 #define FANTASY_PLANT_MODEL "assets/model/decoration/fantasyPlant/scene.gltf"
 #define ROCK_MODEL "assets/model/decoration/rock/scene.gltf"
 #define WATER_PLANT_MODEL "assets/model/decoration/waterPlant/scene.gltf"
@@ -49,9 +49,9 @@ public:
 	Matrix4D getTransform() const override;
 };
 
-class PinkTree : public Decoration {
+class RedTree : public Decoration {
 public:
-    PinkTree();
+	RedTree();
     DecorationInfo getDecorationInfo() const override;
 	Vector3D getCollideSize() const override;
 };
