@@ -52,7 +52,7 @@ void Map::generatePlatform(
             _platforms.push_back(platform);
             _platformHitboxes.push_back(platform); 
             _platforms.back().generateStalagmite(*_collision, stalagmiteTransform, _stalagmite);
-            _collision -> insert(_platforms.back().getExtendedHitbox());
+            // _collision -> insert(_platforms.back().getExtendedHitbox());
             for (size_t i = 0; i < _decorations.size(); i ++) {
             	DecorationInfo info = _decorations[i] -> getDecorationInfo();
             	_platforms.back().generateDecoration(*_collision, decorationTransforms[info.id], *_decorations[i]);

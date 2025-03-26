@@ -26,9 +26,9 @@ Stalagmite::Stalagmite() : Decoration(STALAGMITE_MODEL) {}
 DecorationInfo Stalagmite::getDecorationInfo() const {
 	DecorationInfo info;
 	info.id = 0;
-	info.size = Vector3D(2.0f, 4.2f, 2.0f);
-	info.minScale = 0.8f;
-	info.maxScale = 1.5f;
+	info.size = Vector3D(0.7f, 0.9f, 0.5f);
+	info.minScale = 4.0f;
+	info.maxScale = 7.0f;
 	info.minInstances = 1;   // Not Used
 	info.maxInstances = 1;   // Not Used
 	info.probability = 1.0f; // Not Used
@@ -37,6 +37,10 @@ DecorationInfo Stalagmite::getDecorationInfo() const {
 
 Vector3D Stalagmite::getCollideSize() const {
 	return getDecorationInfo().size;
+}
+
+Matrix4D Stalagmite::getTransform() const {
+	return glm::translate(Matrix4D(1.0f), Vector3D(0.0f, 0.5f, 0.0f));
 }
 
 

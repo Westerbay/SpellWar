@@ -94,7 +94,7 @@ void MapView::render(Map * map) {
     _modelDrawer.drawInstanced(map -> _stalagmite, map -> _stalagmite.getDecorationInfo().id);
     cullCounterClockwise();     
     
-    // for (Platform & plat: _platforms) {
+    // for (Platform & plat: map -> _platforms) {
     //     _hitboxDrawer.setDrawCuboidData(plat.getExtendedHitbox(), ColorRGB(1.0f, 0.0f , 0.0f));
     //     _hitboxDrawer.draw();
     //     for (Hitbox & hitb: plat.getDecorationHitboxes()) {

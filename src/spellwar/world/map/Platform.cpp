@@ -44,8 +44,11 @@ void Platform::generateStalagmite(
             (hitbox.size.z * 0.5f - scale * info.size.z) * randomFloat(-1.0f, 1.0f),
         };
         transform = glm::translate(transform, translate);
+        float rotation = randomFloat(0.0f, 360.0f);
         transform = glm::rotate(transform, glm::radians(180.0f), AXIS_X);
-        transform = glm::scale(transform, Vector3D(scale, scale, scale));            
+        transform = glm::rotate(transform, glm::radians(rotation), AXIS_Y);
+        transform = glm::scale(transform, Vector3D(scale, scale, scale));                    
+        transform *= decoration.getTransform();
 
 		hitboxDecoration.size = info.size * scale;
 		hitboxDecoration.orientation = hitbox.orientation;	
@@ -58,6 +61,8 @@ void Platform::generateStalagmite(
             nb ++;
             tries = 0;
             stalagmiteHitbox.push_back(hitboxDecoration);
+            //collision.insert(hitboxDecoration);
+            _decorationHitboxes.push_back(hitboxDecoration);
             transforms.push_back(transform); 
         }                
     }
@@ -98,7 +103,8 @@ void Platform::generateDecoration(
 			hitboxDecoration.orientation = hitbox.orientation;	
 			hitboxDecoration.position = hitbox.position;
 			hitboxDecoration.position += hitbox.orientation[1] * hitboxDecoration.size.y * 0.5f;
-		    hitboxDecoration.move(translate);					
+		    hitboxDecoration.move(translate);
+            hitboxDecoration.rotateY(rotation);					
 			
 		} while (numberOfTries < MAX_ATTEMPTS_DECORATION && hitboxDecoration.collidesList(_decorationHitboxes));
 		if (numberOfTries < MAX_ATTEMPTS_DECORATION) {
