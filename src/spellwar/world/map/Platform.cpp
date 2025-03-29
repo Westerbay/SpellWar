@@ -22,7 +22,7 @@ Hitbox Platform::getPlayerSpawn() const {
 }
 
 void Platform::generateStalagmite(
-    StaticCollision & collision,
+    CollisionTree & collision,
     std::vector<Matrix4D> & transforms,
     Decoration & decoration
 ) {	
@@ -68,7 +68,7 @@ void Platform::generateStalagmite(
 }
 
 void Platform::generateDecoration(
-    StaticCollision & collision,
+    CollisionTree & collision,
     std::vector<Matrix4D> & transforms, 
     Decoration & decoration
 ) {

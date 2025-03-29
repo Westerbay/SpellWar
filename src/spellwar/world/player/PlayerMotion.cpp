@@ -127,30 +127,26 @@ void PlayerMotion::move(Player * player) {
         return;
     } 
 
-    Vector3D movement = getMovement(player);
-    Vector3D directions[] = {AXIS_X, AXIS_Z};
-    
-    for (Vector3D direction: directions) {
-        Hitbox & hitbox = player -> hitbox;
-        Point3D lastPosition = hitbox.position;         
-        hitbox.move(movement * direction);
-        Hitbox deviatedHitbox = hitbox;
-        deviatedHitbox.move(0.001f, AXIS_Y);
-        if (player -> _map -> collide(deviatedHitbox)) {
-            hitbox.position = lastPosition;
-        } 
-        else if (!player -> onPlatform() && player -> canSwap()) {
-            Point3D destination;
-            Platform * destPlat = player -> findBestAlignedPlatform(destination);
-            if (destPlat && swapPlatform(player, destPlat, destination)) {
-                return;
-            }
-            else {
-                hitbox.position = lastPosition;
-            }
+    Vector3D movement = getMovement(player);    
+    Hitbox & hitbox = player -> hitbox;
+    Point3D lastPosition = hitbox.position;         
+    hitbox.move(movement);
+    Hitbox deviatedHitbox = hitbox;
+    deviatedHitbox.move(0.001f, AXIS_Y);
+    if (player -> _map -> collide(deviatedHitbox)) {
+        hitbox.position = lastPosition;
+    } 
+    else if (!player -> onPlatform() && player -> canSwap()) {
+        Point3D destination;
+        Platform * destPlat = player -> findBestAlignedPlatform(destination);
+        if (destPlat && swapPlatform(player, destPlat, destination)) {
+            return;
         }
-        else if (!player -> onPlatform()) {
-            hitbox.position = lastPosition;   
-        }        
-    }     
+        else {
+            hitbox.position = lastPosition;
+        }
+    }
+    else if (!player -> onPlatform()) {
+        hitbox.position = lastPosition;   
+    }             
 }

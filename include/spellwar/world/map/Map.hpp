@@ -41,7 +41,7 @@ private:
     MapView _mapView;
     AbstractBiome * _biome;
 	std::vector<Platform> _platforms;    
-    std::shared_ptr<StaticCollision> _collision;	       
+    std::shared_ptr<CollisionTree> _collision;	       
 };
 
 

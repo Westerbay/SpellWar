@@ -28,12 +28,12 @@ public:
     Hitbox getPlayerSpawn() const;
     std::vector<Hitbox> & getDecorationHitboxes();  
     void generateStalagmite(
-        StaticCollision & collision,
+        CollisionTree & collision,
         std::vector<Matrix4D> & transforms,
         Decoration & decoration
     );
     void generateDecoration(
-        StaticCollision & collision,
+        CollisionTree & collision,
         std::vector<Matrix4D> & transforms, 
         Decoration & decoration
     );
