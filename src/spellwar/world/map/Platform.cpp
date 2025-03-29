@@ -94,7 +94,6 @@ void Platform::generateDecoration(
 				(hitbox.size.z * 0.5f - scale * info.size.z) * randomFloat(-1.0f, 1.0f),
 			};            
 			transform = glm::translate(transform, translate);
-			transform = glm::rotate(transform, glm::radians(rotation), AXIS_Y);
 			transform = glm::scale(transform, Vector3D(scale, scale, scale)); 
             transform *= decoration.getTransform();
 			
@@ -103,7 +102,8 @@ void Platform::generateDecoration(
 			hitboxDecoration.position = hitbox.position;
 			hitboxDecoration.position += hitbox.orientation[1] * hitboxDecoration.size.y * 0.5f;
 		    hitboxDecoration.move(translate);
-            hitboxDecoration.rotateY(rotation);					
+            hitboxDecoration.rotateY(decoration.getRotaHitboxY());
+            hitboxDecoration.move(decoration.getMoveHitbox() * scale);
 			
 		} while (numberOfTries < MAX_ATTEMPTS_DECORATION && hitboxDecoration.collidesList(_decorationHitboxes));
 		if (numberOfTries < MAX_ATTEMPTS_DECORATION) {

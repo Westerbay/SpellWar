@@ -16,7 +16,15 @@ Matrix4D Decoration::getTransform() const {
 	return Matrix4D(1.0f);
 }
 
+float Decoration::getRotaHitboxY() const {
+	return 0.0f;
+}
+
 Vector3D Decoration::getCollideSize() const {
+	return Vector3D(0.0f);
+}
+
+Vector3D Decoration::getMoveHitbox() const {
 	return Vector3D(0.0f);
 }
 
@@ -89,7 +97,7 @@ Rock::Rock() : Decoration(ROCK_MODEL) {}
 DecorationInfo Rock::getDecorationInfo() const {
 	DecorationInfo info;
 	info.id = 3;
-	info.size = Vector3D(9.0f, 7.0f, 8.0f);
+	info.size = Vector3D(8.5f, 5.0f, 6.0f);
 	info.minScale = 0.5f;
 	info.maxScale = 1.2f;
 	info.minInstances = 1;
@@ -101,6 +109,14 @@ DecorationInfo Rock::getDecorationInfo() const {
 Vector3D Rock::getCollideSize() const {
 	Vector3D size = getDecorationInfo().size;
 	return size;
+}
+
+float Rock::getRotaHitboxY() const {
+	return 45.0f;
+}
+
+Vector3D Rock::getMoveHitbox() const {
+	return Vector3D(0.0f, 0.0f, 0.5f);
 }
 
 /* WaterPlant */

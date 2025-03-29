@@ -38,7 +38,9 @@ public:
 	Decoration(const std::string & filepath);
 	virtual DecorationInfo getDecorationInfo() const = 0;
 	virtual Matrix4D getTransform() const;
+	virtual float getRotaHitboxY() const;
 	virtual Vector3D getCollideSize() const;
+	virtual Vector3D getMoveHitbox() const;
 };
 
 class Stalagmite : public Decoration {
@@ -68,6 +70,8 @@ public:
 	Rock();
 	DecorationInfo getDecorationInfo() const override;
 	Vector3D getCollideSize() const override;
+	float getRotaHitboxY() const override;
+	Vector3D getMoveHitbox() const override;
 };
 
 class WaterPlant : public Decoration {
