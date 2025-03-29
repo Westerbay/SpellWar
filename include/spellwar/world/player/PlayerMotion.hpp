@@ -15,6 +15,7 @@
 
 #define SPEED 0.08f
 #define RUNNING_FACTOR 2.0f
+#define ANIMATION_COLLSION_TEST_STEP 15
 
 using namespace wgame;
 

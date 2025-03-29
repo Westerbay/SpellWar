@@ -38,6 +38,7 @@ public:
         Decoration & decoration
     );
     Hitbox getExtendedHitbox() const;
+    bool onPlatform(const Hitbox & object) const;
 private:
     std::vector<Hitbox> _decorationHitboxes;
     float _maxHeightStalagmite;

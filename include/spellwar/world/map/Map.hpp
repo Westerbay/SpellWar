@@ -31,7 +31,7 @@ public:
     );    
     void render() override;	
     std::vector<Platform> & getPlatforms();
-    bool collide(const Hitbox & hitbox);
+    Hitbox * collide(const Hitbox & hitbox);
 private:
     void constructPlatform(
         Cuboid & platform, Hitbox & hitboxPlatform,

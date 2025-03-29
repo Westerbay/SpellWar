@@ -40,14 +40,6 @@ void Player::update() {
     _playerModel.animate(this);   
 }
 
-bool Player::onPlatform() const {
-    Hitbox platformHitbox = _currentPlatform -> getHitbox();
-    Hitbox playerHitbox = hitbox;
-    float delta = (playerHitbox.size.y + platformHitbox.size.y) * 0.5f;
-    playerHitbox.move(-delta, AXIS_Y);
-    return platformHitbox.contains(playerHitbox.position);
-}
-
 void Player::render() {
     _playerModel.render();
 }

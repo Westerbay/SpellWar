@@ -17,7 +17,7 @@ Map::Map(const Hitbox & hitbox, AbstractBiome * biome) : GameObject(hitbox) {
     _collision = std::make_shared<CollisionTree>(collisionHitbox);
 }
 
-bool Map::collide(const Hitbox & hitbox) {
+Hitbox * Map::collide(const Hitbox & hitbox) {
     return _collision -> collidesWith(hitbox);
 }
 

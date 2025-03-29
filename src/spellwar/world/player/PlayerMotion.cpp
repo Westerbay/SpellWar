@@ -92,10 +92,10 @@ bool PlayerMotion::swapPlatform(Player * player, Platform * platform, const Poin
     Matrix3D pathOrientation = swapAnimation.destinationHitbox.orientation - swapAnimation.startHitbox.orientation;
     Vector3D path = swapAnimation.destinationHitbox.position - swapAnimation.startHitbox.position;
     Hitbox precalculatedHitbox = player -> hitbox;
-    precalculatedHitbox.size.y *= 0.9f;
-    for (int i = 0; i < 10; i ++) {
-        precalculatedHitbox.position += path * 0.1f;    
-        precalculatedHitbox.orientation += pathOrientation * 0.1f;
+    precalculatedHitbox.size.y *= 0.95f;
+    for (int i = 0; i < ANIMATION_COLLSION_TEST_STEP; i ++) {
+        precalculatedHitbox.position += path * (1.0f / ANIMATION_COLLSION_TEST_STEP);    
+        precalculatedHitbox.orientation += pathOrientation * (1.0f / ANIMATION_COLLSION_TEST_STEP);
         if (player -> _map -> collide(precalculatedHitbox)) {            
             return false;
         }
@@ -127,16 +127,21 @@ void PlayerMotion::move(Player * player) {
         return;
     } 
 
-    Vector3D movement = getMovement(player);    
+    Platform * platform = player -> _currentPlatform;    
+    Vector3D movement = getMovement(player);        
     Hitbox & hitbox = player -> hitbox;
-    Point3D lastPosition = hitbox.position;         
+    Point3D lastPosition = hitbox.position;
+    Hitbox * collision;
+
     hitbox.move(movement);
     Hitbox deviatedHitbox = hitbox;
     deviatedHitbox.move(0.001f, AXIS_Y);
-    if (player -> _map -> collide(deviatedHitbox)) {
+    deviatedHitbox.orientation = platform -> getHitbox().orientation;
+    collision = player -> _map -> collide(deviatedHitbox);
+    if (collision) {
         hitbox.position = lastPosition;
     } 
-    else if (!player -> onPlatform() && player -> canSwap()) {
+    else if (!platform -> onPlatform(deviatedHitbox) && player -> canSwap()) {
         Point3D destination;
         Platform * destPlat = player -> findBestAlignedPlatform(destination);
         if (destPlat && swapPlatform(player, destPlat, destination)) {
@@ -146,7 +151,7 @@ void PlayerMotion::move(Player * player) {
             hitbox.position = lastPosition;
         }
     }
-    else if (!player -> onPlatform()) {
-        hitbox.position = lastPosition;   
+    else if (!platform -> onPlatform(deviatedHitbox)) {
+        hitbox.position = lastPosition;
     }             
 }

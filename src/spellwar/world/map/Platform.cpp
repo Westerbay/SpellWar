@@ -129,3 +129,9 @@ Hitbox Platform::getExtendedHitbox() const {
     return extendedHitbox;
 }
 
+bool Platform::onPlatform(const Hitbox & object) const {
+    Hitbox entityHitbox = object;
+    float delta = (entityHitbox.size.y + hitbox.size.y) * 0.5f;
+    entityHitbox.move(-delta, AXIS_Y);
+    return hitbox.contains(entityHitbox.position);
+}

@@ -25,7 +25,7 @@
 #define SWAP_ANIMATION_KEYFRAME 0.014f
 #define MIN_SWAP_ANIMATION_KEYFRAME 0.1f
 
-#define HITBOX_SIZE Vector3D(0.7f, 1.65f, 0.7f)
+#define HITBOX_SIZE Vector3D(0.6f, 1.65f, 0.6f)
 
 
 using namespace wgame;
@@ -60,7 +60,6 @@ public:
 public:
     Player(Map * map);    
     GameObject * getCameraObject();
-    bool onPlatform() const;    
     void update() override;
     void render() override; 
     void renderHUD() override;       
