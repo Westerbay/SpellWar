@@ -69,6 +69,37 @@ void Texture2D::setData(const Image & image, GLenum type, bool generateMipmap) c
     unbind();
 }
 
+void Texture2D::setData(
+    unsigned width, unsigned height, unsigned channels, unsigned char * data,
+    GLenum type, bool generateMipmap
+) const {
+    bind();
+    GLint internalFormat;
+    switch(channels) {
+        case RGBA_CHANNELS:
+            internalFormat = GL_RGBA;
+            break;
+        case RGB_CHANNELS:
+            internalFormat = GL_RGB;
+            break;
+        case RED_CHANNELS:
+            internalFormat = GL_RED;
+            break;
+        default:
+            throw std::runtime_error("Texture2D : Unknown channel format");
+    }
+    glTexImage2D(
+        type, 0, internalFormat, 
+        width, height,
+        0, internalFormat, 
+        GL_UNSIGNED_BYTE, data
+    );
+    if (generateMipmap) {
+        glGenerateMipmap(GL_TEXTURE_2D);
+    }
+    unbind();
+}
+
 void Texture2D::enableAnisotropicFiltering() const {
     bind();
     GLfloat maxAniso = 1.0f;

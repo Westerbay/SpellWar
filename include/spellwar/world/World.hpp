@@ -16,6 +16,8 @@
 #include "map/Light.hpp"
 #include "biome/Space.hpp"
 
+#include "maintitle/Maintitle.hpp"
+
 #include <wgame/wgame.hpp>
 
 #define MAP_SIZE Vector3D(80.0f, 80.0f, 80.0f)

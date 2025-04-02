@@ -18,6 +18,7 @@
 #include "graphics/TextureDrawer.hpp"
 #include "graphics/ModelDrawer.hpp"
 #include "graphics/CubeMapDrawer.hpp"
+#include "graphics/FontDrawer.hpp"
 
 #include "opengl/AttributeProperties.hpp"
 #include "opengl/BufferObject.hpp"
@@ -36,6 +37,7 @@
 #include "tools/System.hpp"
 #include "tools/Keys.hpp"
 #include "tools/Util.hpp"
+#include "tools/Font.hpp"
 
 #include "model/Animation.hpp"
 #include "model/Skeleton.hpp"

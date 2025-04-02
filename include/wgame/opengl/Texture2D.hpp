@@ -55,6 +55,10 @@ public:
     void setInterpolationMode(InterpolationMode interpolation) const;
     void setRepeatMode(RepeatMode repeat) const;
     void setData(const Image & image, GLenum type = TEXTURE_2D, bool generateMipmap = true) const;
+    void setData(
+        unsigned width, unsigned height, unsigned channels, unsigned char * data,
+        GLenum type = TEXTURE_2D, bool generateMipmap = true
+    ) const;
     void enableAnisotropicFiltering() const;
     void bind() const override;
     void unbind() const override;

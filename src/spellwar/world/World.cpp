@@ -28,4 +28,6 @@ World::World(GameCamera * camera, GameLight * light) : GameObjectGroup() {
     
     camera -> setFarPlane(FAR_PLANE);
     camera -> attachGameObject(player -> getCameraObject());
+
+    add(new Maintitle());
 }

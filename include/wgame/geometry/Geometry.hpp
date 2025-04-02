@@ -29,6 +29,7 @@
 #define EPSILON 1e-6f
 
 #define PRINT_VEC3(v) std::cout << #v << ": (" << v.x << ", " << v.y << ", " << v.z << ")" << std::endl;
+#define PRINT_VEC2(v) std::cout << #v << ": (" << v.x << ", " << v.y << ")" << std::endl;
 
 namespace wgame {
 
@@ -42,6 +43,7 @@ typedef glm::mat2 Matrix2D;
 typedef glm::mat3 Matrix3D;
 typedef glm::mat4 Matrix4D;
 typedef glm::vec3 ColorRGB;
+typedef glm::vec4 ColorRGBA;
 typedef glm::quat Quaternion;
 
 typedef struct {
