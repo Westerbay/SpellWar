@@ -46,3 +46,7 @@
 #include "model/ModelGLTF.hpp"
 #include "model/ModelMesh.hpp"
 
+#include "widget/Button.hpp"
+#include "widget/Label.hpp"
+#include "widget/Widget.hpp"
+

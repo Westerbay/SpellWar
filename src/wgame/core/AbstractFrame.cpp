@@ -125,6 +125,7 @@ void AbstractFrame::render() {
 	glFrontFace(GL_CCW);
 	_world -> render();	
 
+	glDisable(GL_CULL_FACE);
 	glDisable(GL_DEPTH_TEST);
 	_world -> renderHUD();	
 }
