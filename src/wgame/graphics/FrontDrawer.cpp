@@ -46,11 +46,11 @@ void FontDrawer::setTextData(
 	for (unsigned char c : text) {
 		Vector3D pos[4] = {
 			toClip(font, x, y, z), toClip(font, x + 1, y, z), 
-			toClip(font, x + 1, y + 1, z), toClip(font, x, y + 1, z)
+			toClip(font, x + 1, y - 1, z), toClip(font, x, y - 1, z)
 		};
 		Vector2D uv[4] = {
-			toUV(font, c, 0, 1), toUV(font, c, 1, 1), 
-			toUV(font, c, 1, 0), toUV(font, c, 0, 0)
+			toUV(font, c, 0, 0), toUV(font, c, 1, 0), 
+			toUV(font, c, 1, 1), toUV(font, c, 0, 1)
 		};
 		unsigned square[6] = {k, k + 2, k + 1, k, k + 3, k + 2};
 		ebo.insert(ebo.end(), square, square + 6);

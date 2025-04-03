@@ -30,7 +30,7 @@ vec4 getGLPosition(vec3 position, int mode) {
     if (mode == WORLD_MODE) {
         return cameraMatrices.world * vec4(position, 1.0);
     }
-    return cameraMatrices.HUD * vec4(position, 1.0);
+    return vec4(position, 1.0);
 }
 
 void main() {
