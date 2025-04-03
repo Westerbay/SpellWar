@@ -30,7 +30,7 @@ void Label::rebuild(const Font & font) {
     _fontDrawer.setTextData(font, _text, Point3D(_position, 0.0f));
 }
 
-void Label::renderHUD() {
+void Label::renderHUD(const Size & size) {
     _fontDrawer.draw();
 }
 

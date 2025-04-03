@@ -35,20 +35,23 @@ void FontDrawer::setTextData(
 	_color = font.getColor();
 	_fillColor = font.getFillColor();
 	
-	std::vector<Vector3D> vertices;
-	std::vector<Vector2D> uvs;
+	std::vector<Point3D> vertices;
+	std::vector<Point2D> uvs;
 	std::vector<unsigned> ebo;
 
 	float x = position.x;
 	float y = position.y;
 	float z = position.z;
 	unsigned k = 0;
+	float ratioWH = font.getRowCharacterNumber() / (float) font.getColumnCharacterNumber();
 	for (unsigned char c : text) {
-		Vector3D pos[4] = {
-			toClip(font, x, y, z), toClip(font, x + 1, y, z), 
-			toClip(font, x + 1, y - 1, z), toClip(font, x, y - 1, z)
+		Point3D pos[4] = {
+			Point3D(x, y, z), 
+			Point3D(x + font.getSize(), y, z), 
+			Point3D(x + font.getSize(), y + font.getSize() * ratioWH, z), 
+			Point3D(x, y + font.getSize() * ratioWH, z)
 		};
-		Vector2D uv[4] = {
+		Point2D uv[4] = {
 			toUV(font, c, 0, 0), toUV(font, c, 1, 0), 
 			toUV(font, c, 1, 1), toUV(font, c, 0, 1)
 		};
@@ -56,7 +59,7 @@ void FontDrawer::setTextData(
 		ebo.insert(ebo.end(), square, square + 6);
 		vertices.insert(vertices.end(), pos, pos + 4);
 		uvs.insert(uvs.end(), uv, uv + 4);
-		x += 1.0f;
+		x += font.getSize();
 		k += 4;
 	}
 	vaos.front().setEBO(ebo);
@@ -82,14 +85,6 @@ void FontDrawer::draw(const Matrix4D & model, Mode mode) {
 
 	_texture.unbind();
     _shader -> unbind();
-}
-
-Point3D FontDrawer::toClip(
-	const Font & font, 
-	float x, float y, float z
-) {
-	float ratioWH = font.getReferencedCharacter() / (float) font.getColumnCharacterNumber();
-	return Point3D(x * font.getSize(), y * font.getSize() * ratioWH, z); 
 }
 
 Point2D FontDrawer::toUV(

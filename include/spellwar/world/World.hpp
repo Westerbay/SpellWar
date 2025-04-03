@@ -16,7 +16,7 @@
 #include "map/Light.hpp"
 #include "biome/Space.hpp"
 
-#include "maintitle/Maintitle.hpp"
+#include "../maintitle/Maintitle.hpp"
 
 #include <wgame/wgame.hpp>
 

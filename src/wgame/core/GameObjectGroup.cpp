@@ -44,9 +44,9 @@ void GameObjectGroup::renderBackground() {
     }
 }
 
-void GameObjectGroup::renderHUD() {
+void GameObjectGroup::renderHUD(const Size & screenSize) {
     for (GameObject * gameObject : _objects) {
-        gameObject -> renderHUD();
+        gameObject -> renderHUD(screenSize);
     }
 }
 

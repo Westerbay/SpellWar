@@ -55,26 +55,18 @@ void ColorDrawer::setFillSphereData(
     const ColorRGB & color, 
     unsigned int stacks, unsigned int slices
 ) {
-    std::vector<ColorRGB> colors(stacks * slices, color);    
-    setFillSphereData(sphere, stacks, slices);
-    vaos[0].setVBO(VBO_COLOR, colors);
-}
-
-void ColorDrawer::setFillSphereData(
-    const Sphere & sphere, 
-    unsigned int stacks, 
-    unsigned int slices
-) {
     std::vector<Point3D> vertices;
     std::vector<Vector3D> normals;
     std::vector<unsigned> elements;
 
     sphere.generateSphere(elements, normals, vertices, stacks, slices);
+    std::vector<ColorRGB> colors(vertices.size(), color);
 
     vaos.resize(1);
     vaos[0].setEBO(elements);
     vaos[0].setVBO(VBO_VERTEX, vertices);
     vaos[0].setVBO(VBO_NORMAL, normals);
+    vaos[0].setVBO(VBO_COLOR, colors);
 }
 
 void ColorDrawer::setFillCuboidData(const Cuboid & cuboid) {
@@ -87,6 +79,25 @@ void ColorDrawer::setFillCuboidData(const Cuboid & cuboid) {
         vaos[i].setVBO(VBO_NORMAL, normals[i]);
         vaos[i].setEBO(elements[i]);
     }
+}
+
+void ColorDrawer::setFillCircleData(
+    const Circle & circle, 
+    const ColorRGB & color, 
+    unsigned int segments
+) {
+    std::vector<Point3D> vertices;
+    std::vector<Vector3D> normals;
+    std::vector<unsigned> elements;
+
+    circle.generateCircle(elements, normals, vertices, segments);
+    std::vector<ColorRGB> colors(vertices.size(), color);
+
+    vaos.resize(1);
+    vaos[0].setEBO(elements);
+    vaos[0].setVBO(VBO_VERTEX, vertices);
+    vaos[0].setVBO(VBO_NORMAL, normals);
+    vaos[0].setVBO(VBO_COLOR, colors);
 }
 
 void ColorDrawer::draw(const Matrix4D & model, Mode mode) {

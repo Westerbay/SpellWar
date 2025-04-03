@@ -11,12 +11,16 @@
 
 
 PlayerHUD::PlayerHUD() {
-    Sphere sphere(Point3D(0.0f), 0.01f);
-    _visionIndicator.setFillSphereData(
-        sphere, ColorRGB(1.0f), 40, 40
+    Circle circle(Point2D(0.0f), 5.0f);
+    _visionIndicator.setFillCircleData(
+        circle, ColorRGB(1.0f), 40
     );
 }
 
-void PlayerHUD::render() {
-    _visionIndicator.fill(Matrix4D(1.0f), Drawer::HUD);
+void PlayerHUD::render(const Size & screenSize) {
+    Matrix4D transform(1.0f);
+    Point3D middleScreen(screenSize.width, screenSize.height, 0.0f);
+    middleScreen *= 0.5f;
+    transform = glm::translate(transform, middleScreen);
+    _visionIndicator.fill(transform, Drawer::HUD);
 }

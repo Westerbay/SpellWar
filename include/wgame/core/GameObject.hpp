@@ -24,7 +24,7 @@ public:
     virtual void update() {};
     virtual void render() {};
     virtual void renderBackground() {};
-    virtual void renderHUD() {};
+    virtual void renderHUD(const Size & screenSize) {};
     virtual ~GameObject() = default;    
 protected:
     Hitbox hitbox;

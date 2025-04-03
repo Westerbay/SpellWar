@@ -65,8 +65,7 @@ void GameCamera::update() {
     
     _cameraMatrices.world = projection * view;
     _cameraMatrices.background = projection * Matrix4D(Matrix3D(view));
-    _cameraMatrices.HUD = Matrix4D(1.0f);
-    _cameraMatrices.HUD[0][0] = (float) hitbox.size.y / hitbox.size.x;
+    _cameraMatrices.HUD = glm::ortho(0.0f, (float)hitbox.size.x, (float)hitbox.size.y, 0.0f);
 }
 
 }

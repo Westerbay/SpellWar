@@ -37,10 +37,10 @@ public:
         const ColorRGB & color, 
         unsigned int stacks, unsigned int slices
     );
-    void setFillSphereData(
-        const Sphere & sphere, 
-        unsigned int stacks, 
-        unsigned int slices
+    void setFillCircleData(
+        const Circle & circle, 
+        const ColorRGB & color, 
+        unsigned int segments
     );
     void draw(const Matrix4D & model = Matrix4D(1.0f), Mode mode = WORLD);    
     void fill(const Matrix4D & model = Matrix4D(1.0f), Mode mode = WORLD);

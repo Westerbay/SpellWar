@@ -14,6 +14,13 @@
 
 namespace wgame {
 
+Size AbstractFrame::_frameSize = {0, 0};
+
+void AbstractFrame::frameResize(GLFWwindow * window, int width, int height) {
+	glViewport(0, 0, width, height);
+	_frameSize = {(unsigned) width, (unsigned) height};
+}
+
 AbstractFrame::AbstractFrame(const char * title, const Size & size) : _running(false) {
 	if (!glfwInit()) {
 		throw std::runtime_error("Failed to initialize GLFW ! ");
@@ -30,11 +37,12 @@ AbstractFrame::AbstractFrame(const char * title, const Size & size) : _running(f
 	}
 	
 	glfwMakeContextCurrent(_frame);
+	glfwSetFramebufferSizeCallback(_frame, frameResize);
 	gladLoadGL();
 	
 	glViewport(0, 0, size.width, size.height);
 
-	_size = size;
+	_frameSize = size;
 	_world = nullptr;
 	_camera = nullptr;
 	_light = nullptr;
@@ -62,8 +70,8 @@ void AbstractFrame::setCursorActive(bool cursorActive) {
 	}
 }
 
-void AbstractFrame::setBackgroundColor(GLclampf red, GLclampf green, GLclampf blue) {
-	glClearColor(red, green, blue, 1.0f);
+void AbstractFrame::setBackgroundColor(ColorRGB color) {
+	glClearColor(color.r, color.g, color.b, 1.0f);
 }
 
 void AbstractFrame::initWorld(GameObjectGroup * world) {
@@ -78,7 +86,7 @@ void AbstractFrame::initCamera(GameCamera * camera) {
 		throw std::runtime_error("Camera already initialized ! ");
 	}
 	_camera = camera;
-	_camera -> setSize(_size);
+	_camera -> setSize(_frameSize);
 }
 
 bool AbstractFrame::shouldExit() const {
@@ -111,6 +119,7 @@ void AbstractFrame::initOpenGLState() {
 void AbstractFrame::render() {
 	glEnable(GL_DEPTH_TEST);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	
+	_camera -> setSize(_frameSize);
 	_light -> apply(_camera -> getHitbox().position);
 	_camera -> apply();
 
@@ -127,7 +136,7 @@ void AbstractFrame::render() {
 
 	glDisable(GL_CULL_FACE);
 	glDisable(GL_DEPTH_TEST);
-	_world -> renderHUD();	
+	_world -> renderHUD(_frameSize);	
 }
 
 };

@@ -25,7 +25,7 @@ public:
     void update() override;
     void render() override;
     void renderBackground() override;
-    void renderHUD() override;
+    void renderHUD(const Size & screenSize) override;
 private:
     std::unordered_set<GameObject *> _objects;
 };

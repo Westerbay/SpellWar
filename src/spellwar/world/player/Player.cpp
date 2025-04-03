@@ -44,8 +44,8 @@ void Player::render() {
     _playerModel.render();
 }
 
-void Player::renderHUD() {
-    _playerHUD.render();
+void Player::renderHUD(const Size & screenSize) {
+    _playerHUD.render(screenSize);
 }
 
 Platform * Player::findBestAlignedPlatform(Point3D & destination) {

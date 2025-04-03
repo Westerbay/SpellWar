@@ -36,10 +36,6 @@ public:
 		FontDrawerShader();
     };
 private:
-	Point3D toClip(
-		const Font & font, 
-		float x, float y, float z
-	);
 	Point2D toUV(
 		const Font & font, unsigned char character,
 		unsigned char xOff, unsigned char yOff

@@ -62,7 +62,7 @@ public:
     GameObject * getCameraObject();
     void update() override;
     void render() override; 
-    void renderHUD() override;       
+    void renderHUD(const Size & screenSize) override;       
 private:
     Platform * findBestAlignedPlatform(Point3D & destination);
     bool intersectionPlatform(

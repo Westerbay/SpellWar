@@ -20,7 +20,7 @@ class Player;
 class PlayerHUD {
 public:
     PlayerHUD();
-    void render();
+    void render(const Size & screenSize);
 private:
     ColorDrawer _visionIndicator;
 };

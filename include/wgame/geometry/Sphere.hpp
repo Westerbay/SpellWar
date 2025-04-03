@@ -24,9 +24,24 @@ struct Sphere {
     );   
     void generateSphere(
         std::vector<unsigned> & elements, 
-        std::vector<Vector3D> & normals, 
-        std::vector<Vector3D> & vertices, 
+        std::vector<Point3D> & normals, 
+        std::vector<Point3D> & vertices, 
         unsigned int stacks, unsigned int slices
+    ) const;
+};
+
+struct Circle {
+    float radius;
+    Point2D position;
+    Circle(
+        Point2D position = Point2D(0.0f), 
+        float radius = 0.0f
+    ); 
+    void generateCircle(
+        std::vector<unsigned> & elements,
+        std::vector<Point3D> & normals,
+        std::vector<Point3D> & vertices,
+        unsigned int segments
     ) const;
 };
 

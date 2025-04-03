@@ -7,9 +7,20 @@
  */
 
 
-#include <spellwar/core/MainFrame.hpp>
+#ifndef __MAINTITLE__
+#define __MAINTITLE__
 
-MainFrame::MainFrame(const char * title, const Size & size) :
-    AbstractFrame(title, size) {
-    setCursorActive(false);
-}
+#define FONT_PATH "assets/font.png"
+
+#include <wgame/wgame.hpp>
+
+
+using namespace wgame;
+
+class Maintitle : public GameObjectGroup {
+public:
+    Maintitle();
+};
+
+
+#endif

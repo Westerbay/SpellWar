@@ -42,18 +42,20 @@ public:
 	void pollEvents() const;
 	void swapBuffers() const;
 	void setCursorActive(bool cursorActive);
-	void setBackgroundColor(GLclampf red, GLclampf green, GLclampf blue);
+	void setBackgroundColor(ColorRGB color);
 	void initWorld(GameObjectGroup * world);
 	void initCamera(GameCamera * camera);
 	void initLight(GameLight * light);
 	void initOpenGLState();
 	void render();	
 private:
+	static void frameResize(GLFWwindow * window, int width, int height);
+	static Size _frameSize;
+private:
 	GLFWwindow * _frame;
+	GameCamera * _camera;	
 	GameObjectGroup * _world;
-	GameCamera * _camera;
 	GameLight * _light;
-	Size _size;
 	bool _running;
 	bool _cursorActive;
 };

@@ -21,7 +21,7 @@ public:
     void setPosition(const Point2D & position);
     void setText(const String & text);
     void rebuild(const Font & font); 
-    void renderHUD() override;
+    void renderHUD(const Size & size) override;
 protected:
     Label();
     Label * createLabel();      

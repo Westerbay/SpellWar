@@ -18,11 +18,10 @@ Sphere::Sphere(Point3D position, float radius) {
 
 void Sphere::generateSphere(
     std::vector<unsigned> & elements, 
-    std::vector<Vector3D> & normals, 
-    std::vector<Vector3D> & vertices, 
+    std::vector<Point3D> & normals, 
+    std::vector<Point3D> & vertices, 
     unsigned int stacks, unsigned int slices
 ) const {
-
     for (unsigned int i = 0; i <= stacks; ++i) {
         float phi = PI * float(i) / float(stacks);
         float y = radius * cos(phi);
@@ -55,6 +54,31 @@ void Sphere::generateSphere(
             elements.push_back(second + 1);
             elements.push_back(first + 1);
         }
+    }
+}
+
+Circle::Circle(Point2D position, float radius) {
+    Circle::position = position;
+    Circle::radius = radius;
+}
+
+void Circle::generateCircle(
+    std::vector<unsigned> & elements,
+    std::vector<Point3D> & normals,
+    std::vector<Point3D> & vertices,
+    unsigned int segments
+) const {
+    vertices.push_back(Point3D(position, 0.0f));    
+    for (unsigned i = 0; i <= segments; i ++) {
+        float angle = 2.0f * PI * i / segments;
+        float x = position.x + radius * cos(angle);
+        float y = position.y + radius * sin(angle);
+        vertices.push_back(Point3D(x, y, 0.0f));
+        normals.push_back(Point3D(0.0f, 0.0f, 1.0f));
+
+        elements.push_back(0);
+        elements.push_back(i);
+        elements.push_back(i + 1);
     }
 }
 
