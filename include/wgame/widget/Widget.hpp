@@ -19,10 +19,17 @@ namespace wgame {
 
 class Widget : public GameObject {
 public:
+    Widget();
+    void setDesignedSize(const Size & designedSize);
+    void setHorizontalResponsive(bool enable);
+    float getScale(const Size & size);
     bool hover();
     bool triggered();
 protected:
     System _system;
+    Size _designedSize;
+    bool _horizontalResponsive;
+    float _scale;
 };
 
 }

@@ -50,6 +50,17 @@ void ColorDrawer::setFillCuboidData(
     }
 }
 
+void ColorDrawer::setFillCuboidData(
+    const Cuboid & cuboid, 
+    const std::vector<std::vector<ColorRGB>> & colors
+) {
+    setFillCuboidData(cuboid);
+    for (int i = 0; i < 6; i ++) {
+        std::vector<Vector3D> vboColors = {colors[i][0], colors[i][1], colors[i][2], colors[i][3]};
+        vaos[i].setVBO(VBO_COLOR, vboColors);
+    }
+}
+
 void ColorDrawer::setFillSphereData(
     const Sphere & sphere, 
     const ColorRGB & color, 

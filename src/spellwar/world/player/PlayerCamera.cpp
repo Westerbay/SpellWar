@@ -44,6 +44,7 @@ void PlayerCamera::updatePlayer(const Hitbox & playerHitbox) {
     hitbox.move(offset.y, AXIS_Y);
     hitbox.move(offset.z, AXIS_Z);
     hitbox.rotateX(_angle);
+    hitbox.rotateY(180.0f);
 }
 
 Vector3D PlayerCamera::getGaze() const {

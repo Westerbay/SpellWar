@@ -16,7 +16,7 @@
  
 int main() {
 	srand((unsigned int) time(nullptr));
-	MainFrame * mainFrame = new MainFrame("Application", {1280, 720});
+	MainFrame * mainFrame = new MainFrame();
 	Game * game = new Game();
 	GameEngine gameEngine(game, mainFrame);
 	gameEngine.start();

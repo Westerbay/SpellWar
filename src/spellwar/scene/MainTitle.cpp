@@ -20,27 +20,45 @@ Maintitle::Maintitle(AbstractGame * game, World * world) : GameObject() {
     font.setColumnCharacterNumber(8);
 
     LabelBuilder labelBuilder;
+    labelBuilder.setHorizontalResponsive(true);
+    labelBuilder.setDesignedSize(DEFAULT_SIZE);
     labelBuilder.setText("Spellwar");
     labelBuilder.setPosition(Point2D(0.0f, 0.0f));
     _widget.add(labelBuilder.build(font));    
 
+    setButtons(font);
+    setBackground();
+}
+
+void Maintitle::setButtons(const Font & font) {
     ButtonBuilder buttonBuilder;
+    buttonBuilder.setHorizontalResponsive(true);
+    buttonBuilder.setDesignedSize(DEFAULT_SIZE);
     buttonBuilder.setText("Play");
     buttonBuilder.setPosition(Point2D(0.0f, 100.0f));
     buttonBuilder.setAction([&]() {
-        System _system;
-        _system.postEvent(IN_GAME_EVENT);
+        System system;
+        system.postEvent(IN_GAME_EVENT);
         _world -> setActive(true);
         setActive(false);
     });
-    _widget.add(buttonBuilder.build(font));  
+    Button * playButton = buttonBuilder.build(font);
+    _widget.add(playButton);  
 
     buttonBuilder.setText("Exit");
     buttonBuilder.setPosition(Point2D(0.0f, 200.0f));
-    buttonBuilder.setAction([game]() {
-        game -> stop();
+    buttonBuilder.setAction([&]() {
+        _game -> stop();
     });
-    _widget.add(buttonBuilder.build(font));  
+    Button * exitButton = buttonBuilder.build(font);
+    _widget.add(exitButton);  
+
+    _widget.add(new MaintitleButton(playButton));
+    _widget.add(new MaintitleButton(exitButton));
+}
+
+void Maintitle::setBackground() {
+    Hitbox background;
 }
 
 void Maintitle::setActive(bool active) {
@@ -61,11 +79,24 @@ void Maintitle::renderHUD(const Size & screenSize) {
 
 MaintitleButton::MaintitleButton(Button * button) : GameObject() {
     _button = button;
+    _text = button -> getText();
 }
 
 void MaintitleButton::update() {
-    if (_button -> hover()) {
-
+    String text = _button -> getText();
+    bool hover = _button -> hover();
+    if (hover && text[0] != '>') {
+        Font font(FONT_PATH, 50.0f);    
+        font.setReferencedCharacter(' ');
+        font.setColumnCharacterNumber(8);
+        _button -> setText(">" + _text);
+        _button -> rebuild(font);
+    } else if (!hover && text[0] == '>') {
+        Font font(FONT_PATH, 50.0f);    
+        font.setReferencedCharacter(' ');
+        font.setColumnCharacterNumber(8);
+        _button -> setText(_text);
+        _button -> rebuild(font);
     }
 }
  

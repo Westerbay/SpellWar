@@ -15,7 +15,7 @@
 #include <wgame/wgame.hpp>
 
 #include "World.hpp"
-#include "Events.hpp"
+#include "Scene.hpp"
 
 
 using namespace wgame;
@@ -27,10 +27,14 @@ public:
     void update() override;
     void renderHUD(const Size & screenSize) override;
 private:
+    void setButtons(const Font & font);
+    void setBackground();
+private:
     GameObjectGroup _widget;
     bool _active;
     AbstractGame * _game;
     World * _world;
+    ColorDrawer _colorDrawer;
 };
 
 class MaintitleButton : public GameObject {
@@ -39,6 +43,7 @@ public:
     void update() override;
 private:
     Button * _button;
+    String _text;
 };
 
 

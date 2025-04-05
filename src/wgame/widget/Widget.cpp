@@ -11,9 +11,35 @@
 
 
 namespace wgame {
+
+Widget::Widget() {
+    _horizontalResponsive = false;
+    _scale = 1.0f;
+}
+
+void Widget::setDesignedSize(const Size & designedSize) {
+    _designedSize = designedSize;
+}
+
+void Widget::setHorizontalResponsive(bool enable) {
+    _horizontalResponsive = enable;
+}
+
+float Widget::getScale(const Size & size) {
+    if (_horizontalResponsive) {
+        _scale = (float) size.width / _designedSize.width;
+    }
+    else {
+        _scale = 1.0f;
+    }
+    return _scale;
+}
     
 bool Widget::hover() {
-    return hitbox.contains(_system.getMousePosition());
+    Hitbox scaledHitbox = hitbox;
+    scaledHitbox.position *= _scale;
+    scaledHitbox.size *= _scale;
+    return scaledHitbox.contains(_system.getMousePosition());
 }
 
 bool Widget::triggered() {

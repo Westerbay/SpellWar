@@ -35,13 +35,17 @@ void Label::rebuild(const Font & font) {
 }
 
 void Label::renderHUD(const Size & size) {
-    _fontDrawer.draw();
+    Matrix4D transform(1.0f);
+    transform = glm::scale(transform, Vector3D(getScale(size)));
+    _fontDrawer.draw(transform);
 }
 
 LabelBuilder::LabelBuilder() : Label() {}
 
 Label * LabelBuilder::build(const Font & font) {
     Label * newLabel = createLabel();
+    newLabel -> setHorizontalResponsive(_horizontalResponsive);
+    newLabel -> setDesignedSize(_designedSize);
     newLabel -> setText(_text);
     newLabel -> setPosition(_position);
     newLabel -> rebuild(font);

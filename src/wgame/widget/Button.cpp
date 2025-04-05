@@ -34,6 +34,8 @@ ButtonBuilder::ButtonBuilder() : Button() {}
 
 Button * ButtonBuilder::build(const Font & font) {
     Button * newButton = createButton();
+    newButton -> setHorizontalResponsive(_horizontalResponsive);
+    newButton -> setDesignedSize(_designedSize);
     newButton -> setText(_text);
     newButton -> setPosition(_position);
     newButton -> setAction(_action);

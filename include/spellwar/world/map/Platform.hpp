@@ -19,6 +19,8 @@
 #define Y_GAP 20
 #define MAX_ATTEMPTS 40
 
+#define SPAWN_SIZE Vector3D(3.0f, 2.0f, 3.0f)
+
 
 using namespace wgame;
 

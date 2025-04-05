@@ -12,7 +12,7 @@
 Platform::Platform(const Hitbox & hitbox) : GameObject(hitbox) {
     _playerSpawn = hitbox;
     _playerSpawn.move(hitbox.size.y * 0.5f, AXIS_Y);
-    _playerSpawn.size = Vector3D(1.0f, 2.0f, 1.0f);
+    _playerSpawn.size = SPAWN_SIZE;
     _decorationHitboxes.push_back(_playerSpawn);
     _maxHeightStalagmite = 0; 
 }

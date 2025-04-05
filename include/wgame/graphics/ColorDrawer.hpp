@@ -31,6 +31,10 @@ public:
         const Cuboid & cuboid, 
         const std::vector<ColorRGB> & colors
     );
+    void setFillCuboidData(
+        const Cuboid & cuboid, 
+        const std::vector<std::vector<ColorRGB>> & colors
+    );
     void setFillCuboidData(const Cuboid & cuboid);
     void setFillSphereData(
         const Sphere & sphere, 

@@ -12,14 +12,16 @@
 
 #include <wgame/wgame.hpp>
 
-#include "../scene/Events.hpp"
+#include "../scene/Scene.hpp"
+
+#define TITLE "Spellwar"
 
 
 using namespace wgame;
 
 class MainFrame : public AbstractFrame {
 public: 
-    MainFrame(const char * title, const Size & size);
+    MainFrame();
     void processEvent(Event event) override;
 private:
     System _system;
