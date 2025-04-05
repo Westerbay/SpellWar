@@ -32,14 +32,15 @@ void Button::update() {
 
 ButtonBuilder::ButtonBuilder() : Button() {}
 
-Button * ButtonBuilder::build(const Font & font) {
+Button * ButtonBuilder::build() {
     Button * newButton = createButton();
     newButton -> setHorizontalResponsive(_horizontalResponsive);
     newButton -> setDesignedSize(_designedSize);
     newButton -> setText(_text);
     newButton -> setPosition(_position);
     newButton -> setAction(_action);
-    newButton -> rebuild(font);
+    newButton -> setFont(_font);
+    newButton -> rebuild();
     return newButton;
 }
 

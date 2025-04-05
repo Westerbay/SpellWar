@@ -13,7 +13,7 @@
 PlayerHUD::PlayerHUD() {
     Circle circle(Point2D(0.0f), 5.0f);
     _visionIndicator.setFillCircleData(
-        circle, ColorRGB(1.0f), 40
+        circle, ColorRGBA(1.0f), 40
     );
 }
 

@@ -19,7 +19,8 @@ namespace wgame {
 
 class Font : public Image {
 public:
-    Font(const char * fontPath, float fontSize);
+    Font();
+    Font(const String & fontPath, float fontSize);
     unsigned char getRowCharacterNumber() const;
     unsigned char getColumnCharacterNumber() const;
     unsigned char getReferencedCharacter() const;
@@ -30,6 +31,7 @@ public:
     void setColumnCharacterNumber(unsigned char nbChar);
     void setReferencedCharacter(unsigned char character);
     void setColor(const ColorRGB & color);
+    void setSize(float fontSize);
     void setFillColor(const ColorRGBA & fillcolor);    
 private:
     unsigned char _nbCharRow;

@@ -11,23 +11,27 @@
 #define __WG_IMAGE_H__
  
 #include <tinygltf/stb_image.h>
+
+#include "Util.hpp"
  
  
 namespace wgame {
 
 class Image {
 public:    
-    Image(const char * filename, bool flipVertical = true);
-    ~Image();
+    Image();
+    Image(const String & filename, bool flipVertical = true);
     int getWidth() const;
     int getHeight() const;
     int getNumberOfChannels() const;
     unsigned char * getData() const;
 private:
+    String _filename;
+    bool _flip;
     int _width; 
     int _height;
     int _numberOfChannels;
-    unsigned char * _data;
+    std::shared_ptr<unsigned char> _data;
 };
 
 }

@@ -22,9 +22,10 @@ public:
     Widget();
     void setDesignedSize(const Size & designedSize);
     void setHorizontalResponsive(bool enable);
-    float getScale(const Size & size);
+    void resize(const Size & size);
     bool hover();
     bool triggered();
+    virtual void rebuild() = 0;
 protected:
     System _system;
     Size _designedSize;

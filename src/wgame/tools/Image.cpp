@@ -11,16 +11,18 @@
 
 namespace wgame {
 
-Image::Image(const char * filename, bool flipVertical) {
+Image::Image() {}
+
+Image::Image(const String & filename, bool flipVertical) {
+    _filename = filename;
+    _flip = flipVertical;
     if (flipVertical) {
         stbi_set_flip_vertically_on_load(true);
     }
-    _data = stbi_load(filename, &_width, &_height, &_numberOfChannels, STBI_default);
+    _data = std::shared_ptr<unsigned char>(
+        stbi_load(filename.c_str(), &_width, &_height, &_numberOfChannels, STBI_default
+    ));
     stbi_set_flip_vertically_on_load(false);
-}
-
-Image::~Image() {
-    stbi_image_free(_data);
 }
 
 int Image::getWidth() const {
@@ -36,7 +38,7 @@ int Image::getNumberOfChannels() const {
 }
 
 unsigned char * Image::getData() const {
-    return _data;
+    return _data.get();
 }
 
 }

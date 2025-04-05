@@ -17,6 +17,10 @@
 #include "World.hpp"
 #include "Scene.hpp"
 
+#define FONT_SIZE_TITLE 50.0f
+#define FONT_SIZE_BUTTONS 25.0f
+#define MARGIN 50.0f
+
 
 using namespace wgame;
 
@@ -27,7 +31,7 @@ public:
     void update() override;
     void renderHUD(const Size & screenSize) override;
 private:
-    void setButtons(const Font & font);
+    void setButtons();
     void setBackground();
 private:
     GameObjectGroup _widget;

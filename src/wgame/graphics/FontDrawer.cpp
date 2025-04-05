@@ -21,14 +21,14 @@ FontDrawer::FontDrawer() : Drawer() {
         _shader = std::make_shared<FontDrawerShader>();
         _uniqueShader = _shader;
     }
-	vaos.resize(1);
 }
 
 void FontDrawer::setTextData(
 	const Font & font, const String & text, 
 	const Point3D & position, Hitbox & hitbox
 ) {
-
+	vaos.clear();
+	vaos.resize(1);
 	_texture.setData(font);
 	_texture.setInterpolationMode(INTERPOLATION_NEAREST);
 

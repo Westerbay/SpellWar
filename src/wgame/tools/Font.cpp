@@ -12,7 +12,9 @@
 
 namespace wgame {
 
-Font::Font(const char * fontPath, float fontSize) : Image(fontPath, false) {
+Font::Font() : Image() {}
+
+Font::Font(const String & fontPath, float fontSize) : Image(fontPath, false) {
     _fontSize = fontSize;
     _refChar = 0;
     _color = ColorRGB(1.0f);
@@ -35,6 +37,10 @@ unsigned char Font::getReferencedCharacter() const {
 
 float Font::getSize() const {
     return _fontSize;
+}
+
+void Font::setSize(float fontSize) {
+    _fontSize = fontSize;
 }
 
 ColorRGB Font::getColor() const {

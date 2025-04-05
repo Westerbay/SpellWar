@@ -5,7 +5,7 @@
 #define HUD_MODE 2
 
 layout(location = 0) in vec3 aPos;
-layout(location = 1) in vec3 aColor;
+layout(location = 1) in vec4 aColor;
 layout(location = 2) in vec3 aNormal;
 
 struct CameraMatrices {
@@ -20,7 +20,7 @@ layout(std140, binding = 0) uniform CameraBlock {
 
 out vec3 fragPosition;
 out vec3 fragNormal;
-out vec3 color;
+out vec4 color;
 
 uniform mat4 model;
 uniform int drawInstanced;

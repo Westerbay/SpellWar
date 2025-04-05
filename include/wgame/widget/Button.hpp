@@ -27,7 +27,7 @@ protected:
 class ButtonBuilder : public Button {
 public:
     ButtonBuilder();    
-    Button * build(const Font & font);    
+    Button * build();    
 };
 
 }

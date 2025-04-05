@@ -20,7 +20,7 @@ layout(std140, binding = 1) uniform LightBlock {
 
 in vec3 fragPosition;
 in vec3 fragNormal;
-in vec3 color;
+in vec4 color;
 
 out vec4 fragColor;
 
@@ -37,10 +37,10 @@ void main() {
         float specAmount = pow(max(dot(viewDirection, reflectionDirection), 0.0), light.defaultSpecularExponent);
         float specular = specAmount * light.defaultSpecularFactor;
 
-        fragColor = vec4(color, 1.0f);
-        fragColor.xyz = color * light.color.xyz * (diffuse + light.defaultAmbient + specular);
+        fragColor = color;
+        fragColor.xyz = color.xyz * light.color.xyz * (diffuse + light.defaultAmbient + specular);
     } 
     else {
-        fragColor = vec4(color, 1.0f);
+        fragColor = color;
     }
 }

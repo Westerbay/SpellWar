@@ -25,21 +25,25 @@ void Widget::setHorizontalResponsive(bool enable) {
     _horizontalResponsive = enable;
 }
 
-float Widget::getScale(const Size & size) {
+void Widget::resize(const Size & size) {
+    float scale;
     if (_horizontalResponsive) {
-        _scale = (float) size.width / _designedSize.width;
+        scale = (float) size.width / _designedSize.width;
     }
     else {
-        _scale = 1.0f;
+        scale = 1.0f;
     }
-    return _scale;
+    if (_scale != scale) {
+        _scale = scale;
+        rebuild();
+    }
+    else {
+        _scale = scale;
+    }
 }
     
 bool Widget::hover() {
-    Hitbox scaledHitbox = hitbox;
-    scaledHitbox.position *= _scale;
-    scaledHitbox.size *= _scale;
-    return scaledHitbox.contains(_system.getMousePosition());
+    return hitbox.contains(_system.getMousePosition());
 }
 
 bool Widget::triggered() {

@@ -22,13 +22,15 @@ public:
     String getText() const;
     void setPosition(const Point2D & position);
     void setText(const String & text);
-    void rebuild(const Font & font); 
+    void setFont(const Font & font);
+    void rebuild() override; 
     void renderHUD(const Size & size) override;
 protected:
     Label();
     Label * createLabel();      
     Point2D _position;
     String _text;  
+    Font _font;
 private:
     FontDrawer _fontDrawer;
 };
@@ -36,7 +38,7 @@ private:
 class LabelBuilder : public Label {
 public:
     LabelBuilder();    
-    Label * build(const Font & font);    
+    Label * build();    
 };
 
 }

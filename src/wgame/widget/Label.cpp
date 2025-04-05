@@ -30,25 +30,37 @@ void Label::setText(const String & text) {
     _text = text;
 }
 
-void Label::rebuild(const Font & font) {
-    _fontDrawer.setTextData(font, _text, Point3D(_position, 0.0f), hitbox);
+void Label::setFont(const Font & font) {
+    _font = font;
+}
+
+void Label::rebuild() {
+    Font font = _font;
+    int fontSize = (int) font.getSize() * _scale;
+    font.setSize((float) fontSize);
+    Point3D position(
+        (int)(_position.x * _scale), 
+        (int)(_position.y * _scale), 
+        0.0f
+    );
+    _fontDrawer.setTextData(font, _text, position, hitbox);
 }
 
 void Label::renderHUD(const Size & size) {
-    Matrix4D transform(1.0f);
-    transform = glm::scale(transform, Vector3D(getScale(size)));
-    _fontDrawer.draw(transform);
+    resize(size);
+    _fontDrawer.draw();
 }
 
 LabelBuilder::LabelBuilder() : Label() {}
 
-Label * LabelBuilder::build(const Font & font) {
+Label * LabelBuilder::build() {
     Label * newLabel = createLabel();
     newLabel -> setHorizontalResponsive(_horizontalResponsive);
     newLabel -> setDesignedSize(_designedSize);
     newLabel -> setText(_text);
     newLabel -> setPosition(_position);
-    newLabel -> rebuild(font);
+    newLabel -> setFont(_font);
+    newLabel -> rebuild();
     return newLabel;
 }
 

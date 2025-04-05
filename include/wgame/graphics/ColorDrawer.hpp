@@ -25,25 +25,25 @@ public:
     ColorDrawer();
     void setDrawCuboidData(
         const Cuboid & cuboid, 
-        const ColorRGB & colors
+        const ColorRGBA & colors
     );
     void setFillCuboidData(
         const Cuboid & cuboid, 
-        const std::vector<ColorRGB> & colors
+        const std::vector<ColorRGBA> & colors
     );
     void setFillCuboidData(
         const Cuboid & cuboid, 
-        const std::vector<std::vector<ColorRGB>> & colors
+        const std::vector<std::vector<ColorRGBA>> & colors
     );
     void setFillCuboidData(const Cuboid & cuboid);
     void setFillSphereData(
         const Sphere & sphere, 
-        const ColorRGB & color, 
+        const ColorRGBA & color, 
         unsigned int stacks, unsigned int slices
     );
     void setFillCircleData(
         const Circle & circle, 
-        const ColorRGB & color, 
+        const ColorRGBA & color, 
         unsigned int segments
     );
     void draw(const Matrix4D & model = Matrix4D(1.0f), Mode mode = WORLD);    
