@@ -10,7 +10,8 @@
 #include <spellwar/scene/World.hpp>
 
 
-World::World(GameCamera * camera, GameLight * light) : GameObjectGroup() {
+World::World(GameCamera * camera, GameLight * light) : Scene() {
+    _active = false;
     AbstractBiome * biome = new Space(light);
     add(biome);
 
@@ -31,7 +32,23 @@ World::World(GameCamera * camera, GameLight * light) : GameObjectGroup() {
     update();
 }
 
+void World::setMaintitle(Scene * maintitle) {
+    _maintitle = maintitle;
+}
+
 void World::setActive(bool active) {
     _player -> setActive(active);
+    _active = active;
+}
+
+void World::update() {
+    if (_active) {        
+        if (_system.isKeyPressed(KEY_ESCAPE)) {
+            setActive(false);
+            _maintitle -> setActive(true);
+            _system.postEvent(IN_MAINTITLE_EVENT);
+        }
+        Scene::update();
+    }    
 }
 

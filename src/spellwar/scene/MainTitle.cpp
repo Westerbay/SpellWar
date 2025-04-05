@@ -10,7 +10,7 @@
 #include <spellwar/scene/Maintitle.hpp>
 
 
-Maintitle::Maintitle(AbstractGame * game, World * world) : GameObject() {
+Maintitle::Maintitle(AbstractGame * game, Scene * world) : Scene() {
     _active = true;
     _world = world;
     _game = game;
@@ -25,7 +25,7 @@ Maintitle::Maintitle(AbstractGame * game, World * world) : GameObject() {
     labelBuilder.setDesignedSize(DEFAULT_SIZE);
     labelBuilder.setText("Spellwar");
     labelBuilder.setPosition(Point2D(20.0f, 0.0f));
-    _widget.add(labelBuilder.build());    
+    add(labelBuilder.build());    
 
     setButtons();
     setBackground();
@@ -49,7 +49,15 @@ void Maintitle::setButtons() {
         setActive(false);
     });
     Button * playButton = buttonBuilder.build();
-    _widget.add(playButton);  
+    add(playButton); 
+    
+    buttonBuilder.setText("Options");
+    buttonBuilder.setPosition(Point2D(MARGIN, 400.0f));
+    buttonBuilder.setAction([&]() {
+        
+    });
+    Button * optionButton = buttonBuilder.build();
+    add(optionButton);  
 
     buttonBuilder.setText("Exit");
     buttonBuilder.setPosition(Point2D(MARGIN, 500.0f));
@@ -57,10 +65,11 @@ void Maintitle::setButtons() {
         _game -> stop();
     });
     Button * exitButton = buttonBuilder.build();
-    _widget.add(exitButton);  
+    add(exitButton);  
 
-    _widget.add(new MaintitleButton(playButton));
-    _widget.add(new MaintitleButton(exitButton));
+    add(new MaintitleButton(playButton));
+    add(new MaintitleButton(exitButton));
+    add(new MaintitleButton(optionButton));
 }
 
 void Maintitle::setBackground() {
@@ -83,7 +92,7 @@ void Maintitle::setActive(bool active) {
 
 void Maintitle::update() {
     if (_active) {
-        _widget.update();
+        Scene::update();
     }
 }
 
@@ -95,7 +104,7 @@ void Maintitle::renderHUD(const Size & screenSize) {
         float scaleH = (float) screenSize.height / defaultSize.height;
         transform = glm::scale(transform, Vector3D(scaleW, scaleH, 0.0f));
         _colorDrawer.fill(transform, Drawer::HUD);
-        _widget.renderHUD(screenSize);
+        Scene::renderHUD(screenSize);
     }
 }
 

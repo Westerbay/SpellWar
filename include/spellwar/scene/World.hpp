@@ -16,6 +16,9 @@
 #include "../world/map/Light.hpp"
 #include "../world/biome/Space.hpp"
 
+#include "Maintitle.hpp"
+#include "Scene.hpp"
+
 #include <wgame/wgame.hpp>
 
 #define MAP_SIZE Vector3D(80.0f, 80.0f, 80.0f)
@@ -27,12 +30,17 @@
 
 using namespace wgame;
 
-class World : public GameObjectGroup {
+class World : public Scene {
 public:
     World(GameCamera * camera, GameLight * light);
-    void setActive(bool active);
+    void setMaintitle(Scene * maintitle);
+    void setActive(bool active) override;
+    void update() override;
 private:
+    Scene * _maintitle;
     Player * _player;
+    System _system;
+    bool _active;
 };
 
 #endif

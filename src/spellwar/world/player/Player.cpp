@@ -41,16 +41,15 @@ GameObject * Player::getCameraObject() {
 
 void Player::setActive(bool active) {
     _active = active;
+    _camera.setActive(active);
 }
 
 void Player::update() {
-    if (_active) {
-        _playerInputs.state(this);
-        _playerMotion.move(this);
-        _playerModel.updateCollideHitbox(this);
-        _playerInputs.orientation(this);
-        _playerModel.animate(this); 
-    }     
+    _playerInputs.state(this);
+    _playerMotion.move(this);
+    _playerModel.updateCollideHitbox(this);
+    _playerInputs.orientation(this);
+    _playerModel.animate(this); 
 }
 
 void Player::render() {

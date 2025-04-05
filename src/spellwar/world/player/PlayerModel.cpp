@@ -61,6 +61,7 @@ void PlayerModel::animate(Player * player) {
         }        
     }
     updateTransform(player);
+    _model.update();
 }
 
 void PlayerModel::updateCollideHitbox(Player * player) {

@@ -24,20 +24,19 @@
 
 using namespace wgame;
 
-class Maintitle : public GameObject {
+class Maintitle : public Scene {
 public:
-    Maintitle(AbstractGame * game, World * world);  
-    void setActive(bool active);
+    Maintitle(AbstractGame * game, Scene * world);  
+    void setActive(bool active) override;
     void update() override;
     void renderHUD(const Size & screenSize) override;
 private:
     void setButtons();
     void setBackground();
 private:
-    GameObjectGroup _widget;
     bool _active;
     AbstractGame * _game;
-    World * _world;
+    Scene * _world;
     ColorDrawer _colorDrawer;
 };
 

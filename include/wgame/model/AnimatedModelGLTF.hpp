@@ -33,6 +33,7 @@ public:
     void start();
     void stop();
     void switchAnimation(std::string name, bool loop = false, bool revert = false);
+    void update();
     void draw(const Shader & shader) override;    
     void drawInstanced(const Shader & shader, size_t numberOfInstance) override;
 private:

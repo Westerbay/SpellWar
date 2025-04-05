@@ -108,8 +108,11 @@ void AnimatedModelGLTF::switchAnimation(std::string name, bool loop, bool revert
     _currentAnimation -> start();    
 }
 
-void AnimatedModelGLTF::draw(const Shader & shader) {
+void AnimatedModelGLTF::update() {
     _currentAnimation -> update(_skeleton, _timeAcceleration);
+}
+
+void AnimatedModelGLTF::draw(const Shader & shader) {
     _ubo.bind();
     _ubo.setData(_skeleton.jointMatrices.data(), _skeleton.jointMatricesByteLength);
     shader.setUniform("isAnimated", true);

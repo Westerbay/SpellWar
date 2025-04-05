@@ -10,12 +10,16 @@
 #include <spellwar/world/player/PlayerCamera.hpp>
 
 PlayerCamera::PlayerCamera() {
-    _offsetFromPlayer = OFFSET_FROM_PLAYER;
     _angle = 0;
+    _active = false;
 }
 
 float PlayerCamera::getAngle() const {
     return _angle;
+}
+
+void PlayerCamera::setActive(bool active) {
+    _active = active;
 }
 
 void PlayerCamera::increaseAngle(float delta) {
@@ -28,10 +32,19 @@ void PlayerCamera::increaseAngle(float delta) {
     }
 }
 
+Vector3D PlayerCamera::getOffsetFromPlayer() {
+    if (_active) {
+        return OFFSET_FROM_PLAYER_IG;
+    }
+    else {
+        return OFFSET_FROM_PLAYER;
+    }
+}
+
 void PlayerCamera::updatePlayer(const Hitbox & playerHitbox) {
     hitbox = playerHitbox;
     
-    Vector3D offset = _offsetFromPlayer;
+    Vector3D offset = getOffsetFromPlayer();
     float radians = glm::radians(_angle);
 
     float radiusX = offset.z;  
@@ -44,7 +57,10 @@ void PlayerCamera::updatePlayer(const Hitbox & playerHitbox) {
     hitbox.move(offset.y, AXIS_Y);
     hitbox.move(offset.z, AXIS_Z);
     hitbox.rotateX(_angle);
-    hitbox.rotateY(180.0f);
+
+    if (!_active) {
+        hitbox.rotateY(180.0f);
+    }
 }
 
 Vector3D PlayerCamera::getGaze() const {

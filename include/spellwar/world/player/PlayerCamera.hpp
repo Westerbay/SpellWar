@@ -13,7 +13,8 @@
 #include <wgame/wgame.hpp>
 
 #define MAX_ANGLE_CAMERA 70.0f
-#define OFFSET_FROM_PLAYER Vector3D(0.4f, 0.0f, 2.5f) //Vector3D(0.3f, 0.7f, -2.5f)
+#define OFFSET_FROM_PLAYER Vector3D(0.4f, 0.0f, 2.5f) 
+#define OFFSET_FROM_PLAYER_IG Vector3D(0.3f, 0.7f, -2.5f)
 
  
 using namespace wgame;
@@ -24,10 +25,13 @@ public:
     float getAngle() const;
     void increaseAngle(float delta);    
     void updatePlayer(const Hitbox & playerHitbox);  
-    Vector3D getGaze() const;    
+    void setActive(bool active);
+    Vector3D getGaze() const;   
 private:
-    Vector3D _offsetFromPlayer;
+    Vector3D getOffsetFromPlayer();
+private:
     float _angle;
+    bool _active;
 };
  
  
