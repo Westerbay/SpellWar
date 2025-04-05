@@ -39,6 +39,10 @@ GameObject * Player::getCameraObject() {
     return &_camera;
 }
 
+void Player::updateCamera() {
+    _camera.updatePlayer(_collideHitbox);  
+} 
+
 void Player::setActive(bool active) {
     _active = active;
     _camera.setActive(active);
@@ -53,7 +57,7 @@ void Player::update() {
 }
 
 void Player::render() {
-    _playerModel.render();
+    _playerModel.render(this);
 }
 
 void Player::renderHUD(const Size & screenSize) {

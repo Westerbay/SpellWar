@@ -50,5 +50,6 @@ void World::update() {
         }
         Scene::update();
     }    
+    _player -> updateCamera();
 }
 

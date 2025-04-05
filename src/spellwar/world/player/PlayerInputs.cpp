@@ -58,7 +58,5 @@ void PlayerInputs::orientation(Player * player) {
         player -> _camera.increaseAngle(mouseMovement.y * _system.getSensibility());
     } else {        
         player -> _camera.increaseAngle(-SWAP_ANIMATION_KEYFRAME * player -> _swapAnimation.angle);
-    }    
-
-    player -> _camera.updatePlayer(player -> _collideHitbox);    
+    }     
 }

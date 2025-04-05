@@ -61,7 +61,6 @@ void PlayerModel::animate(Player * player) {
         }        
     }
     updateTransform(player);
-    _model.update();
 }
 
 void PlayerModel::updateCollideHitbox(Player * player) {
@@ -84,10 +83,13 @@ void PlayerModel::updateCollideHitbox(Player * player) {
             player -> _collideHitbox.size.y *= scaleFactor;
             player -> _collideHitbox.move(moveFactor, AXIS_Y);
         }
-    }
+    }    
 }
 
-void PlayerModel::render() {
+void PlayerModel::render(Player * player) {   
+    if (player -> _active || _model.getCurrentAnimation() == "Idle") {
+        _model.update();
+    }     
     disableCullFace();
     _modelDrawer.draw(_model);
     enableCullFace();

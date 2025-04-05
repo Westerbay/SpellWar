@@ -60,7 +60,8 @@ public:
 public:
     Player(Map * map);    
     GameObject * getCameraObject();
-    void setActive(bool active);  
+    void setActive(bool active);
+    void updateCamera();  
     void update() override;
     void render() override; 
     void renderHUD(const Size & screenSize) override;        

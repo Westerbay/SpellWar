@@ -34,7 +34,7 @@ public:
     void setTransform(const Matrix4D & transform);
     void updateCollideHitbox(Player * player);
     void animate(Player * player);
-    void render();    
+    void render(Player * player);    
 protected:
     class FrostModel : public AnimatedModelGLTF {
     public:

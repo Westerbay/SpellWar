@@ -16,6 +16,8 @@
 #define OFFSET_FROM_PLAYER Vector3D(0.4f, 0.0f, 2.5f) 
 #define OFFSET_FROM_PLAYER_IG Vector3D(0.3f, 0.7f, -2.5f)
 
+#define CAMERA_KEY_FRAME 0.05f
+
  
 using namespace wgame;
  
@@ -28,10 +30,13 @@ public:
     void setActive(bool active);
     Vector3D getGaze() const;   
 private:
-    Vector3D getOffsetFromPlayer();
+    Hitbox getOffsetPlayer(const Hitbox & playerHitbox);
+    Hitbox getOffsetIGPlayer(const Hitbox & playerHitbox);
 private:
     float _angle;
     bool _active;
+    float _keyFrame;
+    bool _moving;
 };
  
  

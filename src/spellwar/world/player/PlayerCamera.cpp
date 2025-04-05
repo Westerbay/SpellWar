@@ -10,8 +10,10 @@
 #include <spellwar/world/player/PlayerCamera.hpp>
 
 PlayerCamera::PlayerCamera() {
-    _angle = 0;
+    _angle = 0.0f;
+    _keyFrame = 0.0f;
     _active = false;
+    _moving = false;
 }
 
 float PlayerCamera::getAngle() const {
@@ -20,6 +22,8 @@ float PlayerCamera::getAngle() const {
 
 void PlayerCamera::setActive(bool active) {
     _active = active;
+    _moving = true;
+    _keyFrame = 0.0f;
 }
 
 void PlayerCamera::increaseAngle(float delta) {
@@ -32,19 +36,20 @@ void PlayerCamera::increaseAngle(float delta) {
     }
 }
 
-Vector3D PlayerCamera::getOffsetFromPlayer() {
-    if (_active) {
-        return OFFSET_FROM_PLAYER_IG;
-    }
-    else {
-        return OFFSET_FROM_PLAYER;
-    }
+Hitbox PlayerCamera::getOffsetPlayer(const Hitbox & playerHitbox) {
+    Hitbox hitboxOffset = playerHitbox;    
+    Vector3D offset = OFFSET_FROM_PLAYER;
+    hitboxOffset.move(offset.x, AXIS_X);
+    hitboxOffset.move(offset.y, AXIS_Y);
+    hitboxOffset.move(offset.z, AXIS_Z);
+    hitboxOffset.rotateY(180.0f);
+    return hitboxOffset;
 }
 
-void PlayerCamera::updatePlayer(const Hitbox & playerHitbox) {
-    hitbox = playerHitbox;
+Hitbox PlayerCamera::getOffsetIGPlayer(const Hitbox & playerHitbox) {
+    Hitbox hitboxOffset = playerHitbox;
     
-    Vector3D offset = getOffsetFromPlayer();
+    Vector3D offset = OFFSET_FROM_PLAYER_IG;
     float radians = glm::radians(_angle);
 
     float radiusX = offset.z;  
@@ -53,13 +58,37 @@ void PlayerCamera::updatePlayer(const Hitbox & playerHitbox) {
     offset.y += glm::sin(radians) * radiusZ;
     offset.z = glm::cos(radians) * radiusX;
 
-    hitbox.move(offset.x, AXIS_X);
-    hitbox.move(offset.y, AXIS_Y);
-    hitbox.move(offset.z, AXIS_Z);
-    hitbox.rotateX(_angle);
+    hitboxOffset.move(offset.x, AXIS_X);
+    hitboxOffset.move(offset.y, AXIS_Y);
+    hitboxOffset.move(offset.z, AXIS_Z);
 
-    if (!_active) {
-        hitbox.rotateY(180.0f);
+    hitboxOffset.rotateX(_angle);
+    return hitboxOffset;
+}
+
+void PlayerCamera::updatePlayer(const Hitbox & playerHitbox) {
+    if (_moving) {
+        Hitbox start;
+        Hitbox end;
+        if (_active) {
+            start = getOffsetPlayer(playerHitbox);
+            end = getOffsetIGPlayer(playerHitbox);
+        } else {
+            start = getOffsetIGPlayer(playerHitbox);
+            end = getOffsetPlayer(playerHitbox);
+        }
+        _keyFrame += CAMERA_KEY_FRAME;        
+        Point3D offsetPos = end.position - start.position;
+        hitbox.position = start.position + offsetPos * _keyFrame;
+        Matrix3D offsetOr = end.orientation - start.orientation;
+        hitbox.orientation = start.orientation + offsetOr * _keyFrame;
+        _moving = _keyFrame < 1.0f;
+    }
+    else if (_active) {
+        hitbox = getOffsetIGPlayer(playerHitbox);
+    }
+    else {
+        hitbox = getOffsetPlayer(playerHitbox);
     }
 }
 
