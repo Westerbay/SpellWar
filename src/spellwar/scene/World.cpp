@@ -7,7 +7,7 @@
  */
 
 
-#include <spellwar/world/World.hpp>
+#include <spellwar/scene/World.hpp>
 
 
 World::World(GameCamera * camera, GameLight * light) : GameObjectGroup() {
@@ -23,11 +23,15 @@ World::World(GameCamera * camera, GameLight * light) : GameObjectGroup() {
     );
     add(map);
 
-    Player * player = new Player(map);
-    add(player);
+    _player = new Player(map);
+    add(_player);
     
     camera -> setFarPlane(FAR_PLANE);
-    camera -> attachGameObject(player -> getCameraObject());
-
-    add(new Maintitle());
+    camera -> attachGameObject(_player -> getCameraObject());
+    update();
 }
+
+void World::setActive(bool active) {
+    _player -> setActive(active);
+}
+

@@ -11,17 +11,19 @@
 #define __WG_SYSTEM_H__
 
 #include <GLFW/glfw3.h>
+#include <queue>
 
-#include "Keys.hpp"
+#include "Inputs.hpp"
 #include "../geometry/Geometry.hpp"
 
-#define PRESS GLFW_PRESS
 #define DEFAULT_SENSIBILITY 0.2f
 
 
 namespace wgame {
 
 typedef int Key;
+typedef int Mouse;
+typedef int Event;
 
 class System {
 public:
@@ -32,11 +34,20 @@ public:
     static Point2D getMousePosition();
     static Vector2D getMouseMovement();
     static bool isKeyPressed(Key key); 
+    static bool isKeyReleased(Key key); 
+    static bool isMousePressed(Mouse mouse); 
+    static bool isMouseReleased(Mouse mouse);
+    static void setSensibility(float sensibility);
+    static std::queue<Event> & getEvents(); 
+    static void postEvent(Event event);
+    static void resetMousePosition();
 private:
     static GLFWwindow * _frame;
     static Point2D _mousePosition;
     static Vector2D _lastMousePosition;
     static float _sensibility;
+    static std::queue<Event> _events;
+    static bool _lastMousePressed[2];
 };
 
 }

@@ -7,20 +7,12 @@
  */
 
 
-#ifndef __MAINTITLE__
-#define __MAINTITLE__
+#ifndef __EVENTS_H__
+#define __EVENTS_H__
 
-#define FONT_PATH "assets/font.png"
-
-#include <wgame/wgame.hpp>
-
-
-using namespace wgame;
-
-class Maintitle : public GameObjectGroup {
-public:
-    Maintitle();
+enum Events {
+    IN_GAME_EVENT,
+    IN_MAINTITLE_EVENT
 };
-
 
 #endif

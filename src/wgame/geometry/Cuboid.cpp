@@ -184,6 +184,10 @@ bool Cuboid::contains(const Point3D & point) const {
             fabs(localPoint.z) <= halfSize.z);
 }
 
+bool Cuboid::contains(const Point2D & point) const {
+    return contains(Point3D(point, 0.0f));
+}
+
 bool Cuboid::collidesWith(const Cuboid & other) const {
     std::vector<Point3D> axes = {
         orientation[0], orientation[1], orientation[2],

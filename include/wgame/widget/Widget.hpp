@@ -12,11 +12,17 @@
 
 
 #include "../core/GameObject.hpp"
+#include "../tools/System.hpp"
+
 
 namespace wgame {
 
 class Widget : public GameObject {
-
+public:
+    bool hover();
+    bool triggered();
+protected:
+    System _system;
 };
 
 }

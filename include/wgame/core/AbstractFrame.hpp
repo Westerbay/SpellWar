@@ -48,6 +48,8 @@ public:
 	void initLight(GameLight * light);
 	void initOpenGLState();
 	void render();	
+	void processEvents();
+	virtual void processEvent(Event event) = 0;
 private:
 	static void frameResize(GLFWwindow * window, int width, int height);
 	static Size _frameSize;
@@ -58,6 +60,7 @@ private:
 	GameLight * _light;
 	bool _running;
 	bool _cursorActive;
+	System _system;
 };
 
 }

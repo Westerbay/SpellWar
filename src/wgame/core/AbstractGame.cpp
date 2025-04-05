@@ -13,7 +13,7 @@
 
 namespace wgame {
 
-AbstractGame::AbstractGame(unsigned tps) : _running(false) {
+AbstractGame::AbstractGame(unsigned tps) : _running(true) {
     setTPS(tps);
     _world = nullptr;
     _camera = nullptr;
@@ -34,6 +34,14 @@ GameCamera * AbstractGame::getCamera() {
 
 GameLight * AbstractGame::getLight() {
     return _light;
+}
+
+bool AbstractGame::isRunning() const {
+	return _running;
+}
+
+void AbstractGame::stop() {
+	_running = false;
 }
 
 void AbstractGame::initWorld(GameObjectGroup * world) {
@@ -57,11 +65,11 @@ void AbstractGame::initLight(GameLight * light) {
 	_light = light;
 }
 
-void AbstractGame::addToWorld(GameObject * gameObject) {
+void AbstractGame::addGameObject(GameObject * gameObject) {
     _world -> add(gameObject);
 }
 
-void AbstractGame::removeFromWorld(GameObject * gameObject) {
+void AbstractGame::removeGameObject(GameObject * gameObject) {
     _world -> remove(gameObject);
 }
 

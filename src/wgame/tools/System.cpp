@@ -17,6 +17,8 @@ GLFWwindow * System::_frame = nullptr;
 Point2D System::_mousePosition = Point2D(0.0f);
 Point2D System::_lastMousePosition = Point2D(0.0f);
 float System::_sensibility = DEFAULT_SENSIBILITY;
+bool System::_lastMousePressed[2] = {false, false};
+std::queue<Event> System::_events = std::queue<Event>();
 
 void System::initContext(GLFWwindow * frame) {
     _frame = frame;
@@ -35,6 +37,11 @@ void System::record() {
     _mousePosition.y = (float) mouseY;
 }
 
+void System::resetMousePosition() {
+    record();
+    _lastMousePosition = _mousePosition;
+}
+
 double System::getTime() {
     return glfwGetTime();
 }
@@ -49,6 +56,36 @@ Vector2D System::getMouseMovement() {
 
 bool System::isKeyPressed(Key key) {
     return glfwGetKey(_frame, key) == PRESS;
+}
+
+bool System::isKeyReleased(Key key) {
+    return glfwGetKey(_frame, key) == RELEASE;
+}
+
+bool System::isMousePressed(Mouse mouse) {
+    return glfwGetMouseButton(_frame, mouse) == PRESS;
+}
+
+bool System::isMouseReleased(Mouse mouse) {
+    int state = glfwGetMouseButton(_frame, mouse);
+    if (state == RELEASE && _lastMousePressed[mouse]) {
+        _lastMousePressed[mouse] = false;
+        return true;
+    }
+    _lastMousePressed[mouse] = state == PRESS;
+    return false;
+}
+
+void System::setSensibility(float sensibility) {
+    _sensibility = sensibility;
+}
+
+std::queue<Event> & System::getEvents() {
+    return _events;
+}
+
+void System::postEvent(Event event) {
+    _events.push(event);
 }
 
 }

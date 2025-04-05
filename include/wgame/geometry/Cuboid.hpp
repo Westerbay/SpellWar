@@ -35,6 +35,7 @@ struct Cuboid {
     std::vector<std::vector<Vector3D>> getTangentsPerFace() const;
     std::vector<std::vector<unsigned>> getElementsPerFace() const;
     bool contains(const Point3D & point) const;
+    bool contains(const Point2D & point) const;
     bool collidesWith(const Cuboid & other) const;
     bool collidesList(const std::vector<Cuboid> & cuboids) const;
     void translate(float delta, const Vector3D & axis);

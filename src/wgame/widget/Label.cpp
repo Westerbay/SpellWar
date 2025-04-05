@@ -18,6 +18,10 @@ Label * Label::createLabel() {
     return new Label();
 }
 
+String Label::getText() const {
+    return _text;
+}
+
 void Label::setPosition(const Point2D & position) {
     _position = position;
 }
@@ -27,7 +31,7 @@ void Label::setText(const String & text) {
 }
 
 void Label::rebuild(const Font & font) {
-    _fontDrawer.setTextData(font, _text, Point3D(_position, 0.0f));
+    _fontDrawer.setTextData(font, _text, Point3D(_position, 0.0f), hitbox);
 }
 
 void Label::renderHUD(const Size & size) {

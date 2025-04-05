@@ -13,6 +13,9 @@
 Game::Game(unsigned tps) : AbstractGame(tps) {}
 
 void Game::init() {
-    addToWorld(new World(getCamera(), getLight()));
+    _world = new World(getCamera(), getLight());
+    _mainTitle = new Maintitle(this, _world);
+    addGameObject(_world);
+    addGameObject(_mainTitle);
 }
 

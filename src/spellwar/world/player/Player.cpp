@@ -16,7 +16,8 @@ _map(map),
 _state(IDLE),
 _jumping(false),
 _leap(false),
-_trySwap(false)
+_trySwap(false),
+_active(false)
 {
     hitbox.size = HITBOX_SIZE;
     _swapAnimation = {
@@ -26,18 +27,30 @@ _trySwap(false)
         false
     };
     _playerMotion.spawnPlayer(this);
+
+    _playerInputs.state(this);
+    _playerMotion.move(this);
+    _playerModel.updateCollideHitbox(this);
+    _playerInputs.orientation(this);
+    _playerModel.animate(this);
 }
 
 GameObject * Player::getCameraObject() {
     return &_camera;
 }
 
+void Player::setActive(bool active) {
+    _active = active;
+}
+
 void Player::update() {
-    _playerInputs.state(this);
-    _playerMotion.move(this);
-    _playerModel.updateCollideHitbox(this);
-    _playerInputs.orientation(this);
-    _playerModel.animate(this);   
+    if (_active) {
+        _playerInputs.state(this);
+        _playerMotion.move(this);
+        _playerModel.updateCollideHitbox(this);
+        _playerInputs.orientation(this);
+        _playerModel.animate(this); 
+    }     
 }
 
 void Player::render() {
@@ -45,7 +58,9 @@ void Player::render() {
 }
 
 void Player::renderHUD(const Size & screenSize) {
-    _playerHUD.render(screenSize);
+    if (_active) {
+        _playerHUD.render(screenSize);
+    }
 }
 
 Platform * Player::findBestAlignedPlatform(Point3D & destination) {

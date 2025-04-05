@@ -11,5 +11,19 @@
 
 MainFrame::MainFrame(const char * title, const Size & size) :
     AbstractFrame(title, size) {
-    setCursorActive(false);
+}
+
+void MainFrame::processEvent(Event event) {
+    switch (event) {
+        case IN_GAME_EVENT:
+            setCursorActive(false);
+            pollEvents();
+            _system.resetMousePosition();
+            break;
+        case IN_MAINTITLE_EVENT:
+            setCursorActive(true);
+            pollEvents();
+            _system.resetMousePosition();
+            break;
+    }    
 }

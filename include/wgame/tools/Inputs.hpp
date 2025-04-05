@@ -6,10 +6,13 @@
  * No warranties are provided, and any use of this code is at your own risk.
  */
 
-#ifndef __WG_GLFW_KEYS_H__
-#define __WG_GLFW_KEYS_H__
+#ifndef __WG_INPUTS_H__
+#define __WG_INPUTS_H__
 
 #include <GLFW/glfw3.h>
+
+#define PRESS GLFW_PRESS
+#define RELEASE GLFW_RELEASE
 
 #define KEY_UNKNOWN         GLFW_KEY_UNKNOWN
 #define KEY_SPACE           GLFW_KEY_SPACE
@@ -131,4 +134,7 @@
 #define KEY_RIGHT_SUPER     GLFW_KEY_RIGHT_SUPER
 #define KEY_MENU            GLFW_KEY_MENU
 
-#endif // GLFW_KEYS_H
+#define MOUSE_BUTTON_LEFT GLFW_MOUSE_BUTTON_LEFT
+#define MOUSE_BUTTON_RIGHT GLFW_MOUSE_BUTTON_RIGHT
+
+#endif

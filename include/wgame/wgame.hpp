@@ -35,7 +35,7 @@
 #include "core/GameLight.hpp"
 
 #include "tools/System.hpp"
-#include "tools/Keys.hpp"
+#include "tools/Inputs.hpp"
 #include "tools/Util.hpp"
 #include "tools/Font.hpp"
 

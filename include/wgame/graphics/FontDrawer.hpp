@@ -15,6 +15,7 @@
 #include "../tools/Font.hpp"
 #include "../tools/Util.hpp"
 #include "../opengl/Texture2D.hpp"
+#include "../geometry/Cuboid.hpp"
 
 #define FONT_DRAWER_VERTEX_SHADER_PATH "shaders/fontDrawer.vert"
 #define FONT_DRAWER_FRAGMENT_SHADER_PATH "shaders/fontDrawer.frag"
@@ -27,7 +28,7 @@ public:
 	FontDrawer();
 	void setTextData(
 		const Font & font, const String & text, 
-		const Point3D & position
+		const Point3D & position, Hitbox & hitbox = Hitbox()
 	);
 	void draw(const Matrix4D & model = Matrix4D(1.0f), Mode mode = HUD);
 public:

@@ -5,3 +5,41 @@
  * You are free to copy, modify, and distribute this file without restriction.
  * No warranties are provided, and any use of this code is at your own risk.
  */
+
+
+#include <wgame/widget/Button.hpp>
+
+
+namespace wgame {
+
+Button::Button() : Label() {
+    _action = [](){};
+}
+
+Button * Button::createButton() {
+    return new Button();
+}
+
+void Button::setAction(const std::function<void()> & action) {
+    _action = action;
+}
+
+void Button::update() {
+    if (triggered()) {
+        _action();
+    }
+}
+
+ButtonBuilder::ButtonBuilder() : Button() {}
+
+Button * ButtonBuilder::build(const Font & font) {
+    Button * newButton = createButton();
+    newButton -> setText(_text);
+    newButton -> setPosition(_position);
+    newButton -> setAction(_action);
+    newButton -> rebuild(font);
+    return newButton;
+}
+
+}
+

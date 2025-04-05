@@ -10,13 +10,11 @@
 #ifndef __WORLD__
 #define __WORLD__
 
-#include "player/Player.hpp"
-#include "map/Background.hpp"
-#include "map/Map.hpp"
-#include "map/Light.hpp"
-#include "biome/Space.hpp"
-
-#include "../maintitle/Maintitle.hpp"
+#include "../world/player/Player.hpp"
+#include "../world/map/Background.hpp"
+#include "../world/map/Map.hpp"
+#include "../world/map/Light.hpp"
+#include "../world/biome/Space.hpp"
 
 #include <wgame/wgame.hpp>
 
@@ -32,6 +30,9 @@ using namespace wgame;
 class World : public GameObjectGroup {
 public:
     World(GameCamera * camera, GameLight * light);
+    void setActive(bool active);
+private:
+    Player * _player;
 };
 
 #endif

@@ -21,6 +21,14 @@ void AbstractFrame::frameResize(GLFWwindow * window, int width, int height) {
 	_frameSize = {(unsigned) width, (unsigned) height};
 }
 
+void AbstractFrame::processEvents() {
+	std::queue<Event> & events = _system.getEvents();
+	while (!events.empty()) {
+		processEvent(events.front());
+		events.pop();
+	}
+}
+
 AbstractFrame::AbstractFrame(const char * title, const Size & size) : _running(false) {
 	if (!glfwInit()) {
 		throw std::runtime_error("Failed to initialize GLFW ! ");

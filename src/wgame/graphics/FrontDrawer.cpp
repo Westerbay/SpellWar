@@ -26,7 +26,7 @@ FontDrawer::FontDrawer() : Drawer() {
 
 void FontDrawer::setTextData(
 	const Font & font, const String & text, 
-	const Point3D & position
+	const Point3D & position, Hitbox & hitbox
 ) {
 
 	_texture.setData(font);
@@ -62,6 +62,10 @@ void FontDrawer::setTextData(
 		x += font.getSize();
 		k += 4;
 	}
+	hitbox.size = Vector3D(x - position.x, font.getSize() * ratioWH, 0.0f);
+	hitbox.position = position;
+	hitbox.move(hitbox.size * 0.5f);
+
 	vaos.front().setEBO(ebo);
 	vaos.front().setVBO(VBO_VERTEX, vertices);
 	vaos.front().setVBO(VBO_TEXCOORD_0, uvs);

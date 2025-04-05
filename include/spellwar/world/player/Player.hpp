@@ -60,9 +60,10 @@ public:
 public:
     Player(Map * map);    
     GameObject * getCameraObject();
+    void setActive(bool active);  
     void update() override;
     void render() override; 
-    void renderHUD(const Size & screenSize) override;       
+    void renderHUD(const Size & screenSize) override;        
 private:
     Platform * findBestAlignedPlatform(Point3D & destination);
     bool intersectionPlatform(
@@ -91,6 +92,8 @@ private:
     bool _jumping;
     bool _leap;
     bool _trySwap;
+
+    bool _active;
 };
 
 

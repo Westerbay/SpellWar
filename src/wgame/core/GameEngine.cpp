@@ -41,9 +41,10 @@ void GameEngine::start() {
     _frame -> initLight(_light);
 
     _game -> init();   
-    while (!_frame -> shouldExit()) {
+    while (!_frame -> shouldExit() && _game -> isRunning()) {        
         steady_clock::time_point updateStart = steady_clock::now();
         
+        _frame -> processEvents();
         _frame -> pollEvents();
         System::record();             
         

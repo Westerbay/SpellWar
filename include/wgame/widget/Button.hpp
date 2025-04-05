@@ -14,6 +14,22 @@
 
 namespace wgame {
 
+class Button : public Label {
+public:
+    void setAction(const std::function<void()> & action);
+    void update() override;
+protected:
+    Button();
+    Button * createButton();  
+    std::function<void()> _action;    
+};
+
+class ButtonBuilder : public Button {
+public:
+    ButtonBuilder();    
+    Button * build(const Font & font);    
+};
+
 }
 
 #endif

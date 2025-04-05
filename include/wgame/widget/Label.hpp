@@ -11,6 +11,7 @@
 #define __WG_LABEL_H__
 
 #include "Widget.hpp"
+#include "../tools/Util.hpp"
 #include "../graphics/FontDrawer.hpp"
 
 
@@ -18,6 +19,7 @@ namespace wgame {
 
 class Label : public Widget {
 public:    
+    String getText() const;
     void setPosition(const Point2D & position);
     void setText(const String & text);
     void rebuild(const Font & font); 

@@ -13,6 +13,7 @@ PlayerModel::PlayerModel() {
     _model.setTimeAcceleration(ANIMATION_ACCELERATION);
     _hitboxDrawer.setActiveLight(false);
     _modelDrawer.setActiveLight(false);
+    _model.setLoop(true);
 }
 
 float PlayerModel::getAnimationProgress() const {

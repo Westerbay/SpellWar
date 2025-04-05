@@ -12,12 +12,17 @@
 
 #include <wgame/wgame.hpp>
 
+#include "../scene/Events.hpp"
+
 
 using namespace wgame;
 
 class MainFrame : public AbstractFrame {
 public: 
     MainFrame(const char * title, const Size & size);
+    void processEvent(Event event) override;
+private:
+    System _system;
 };
 
 #endif

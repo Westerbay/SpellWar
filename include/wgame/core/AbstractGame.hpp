@@ -31,11 +31,13 @@ public:
     void setTPS(unsigned tps);
     GameCamera * getCamera();
     GameLight * getLight();
+    bool isRunning() const;
+    void stop();
     void initWorld(GameObjectGroup * world);
     void initCamera(GameCamera * camera);
     void initLight(GameLight * light);
-    void addToWorld(GameObject * gameObject);
-    void removeFromWorld(GameObject * gameObject);
+    void addGameObject(GameObject * gameObject);
+    void removeGameObject(GameObject * gameObject);
     void update();
     virtual void init() = 0;
 private:

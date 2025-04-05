@@ -10,7 +10,9 @@
 #ifndef __GAME__
 #define __GAME__
 
-#include "../world/World.hpp"
+#include "../scene/World.hpp"
+#include "../scene/Maintitle.hpp"
+
 #include <wgame/wgame.hpp>
 
 
@@ -20,6 +22,9 @@ class Game : public AbstractGame {
 public:
     Game(unsigned tps = DEFAULT_TPS);
     void init() override;
+private:
+    World * _world;
+    Maintitle * _mainTitle;
 };
 
 
