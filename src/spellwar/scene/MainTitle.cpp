@@ -14,6 +14,11 @@ Maintitle::Maintitle(AbstractGame * game, World * world) : Scene() {
     _active = true;
     _world = world;
     _game = game;
+    _state = MAIN;
+
+    _lightDisplay = true;
+    _activeNormalMapping = true;
+    _activeParallaxMapping = true;
 
     Font font(FONT_PATH, FONT_SIZE_TITLE);    
     font.setReferencedCharacter(' ');
@@ -27,8 +32,9 @@ Maintitle::Maintitle(AbstractGame * game, World * world) : Scene() {
     labelBuilder.setPosition(Point2D(20.0f, 20.0f));
     add(labelBuilder.build());    
 
-    setMaintitleButtons(font);
+    setMaintitleButtons(font);    
     setCharacterSelector(font);
+    setOptions(font);
     setBackground();
 }
 
@@ -52,7 +58,7 @@ void Maintitle::setMaintitleButtons(Font & font) {
     buttonBuilder.setText("Options");
     buttonBuilder.setPosition(Point2D(MARGIN, 400.0f));
     buttonBuilder.setAction([&]() {
-        
+        _state = OPTIONS;
     });
     Button * optionButton = buttonBuilder.build();
     _mainTitleButtons.add(optionButton);  
@@ -96,6 +102,60 @@ void Maintitle::setCharacterSelector(Font & font) {
     _characterSelector.add(new CharacterSelector(previousCharacter, true));
 }
 
+void Maintitle::setOptions(Font & font) {
+    font.setSize(FONT_SIZE_OPTIONS);
+    ButtonBuilder buttonBuilder;
+    buttonBuilder.setFont(font);
+    buttonBuilder.setHorizontalResponsive(true);
+    buttonBuilder.setDesignedSize(DEFAULT_SIZE);
+    buttonBuilder.setText("Enable lighting");
+    buttonBuilder.setPosition(Point2D(MARGIN, 250.0f));
+    buttonBuilder.setAction([&]() {
+        _lightDisplay = !_lightDisplay;
+        _world -> setActiveLight(_lightDisplay);
+        if (!_lightDisplay) {
+            _activeNormalMapping = false;
+            _activeParallaxMapping = false;
+        }
+    });
+    Button * lightButton = buttonBuilder.build();
+    _optionButtons.add(lightButton); 
+    
+    buttonBuilder.setText("Enable normal map");
+    buttonBuilder.setPosition(Point2D(MARGIN, 350.0f));
+    buttonBuilder.setAction([&]() {
+        _activeNormalMapping = !_activeNormalMapping;
+        _world -> setActiveNormalMap(_activeNormalMapping);
+        if (!_activeNormalMapping) {
+            _activeParallaxMapping = false;
+        }
+    });
+    Button * normalButton = buttonBuilder.build();
+    _optionButtons.add(normalButton);  
+
+    buttonBuilder.setText("Enable parallax mapping");
+    buttonBuilder.setPosition(Point2D(MARGIN, 450.0f));
+    buttonBuilder.setAction([&]() {
+        _activeParallaxMapping = !_activeParallaxMapping;
+        _world -> setActiveParallaxMapping(_activeParallaxMapping);
+    });
+    Button * parallaxMapping = buttonBuilder.build();
+    _optionButtons.add(parallaxMapping);  
+
+    buttonBuilder.setText("Back");
+    buttonBuilder.setPosition(Point2D(MARGIN, 550.0f));
+    buttonBuilder.setAction([&]() {
+        _state = MAIN;
+    });
+    Button * backButton = buttonBuilder.build();
+    _optionButtons.add(backButton);  
+
+    _optionButtons.add(new MaintitleHoverButton(lightButton));
+    _optionButtons.add(new MaintitleHoverButton(normalButton));
+    _optionButtons.add(new MaintitleHoverButton(parallaxMapping));
+    _optionButtons.add(new MaintitleHoverButton(backButton));
+}
+
 void Maintitle::setBackground() {
     Hitbox background;
     Size defaultSize = DEFAULT_SIZE;
@@ -117,8 +177,13 @@ void Maintitle::setActive(bool active) {
 void Maintitle::update() {
     if (_active) {
         Scene::update();
-        _mainTitleButtons.update();
         _characterSelector.update();
+        if (_state == MAIN) {
+            _mainTitleButtons.update();
+        }       
+        else {
+            _optionButtons.update();
+        }
     }
 }
 
@@ -130,8 +195,14 @@ void Maintitle::renderHUD(const Size & screenSize) {
         float scaleH = (float) screenSize.height / defaultSize.height;
         transform = glm::scale(transform, Vector3D(scaleW, scaleH, 0.0f));
         _colorDrawer.fill(transform, Drawer::HUD);
-        Scene::renderHUD(screenSize);        
-        _mainTitleButtons.renderHUD(screenSize);
+        Scene::renderHUD(screenSize); 
+
+        if (_state == MAIN) {
+            _mainTitleButtons.renderHUD(screenSize);
+        }       
+        else {
+            _optionButtons.renderHUD(screenSize);
+        }        
 
         Size designedSize = DEFAULT_SIZE;
         float designedRatio = (float) designedSize.width / designedSize.height;
@@ -139,8 +210,7 @@ void Maintitle::renderHUD(const Size & screenSize) {
         float diff = designedRatio - ratio;        
         if (diff > -0.4f && diff < 0.85f) {
             _characterSelector.renderHUD(screenSize);
-        }
-        
+        }        
     }
 }
 

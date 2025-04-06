@@ -8,10 +8,12 @@ struct LightInfo {
     vec4 cameraPosition; 
     vec4 position;
     vec4 color;    
-    bool display;
     float defaultAmbient;
     float defaultSpecularFactor; 
     int defaultSpecularExponent;
+    bool display;
+    bool activeNormalMap;
+    bool activeParallaxMapping;
 };
 
 layout(std140, binding = 1) uniform LightBlock {

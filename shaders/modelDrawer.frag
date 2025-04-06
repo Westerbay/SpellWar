@@ -8,10 +8,12 @@ struct LightInfo {
     vec4 cameraPosition; 
     vec4 position;
     vec4 color;    
-    bool display;
     float defaultAmbient;
     float defaultSpecularFactor; 
     int defaultSpecularExponent;
+    bool display;
+    bool activeNormalMap;
+    bool activeParallaxMapping;
 };
 
 layout(std140, binding = 1) uniform LightBlock {
@@ -83,7 +85,7 @@ void main() {
         float metallic = metallicRoughness.r * metallicFactor;
         float roughness = clamp(metallicRoughness.g * roughnessFactor, 0.04, 1.0);
         
-        vec3 normal = hasNormalMap ? getNormalFromMap() : normalize(fragNormal);
+        vec3 normal = hasNormalMap && light.activeNormalMap ? getNormalFromMap() : normalize(fragNormal);
 
         vec3 lightDir = normalize(light.position.xyz - fragPosition);
         vec3 viewDir = normalize(light.cameraPosition.xyz - fragPosition);

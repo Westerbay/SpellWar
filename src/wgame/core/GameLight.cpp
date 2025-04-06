@@ -17,7 +17,7 @@ GameLight::GameLight() {
         Point4D(0.0f),
         Point4D(0.0f, 0.0f, 0.0f, 1.0f),
         Vector4D(1.0f),
-        0, 0.0f, 0.0f, 0
+        0.0f, 0.0f, 0, 0, 0, 0
     };
     _ubo.configure(sizeof(LightInfo));
     _ubo.setBindingPoint(LIGHT_POINT);
@@ -45,6 +45,14 @@ void GameLight::setDefaultSpecularFactor(float specularFactor) {
 
 void GameLight::setDefaultSpecularExponent(int specularExponent) {
     _lightInfo.defaultSpecularExponent = specularExponent;
+}
+
+void GameLight::setActiveNormalMap(bool activeNormalMap) {
+    _lightInfo.activeNormalMap = activeNormalMap;
+}
+
+void GameLight::setActiveParallaxMapping(bool activeParallaxMapping) {
+    _lightInfo.activeParallaxMapping = activeParallaxMapping;
 }
 
 void GameLight::apply(const Point3D & cameraPosition) {

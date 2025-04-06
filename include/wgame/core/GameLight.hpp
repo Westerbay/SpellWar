@@ -21,11 +21,13 @@ namespace wgame {
 struct LightInfo {
     Point4D cameraPosition; 
     Point4D position; 
-    Vector4D color;
-    int display;
+    Vector4D color;    
     float defaultAmbient;
     float defaultSpecularFactor; 
     int defaultSpecularExponent;
+    int display;
+    int activeNormalMap;
+    int activeParallaxMapping;
 };
 
 class GameLight {
@@ -37,6 +39,8 @@ public:
     void setDefaultAmbientLighting(float ambient);
     void setDefaultSpecularFactor(float specularFactor);
     void setDefaultSpecularExponent(int specularExponent);
+    void setActiveNormalMap(bool activeNormalMap);
+    void setActiveParallaxMapping(bool activeParallaxMapping);
     void apply(const Point3D & cameraPosition);
 private:
     LightInfo _lightInfo;

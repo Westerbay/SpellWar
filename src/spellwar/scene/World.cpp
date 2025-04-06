@@ -14,6 +14,7 @@ World::World(GameCamera * camera, GameLight * light) : Scene() {
     _active = false;
     _characters = {&_flame, &_frost};
     _characterIndex = 0;
+    _light = light;
 
     AbstractBiome * biome = new Space(light);
     add(biome);
@@ -64,5 +65,24 @@ void World::nextCharacter() {
 void World::previousCharacter() {
     _characterIndex = (_characters.size() + _characterIndex - 1) % _characters.size();
     _player -> setCharacter(_characters[_characterIndex]);
+}
+
+void World::setActiveLight(bool active) {
+    _light -> setDisplayLight(active);
+    if (!active) {
+        _light -> setActiveParallaxMapping(false);
+        _light -> setActiveNormalMap(false);
+    }
+}
+
+void World::setActiveNormalMap(bool active) {
+    _light -> setActiveNormalMap(active);
+    if (!active) {
+        _light -> setActiveParallaxMapping(false);
+    }
+}
+
+void World::setActiveParallaxMapping(bool active) {
+    _light -> setActiveParallaxMapping(active);
 }
 

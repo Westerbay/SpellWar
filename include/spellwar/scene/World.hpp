@@ -40,10 +40,15 @@ public:
     void update() override;
     void nextCharacter();
     void previousCharacter();
+
+    void setActiveLight(bool active);
+    void setActiveNormalMap(bool active);
+    void setActiveParallaxMapping(bool active);
 private:    
     System _system;
     bool _active;
     Scene * _maintitle;
+    GameLight * _light;
     Player * _player;
     int _characterIndex;
 private:  

@@ -19,6 +19,7 @@
 
 #define FONT_SIZE_TITLE 50.0f
 #define FONT_SIZE_BUTTONS 25.0f
+#define FONT_SIZE_OPTIONS 20.0f
 #define FONT_SIZE_SELECTOR 75.0f
 #define MARGIN 80.0f
 
@@ -29,6 +30,10 @@ using namespace wgame;
 
 class Maintitle : public Scene {
 public:
+    enum State {
+        MAIN, OPTIONS
+    };
+public:
     Maintitle(AbstractGame * game, World * world);  
     void setActive(bool active) override;
     void update() override;
@@ -36,15 +41,22 @@ public:
 private:
     void setMaintitleButtons(Font & font);
     void setCharacterSelector(Font & font);
+    void setOptions(Font & font);
     void setBackground();
 private:
+    State _state;
     bool _active;
     Font _font;
     AbstractGame * _game;
     World * _world;
     ColorDrawer _colorDrawer;
     GameObjectGroup _mainTitleButtons;
+    GameObjectGroup _optionButtons;
     GameObjectGroup _characterSelector;
+
+    bool _lightDisplay;
+    bool _activeNormalMapping;
+    bool _activeParallaxMapping;
 };
 
 class MaintitleHoverButton : public GameObject {

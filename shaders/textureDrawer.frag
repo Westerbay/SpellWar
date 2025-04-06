@@ -8,10 +8,12 @@ struct LightInfo {
     vec4 cameraPosition; 
     vec4 position;
     vec4 color;    
-    bool display;
     float defaultAmbient;
     float defaultSpecularFactor; 
     int defaultSpecularExponent;
+    bool display;
+    bool activeNormalMap;
+    bool activeParallaxMapping;
 };
 
 layout(std140, binding = 1) uniform LightBlock {
@@ -73,7 +75,7 @@ void main() {
         vec3 normal;
         vec2 newTexCoord;
         vec3 viewDirection = normalize(tangentViewPos - tangentFragPos);
-        if (activeParallaxMapping) {
+        if (activeParallaxMapping && light.activeParallaxMapping && light.activeNormalMap) {
             newTexCoord = parallaxMapping(texCoord, viewDirection);
             normal = texture(normalMap, newTexCoord).rgb;
             normal = normalize(normal * 2.0 - 1.0);

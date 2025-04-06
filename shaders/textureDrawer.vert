@@ -20,10 +20,12 @@ struct LightInfo {
     vec4 cameraPosition; 
     vec4 position;
     vec4 color;    
-    bool display;
     float defaultAmbient;
     float defaultSpecularFactor; 
     int defaultSpecularExponent;
+    bool display;
+    bool activeNormalMap;
+    bool activeParallaxMapping;
 };
 
 layout(std140, binding = 0) uniform CameraBlock {
@@ -62,7 +64,7 @@ void main() {
     fragNormal = transpose(inverse(mat3(model))) * aNormal;
     texCoord = aTexCoord;    
 
-    if (activeParallaxMapping) {
+    if (activeParallaxMapping && light.activeParallaxMapping && light.display && light.activeNormalMap) {
         vec3 T = normalize(mat3(model) * aTangent);
         vec3 N = normalize(mat3(model) * aNormal);
         vec3 B = cross(N, T);
