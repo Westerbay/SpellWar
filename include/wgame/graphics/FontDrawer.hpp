@@ -28,7 +28,7 @@ public:
 	FontDrawer();
 	void setTextData(
 		const Font & font, const String & text, 
-		const Point3D & position, Hitbox & hitbox = Hitbox()
+		const Point3D & position, Hitbox & hitbox
 	);
 	void draw(const Matrix4D & model = Matrix4D(1.0f), Mode mode = HUD);
 public:

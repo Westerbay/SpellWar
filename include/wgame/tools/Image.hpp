@@ -13,6 +13,8 @@
 #include <tinygltf/stb_image.h>
 
 #include "Util.hpp"
+
+#include <memory>
  
  
 namespace wgame {
