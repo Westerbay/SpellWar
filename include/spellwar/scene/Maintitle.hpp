@@ -44,16 +44,27 @@ private:
     World * _world;
     ColorDrawer _colorDrawer;
     GameObjectGroup _mainTitleButtons;
+    GameObjectGroup _characterSelector;
 };
 
 class MaintitleHoverButton : public GameObject {
 public:
-    MaintitleHoverButton(Button * button, const Font & font);
+    MaintitleHoverButton(Button * button);
     void update() override;
-private:
+protected:
     Button * _button;
     Font _font;
     bool _rebuild;
+};
+
+class CharacterSelector : public MaintitleHoverButton {
+public:
+    CharacterSelector(Button * button, bool left);
+    void renderHUD(const Size & screenSize) override;
+private:
+    Size _screenSize;
+    Point2D _position;
+    bool _left;
 };
 
 #endif

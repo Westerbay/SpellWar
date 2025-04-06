@@ -65,9 +65,9 @@ void Maintitle::setMaintitleButtons(Font & font) {
     Button * exitButton = buttonBuilder.build();
     _mainTitleButtons.add(exitButton);  
 
-    _mainTitleButtons.add(new MaintitleHoverButton(playButton, font));
-    _mainTitleButtons.add(new MaintitleHoverButton(exitButton, font));
-    _mainTitleButtons.add(new MaintitleHoverButton(optionButton, font));
+    _mainTitleButtons.add(new MaintitleHoverButton(playButton));
+    _mainTitleButtons.add(new MaintitleHoverButton(exitButton));
+    _mainTitleButtons.add(new MaintitleHoverButton(optionButton));
 }
 
 void Maintitle::setCharacterSelector(Font & font) {
@@ -82,7 +82,7 @@ void Maintitle::setCharacterSelector(Font & font) {
         _world -> nextCharacter();
     });
     Button * nextCharacter = buttonBuilder.build();
-    add(nextCharacter); 
+    _characterSelector.add(nextCharacter); 
 
     buttonBuilder.setText("<");
     buttonBuilder.setPosition(Point2D(600.0f, 300.0f));
@@ -90,10 +90,10 @@ void Maintitle::setCharacterSelector(Font & font) {
         _world -> previousCharacter();
     });
     Button * previousCharacter = buttonBuilder.build();
-    add(previousCharacter); 
+    _characterSelector.add(previousCharacter); 
 
-    add(new MaintitleHoverButton(nextCharacter, font));
-    add(new MaintitleHoverButton(previousCharacter, font));
+    _characterSelector.add(new CharacterSelector(nextCharacter, false));
+    _characterSelector.add(new CharacterSelector(previousCharacter, true));
 }
 
 void Maintitle::setBackground() {
@@ -118,6 +118,7 @@ void Maintitle::update() {
     if (_active) {
         Scene::update();
         _mainTitleButtons.update();
+        _characterSelector.update();
     }
 }
 
@@ -129,14 +130,23 @@ void Maintitle::renderHUD(const Size & screenSize) {
         float scaleH = (float) screenSize.height / defaultSize.height;
         transform = glm::scale(transform, Vector3D(scaleW, scaleH, 0.0f));
         _colorDrawer.fill(transform, Drawer::HUD);
-        Scene::renderHUD(screenSize);
+        Scene::renderHUD(screenSize);        
         _mainTitleButtons.renderHUD(screenSize);
+
+        Size designedSize = DEFAULT_SIZE;
+        float designedRatio = (float) designedSize.width / designedSize.height;
+        float ratio = (float) screenSize.width / screenSize.height;
+        float diff = designedRatio - ratio;        
+        if (diff > -0.4f && diff < 0.85f) {
+            _characterSelector.renderHUD(screenSize);
+        }
+        
     }
 }
 
-MaintitleHoverButton::MaintitleHoverButton(Button * button, const Font & font) : GameObject() {
+MaintitleHoverButton::MaintitleHoverButton(Button * button) : GameObject() {
     _button = button;
-    _font = font;
+    _font = button -> getFont();
     _rebuild = false;
 }
 
@@ -153,5 +163,26 @@ void MaintitleHoverButton::update() {
         _button -> rebuild();
         _rebuild = false;
     }
+}
+
+CharacterSelector::CharacterSelector(Button * button, bool left) : MaintitleHoverButton(button) {
+    _left = left;
+    _position = button -> getPosition();
+    _screenSize = DEFAULT_SIZE;
+}
+
+void CharacterSelector::renderHUD(const Size & screenSize) {
+    if (_screenSize.width == screenSize.width && _screenSize.height == screenSize.height) {
+        MaintitleHoverButton::renderHUD(screenSize);
+        return;
+    }
+    Size designedSize = DEFAULT_SIZE;
+    float designedRatio = (float) designedSize.width / designedSize.height;
+    float ratio = (float) screenSize.width / screenSize.height;
+    float diff = designedRatio - ratio;
+    _button -> setPosition(_position + Vector2D(diff * 175.0f));
+    _button -> rebuild();
+    _screenSize = screenSize;
+    MaintitleHoverButton::renderHUD(screenSize);
 }
  

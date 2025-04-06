@@ -20,6 +20,8 @@ namespace wgame {
 class Label : public Widget {
 public:    
     String getText() const;
+    Point2D getPosition() const;
+    Font getFont() const;
     void setPosition(const Point2D & position);
     void setText(const String & text);
     void setFont(const Font & font);

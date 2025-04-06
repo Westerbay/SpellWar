@@ -10,7 +10,8 @@
 #include <spellwar/scene/World.hpp>
 
 
-World::World(GameCamera * camera, GameLight * light) : Scene() {    _active = false;
+World::World(GameCamera * camera, GameLight * light) : Scene() {    
+    _active = false;
     _characters = {&_flame, &_frost};
     _characterIndex = 0;
 

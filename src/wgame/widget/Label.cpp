@@ -22,6 +22,14 @@ String Label::getText() const {
     return _text;
 }
 
+Point2D Label::getPosition() const {
+    return _position;
+}
+
+Font Label::getFont() const {
+    return _font;
+}
+
 void Label::setPosition(const Point2D & position) {
     _position = position;
 }
