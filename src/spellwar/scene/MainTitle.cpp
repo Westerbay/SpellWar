@@ -98,8 +98,8 @@ void Maintitle::setCharacterSelector(Font & font) {
     Button * previousCharacter = buttonBuilder.build();
     _characterSelector.add(previousCharacter); 
 
-    _characterSelector.add(new CharacterSelector(nextCharacter, false));
-    _characterSelector.add(new CharacterSelector(previousCharacter, true));
+    _characterSelector.add(new CharacterSelector(nextCharacter));
+    _characterSelector.add(new CharacterSelector(previousCharacter));
 }
 
 void Maintitle::setOptions(Font & font) {
@@ -108,7 +108,7 @@ void Maintitle::setOptions(Font & font) {
     buttonBuilder.setFont(font);
     buttonBuilder.setHorizontalResponsive(true);
     buttonBuilder.setDesignedSize(DEFAULT_SIZE);
-    buttonBuilder.setText("Enable lighting");
+    buttonBuilder.setText("Lighting");
     buttonBuilder.setPosition(Point2D(MARGIN, 250.0f));
     buttonBuilder.setAction([&]() {
         _lightDisplay = !_lightDisplay;
@@ -120,10 +120,22 @@ void Maintitle::setOptions(Font & font) {
     });
     Button * lightButton = buttonBuilder.build();
     _optionButtons.add(lightButton); 
+
+    LabelBuilder labelBuilder;
+    labelBuilder.setFont(font);
+    labelBuilder.setHorizontalResponsive(true);
+    labelBuilder.setDesignedSize(DEFAULT_SIZE);
+    labelBuilder.setText("V");
+    labelBuilder.setPosition(Point2D(450.0f, 250.0f));
+    Label * checkLight = labelBuilder.build();   
+    _optionButtons.add(checkLight);  
     
-    buttonBuilder.setText("Enable normal map");
+    buttonBuilder.setText("Normal map");
     buttonBuilder.setPosition(Point2D(MARGIN, 350.0f));
     buttonBuilder.setAction([&]() {
+        if (!_lightDisplay) {
+            return;
+        }
         _activeNormalMapping = !_activeNormalMapping;
         _world -> setActiveNormalMap(_activeNormalMapping);
         if (!_activeNormalMapping) {
@@ -133,14 +145,25 @@ void Maintitle::setOptions(Font & font) {
     Button * normalButton = buttonBuilder.build();
     _optionButtons.add(normalButton);  
 
-    buttonBuilder.setText("Enable parallax mapping");
+    labelBuilder.setPosition(Point2D(450.0f, 350.0f));
+    Label * checkNormal = labelBuilder.build();   
+    _optionButtons.add(checkNormal);  
+
+    buttonBuilder.setText("Parallax mapping");
     buttonBuilder.setPosition(Point2D(MARGIN, 450.0f));
     buttonBuilder.setAction([&]() {
+        if (!_lightDisplay || !_activeNormalMapping) {
+            return;
+        }
         _activeParallaxMapping = !_activeParallaxMapping;
         _world -> setActiveParallaxMapping(_activeParallaxMapping);
     });
     Button * parallaxMapping = buttonBuilder.build();
     _optionButtons.add(parallaxMapping);  
+
+    labelBuilder.setPosition(Point2D(450.0f, 450.0f));
+    Label * checkParallax = labelBuilder.build();   
+    _optionButtons.add(checkParallax);  
 
     buttonBuilder.setText("Back");
     buttonBuilder.setPosition(Point2D(MARGIN, 550.0f));
@@ -150,9 +173,9 @@ void Maintitle::setOptions(Font & font) {
     Button * backButton = buttonBuilder.build();
     _optionButtons.add(backButton);  
 
-    _optionButtons.add(new MaintitleHoverButton(lightButton));
-    _optionButtons.add(new MaintitleHoverButton(normalButton));
-    _optionButtons.add(new MaintitleHoverButton(parallaxMapping));
+    _optionButtons.add(new OptionButton(lightButton, checkLight, &_lightDisplay));
+    _optionButtons.add(new OptionButton(normalButton, checkNormal, &_activeNormalMapping));
+    _optionButtons.add(new OptionButton(parallaxMapping, checkParallax, &_activeParallaxMapping));
     _optionButtons.add(new MaintitleHoverButton(backButton));
 }
 
@@ -235,8 +258,7 @@ void MaintitleHoverButton::update() {
     }
 }
 
-CharacterSelector::CharacterSelector(Button * button, bool left) : MaintitleHoverButton(button) {
-    _left = left;
+CharacterSelector::CharacterSelector(Button * button) : MaintitleHoverButton(button) {
     _position = button -> getPosition();
     _screenSize = DEFAULT_SIZE;
 }
@@ -253,6 +275,31 @@ void CharacterSelector::renderHUD(const Size & screenSize) {
     _button -> setPosition(_position + Vector2D(diff * 175.0f));
     _button -> rebuild();
     _screenSize = screenSize;
+    MaintitleHoverButton::renderHUD(screenSize);
+}
+
+OptionButton::OptionButton(Button * button, Label * label, bool * active) : MaintitleHoverButton(button) {
+    _label = label;
+    _active = active;
+    _changed = !*active;
+}
+
+void OptionButton::renderHUD(const Size & screenSize) {
+    if (*_active && !_changed) {
+        Font font = _label -> getFont();
+        font.setColor(ColorRGB(0.0f, 1.0f, 0.0f));
+        _label -> setText("V");
+        _label -> setFont(font);
+        _label -> rebuild();
+        _changed = *_active;
+    } else if (!*_active && _changed) {
+        Font font = _label -> getFont();
+        font.setColor(ColorRGB(1.0f, 0.0f, 0.0f));
+        _label -> setText("X");
+        _label -> setFont(font);
+        _label -> rebuild();
+        _changed = *_active;
+    }
     MaintitleHoverButton::renderHUD(screenSize);
 }
  

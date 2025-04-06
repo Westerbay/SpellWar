@@ -71,12 +71,22 @@ protected:
 
 class CharacterSelector : public MaintitleHoverButton {
 public:
-    CharacterSelector(Button * button, bool left);
+    CharacterSelector(Button * button);
     void renderHUD(const Size & screenSize) override;
 private:
     Size _screenSize;
     Point2D _position;
-    bool _left;
 };
+
+class OptionButton : public MaintitleHoverButton {
+public:
+    OptionButton(Button * button, Label * label, bool * active);
+    void renderHUD(const Size & screenSize) override;
+private:
+    Label * _label;
+    bool * _active;
+    bool _changed;
+};
+    
 
 #endif
