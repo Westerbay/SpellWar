@@ -30,6 +30,7 @@ public:
     void setLoop(bool loop);
     void setRevert(bool revert);
     bool isRunning() const;
+    bool isLooping() const;
     void start();
     void stop();
     void switchAnimation(std::string name, bool loop = false, bool revert = false);

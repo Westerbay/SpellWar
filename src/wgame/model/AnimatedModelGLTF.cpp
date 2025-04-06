@@ -45,9 +45,8 @@ AnimatedModelGLTF::AnimatedModelGLTF(const std::string & filename) {
     processAnimation(model);
     process(model);
 
+    _ubo.configure(_skeleton.jointMatricesByteLength); 
     _currentAnimation = &_animations.front();
-    _ubo.configure(_skeleton.jointMatricesByteLength);
-    _ubo.setBindingPoint(BINDING_JOINT_MATRICES);
     _skeleton.update();
 }
 
@@ -87,6 +86,10 @@ bool AnimatedModelGLTF::isRunning() const {
     return _currentAnimation -> isRunning();
 }
 
+bool AnimatedModelGLTF::isLooping() const {
+    return _currentAnimation -> isLooping();
+}
+
 void AnimatedModelGLTF::start() {
     _currentAnimation -> start();
 }
@@ -113,7 +116,8 @@ void AnimatedModelGLTF::update() {
 }
 
 void AnimatedModelGLTF::draw(const Shader & shader) {
-    _ubo.bind();
+    _ubo.bind();   
+    _ubo.setBindingPoint(BINDING_JOINT_MATRICES);
     _ubo.setData(_skeleton.jointMatrices.data(), _skeleton.jointMatricesByteLength);
     shader.setUniform("isAnimated", true);
     drawModelMesh(shader);
@@ -123,6 +127,7 @@ void AnimatedModelGLTF::draw(const Shader & shader) {
 void AnimatedModelGLTF::drawInstanced(const Shader & shader, size_t numberOfInstance) {
     _currentAnimation -> update(_skeleton, _timeAcceleration);
     _ubo.bind();
+    _ubo.setBindingPoint(BINDING_JOINT_MATRICES);
     _ubo.setData(_skeleton.jointMatrices.data(), _skeleton.jointMatricesByteLength);
     shader.setUniform("isAnimated", true);
     drawModelMeshInstanced(shader, numberOfInstance);

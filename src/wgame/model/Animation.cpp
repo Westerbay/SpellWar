@@ -60,6 +60,10 @@ bool Animation::isRunning() const {
     return _repeat || _currentKeyFrameTime <= _lastKeyFrameTime;
 }
 
+bool Animation::isLooping() const {
+    return _repeat;
+}
+
 void Animation::start() {
     _currentKeyFrameTime = _firstKeyFrameTime;
 }

@@ -58,8 +58,9 @@ public:
         NONE
     };
 public:
-    Player(Map * map);    
+    Player(Map * map, Character * model);    
     GameObject * getCameraObject();
+    void setCharacter(Character * model);
     void setActive(bool active);
     void updateCamera();  
     void update() override;
@@ -93,7 +94,6 @@ private:
     bool _jumping;
     bool _leap;
     bool _trySwap;
-
     bool _active;
 };
 

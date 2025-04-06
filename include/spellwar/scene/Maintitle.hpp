@@ -19,35 +19,41 @@
 
 #define FONT_SIZE_TITLE 50.0f
 #define FONT_SIZE_BUTTONS 25.0f
-#define MARGIN 50.0f
+#define FONT_SIZE_SELECTOR 75.0f
+#define MARGIN 80.0f
+
+#define HOVER_COLOR ColorRGB(0.2f, 0.2f, 1.0f)
 
 
 using namespace wgame;
 
 class Maintitle : public Scene {
 public:
-    Maintitle(AbstractGame * game, Scene * world);  
+    Maintitle(AbstractGame * game, World * world);  
     void setActive(bool active) override;
     void update() override;
     void renderHUD(const Size & screenSize) override;
 private:
-    void setButtons();
+    void setMaintitleButtons(Font & font);
+    void setCharacterSelector(Font & font);
     void setBackground();
 private:
     bool _active;
+    Font _font;
     AbstractGame * _game;
-    Scene * _world;
+    World * _world;
     ColorDrawer _colorDrawer;
+    GameObjectGroup _mainTitleButtons;
 };
 
-class MaintitleButton : public GameObject {
+class MaintitleHoverButton : public GameObject {
 public:
-    MaintitleButton(Button * button);
+    MaintitleHoverButton(Button * button, const Font & font);
     void update() override;
 private:
     Button * _button;
-    String _text;
+    Font _font;
+    bool _rebuild;
 };
-
 
 #endif

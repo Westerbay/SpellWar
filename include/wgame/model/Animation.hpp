@@ -56,6 +56,7 @@ public:
     void setLoop(bool repeat);
     void setRevert(bool revert);
     bool isRunning() const;
+    bool isLooping() const;
     void start();
     void stop();
     void update(

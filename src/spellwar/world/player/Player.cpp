@@ -10,7 +10,7 @@
 #include <spellwar/world/player/Player.hpp>
 
 
-Player::Player(Map * map) : 
+Player::Player(Map * map, Character * model) : 
 GameObject(), 
 _map(map),
 _state(IDLE),
@@ -19,6 +19,7 @@ _leap(false),
 _trySwap(false),
 _active(false)
 {
+    setCharacter(model);
     hitbox.size = HITBOX_SIZE;
     _swapAnimation = {
         hitbox,
@@ -37,6 +38,12 @@ _active(false)
 
 GameObject * Player::getCameraObject() {
     return &_camera;
+}
+
+void Player::setCharacter(Character * model) {
+    _playerModel.setCharacter(model);
+    _playerModel.updateCollideHitbox(this);
+    _playerModel.animate(this);
 }
 
 void Player::updateCamera() {

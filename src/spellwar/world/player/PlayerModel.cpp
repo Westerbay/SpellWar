@@ -9,19 +9,39 @@
 
 #include <spellwar/world/player/Player.hpp>
 
-PlayerModel::PlayerModel() {
-    _model.setTimeAcceleration(ANIMATION_ACCELERATION);
+PlayerModel::PlayerModel() {    
     _hitboxDrawer.setActiveLight(false);
     _modelDrawer.setActiveLight(false);
-    _model.setLoop(true);
+    _model = nullptr;
 }
 
 float PlayerModel::getAnimationProgress() const {
-    return _model.getAnimationProgress();
+    return _model -> getAnimationProgress();
+}
+
+void PlayerModel::setCharacter(Character * model) {
+    if (_model) {
+        model -> switchAnimation(
+            _model -> getCurrentAnimation()
+        );
+        model -> setLoop(
+            _model -> isLooping()
+        );
+        model -> setAnimationProgress(
+            _model -> getAnimationProgress()
+        );
+        model -> update();
+    }
+    else {
+        model -> setLoop(true);
+    }
+    _model = model;
+    _model -> setTimeAcceleration(ANIMATION_ACCELERATION);
+    
 }
 
 void PlayerModel::setTransform(const Matrix4D & transform) {
-    _model.setTransform(transform);
+    _model -> setTransform(transform);
 }
 
 void PlayerModel::updateTransform(Player * player) {
@@ -35,27 +55,27 @@ void PlayerModel::updateTransform(Player * player) {
 
 void PlayerModel::animate(Player * player) {    
     if (player -> _jumping) {        
-        _model.switchAnimation("Jump", false);
+        _model -> switchAnimation("Jump", false);
         if (!player -> _leap) {
-            _model.setAnimationProgress(JUMP_START_ANIM);
+            _model -> setAnimationProgress(JUMP_START_ANIM);
             player -> _leap = true;
         }
     } else if (player -> _state == Player::IDLE) {
-        _model.switchAnimation("Idle", true);
+        _model -> switchAnimation("Idle", true);
     } else if (player -> _state == Player::STRAFE && player -> _direction == Player::LEFT) {
-        _model.switchAnimation("WalkRight", true);
+        _model -> switchAnimation("WalkRight", true);
     } else if (player -> _state == Player::STRAFE && player -> _direction == Player::RIGHT) {
-        _model.switchAnimation("WalkLeft", true);
+        _model -> switchAnimation("WalkLeft", true);
     } else if (player -> _state == Player::WALKING) {
-        _model.switchAnimation("Walking", true);
+        _model -> switchAnimation("Walking", true);
     } else if (player -> _state == Player::RUNNING) {
-        _model.switchAnimation("Run", true);
+        _model -> switchAnimation("Run", true);
     } else if (player -> _state == Player::BACK) {
-        _model.switchAnimation("Walking", true, true);
+        _model -> switchAnimation("Walking", true, true);
     }    
     
-    if (player -> _jumping && _model.getCurrentAnimation() == "Jump") {
-        if (_model.getAnimationProgress() > JUMP_END_ANIM) {
+    if (player -> _jumping && _model -> getCurrentAnimation() == "Jump") {
+        if (_model -> getAnimationProgress() > JUMP_END_ANIM) {
             player -> _jumping = false;
             player -> _leap = false; 
         }        
@@ -66,7 +86,7 @@ void PlayerModel::animate(Player * player) {
 void PlayerModel::updateCollideHitbox(Player * player) {
     player -> _collideHitbox = player -> hitbox;
     if (player -> _jumping) {
-        float progress = _model.getAnimationProgress();
+        float progress = _model -> getAnimationProgress();
         if (progress > JUMP_START_PROGRESS && progress < JUMP_END_PROGRESS) {
             float midProgress = (JUMP_START_PROGRESS + JUMP_END_PROGRESS) / 2.0f;
             float scaleFactor;
@@ -83,16 +103,19 @@ void PlayerModel::updateCollideHitbox(Player * player) {
             player -> _collideHitbox.size.y *= scaleFactor;
             player -> _collideHitbox.move(moveFactor, AXIS_Y);
         }
-    }    
+    }   
 }
 
 void PlayerModel::render(Player * player) {   
-    if (player -> _active || _model.getCurrentAnimation() == "Idle") {
-        _model.update();
+    if (player -> _active || _model -> getCurrentAnimation() == "Idle") {
+        _model -> update();
     }     
-    disableCullFace();
-    _modelDrawer.draw(_model);
-    enableCullFace();
+    if (!_model -> isCullable()) {
+        disableCullFace();
+        _modelDrawer.draw(_model);
+        enableCullFace();
+    }
+    else {
+        _modelDrawer.draw(_model);
+    }
 }
-
-PlayerModel::FrostModel::FrostModel() : AnimatedModelGLTF(FROST_MODEL) {}

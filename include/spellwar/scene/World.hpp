@@ -16,7 +16,9 @@
 #include "../world/map/Light.hpp"
 #include "../world/biome/Space.hpp"
 
-#include "Maintitle.hpp"
+#include "../world/character/Flame.hpp"
+#include "../world/character/Frost.hpp"
+
 #include "Scene.hpp"
 
 #include <wgame/wgame.hpp>
@@ -36,11 +38,18 @@ public:
     void setMaintitle(Scene * maintitle);
     void setActive(bool active) override;
     void update() override;
-private:
-    Scene * _maintitle;
-    Player * _player;
+    void nextCharacter();
+    void previousCharacter();
+private:    
     System _system;
     bool _active;
+    Scene * _maintitle;
+    Player * _player;
+    int _characterIndex;
+private:  
+    Flame _flame;  
+    Frost _frost;        
+    std::vector<Character *> _characters;
 };
 
 #endif

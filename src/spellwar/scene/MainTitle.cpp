@@ -10,7 +10,7 @@
 #include <spellwar/scene/Maintitle.hpp>
 
 
-Maintitle::Maintitle(AbstractGame * game, Scene * world) : Scene() {
+Maintitle::Maintitle(AbstractGame * game, World * world) : Scene() {
     _active = true;
     _world = world;
     _game = game;
@@ -24,18 +24,16 @@ Maintitle::Maintitle(AbstractGame * game, Scene * world) : Scene() {
     labelBuilder.setHorizontalResponsive(true);
     labelBuilder.setDesignedSize(DEFAULT_SIZE);
     labelBuilder.setText("Spellwar");
-    labelBuilder.setPosition(Point2D(20.0f, 0.0f));
+    labelBuilder.setPosition(Point2D(20.0f, 20.0f));
     add(labelBuilder.build());    
 
-    setButtons();
+    setMaintitleButtons(font);
+    setCharacterSelector(font);
     setBackground();
 }
 
-void Maintitle::setButtons() {
-    Font font(FONT_PATH, FONT_SIZE_BUTTONS);    
-    font.setReferencedCharacter(' ');
-    font.setColumnCharacterNumber(8);
-
+void Maintitle::setMaintitleButtons(Font & font) {
+    font.setSize(FONT_SIZE_BUTTONS);
     ButtonBuilder buttonBuilder;
     buttonBuilder.setFont(font);
     buttonBuilder.setHorizontalResponsive(true);
@@ -49,7 +47,7 @@ void Maintitle::setButtons() {
         setActive(false);
     });
     Button * playButton = buttonBuilder.build();
-    add(playButton); 
+    _mainTitleButtons.add(playButton); 
     
     buttonBuilder.setText("Options");
     buttonBuilder.setPosition(Point2D(MARGIN, 400.0f));
@@ -57,7 +55,7 @@ void Maintitle::setButtons() {
         
     });
     Button * optionButton = buttonBuilder.build();
-    add(optionButton);  
+    _mainTitleButtons.add(optionButton);  
 
     buttonBuilder.setText("Exit");
     buttonBuilder.setPosition(Point2D(MARGIN, 500.0f));
@@ -65,11 +63,37 @@ void Maintitle::setButtons() {
         _game -> stop();
     });
     Button * exitButton = buttonBuilder.build();
-    add(exitButton);  
+    _mainTitleButtons.add(exitButton);  
 
-    add(new MaintitleButton(playButton));
-    add(new MaintitleButton(exitButton));
-    add(new MaintitleButton(optionButton));
+    _mainTitleButtons.add(new MaintitleHoverButton(playButton, font));
+    _mainTitleButtons.add(new MaintitleHoverButton(exitButton, font));
+    _mainTitleButtons.add(new MaintitleHoverButton(optionButton, font));
+}
+
+void Maintitle::setCharacterSelector(Font & font) {
+    font.setSize(FONT_SIZE_SELECTOR);
+    ButtonBuilder buttonBuilder;
+    buttonBuilder.setFont(font);
+    buttonBuilder.setHorizontalResponsive(true);
+    buttonBuilder.setDesignedSize(DEFAULT_SIZE);
+    buttonBuilder.setText(">");
+    buttonBuilder.setPosition(Point2D(1030.0f, 300.0f));
+    buttonBuilder.setAction([&]() {
+        _world -> nextCharacter();
+    });
+    Button * nextCharacter = buttonBuilder.build();
+    add(nextCharacter); 
+
+    buttonBuilder.setText("<");
+    buttonBuilder.setPosition(Point2D(600.0f, 300.0f));
+    buttonBuilder.setAction([&]() {
+        _world -> previousCharacter();
+    });
+    Button * previousCharacter = buttonBuilder.build();
+    add(previousCharacter); 
+
+    add(new MaintitleHoverButton(nextCharacter, font));
+    add(new MaintitleHoverButton(previousCharacter, font));
 }
 
 void Maintitle::setBackground() {
@@ -93,6 +117,7 @@ void Maintitle::setActive(bool active) {
 void Maintitle::update() {
     if (_active) {
         Scene::update();
+        _mainTitleButtons.update();
     }
 }
 
@@ -105,23 +130,28 @@ void Maintitle::renderHUD(const Size & screenSize) {
         transform = glm::scale(transform, Vector3D(scaleW, scaleH, 0.0f));
         _colorDrawer.fill(transform, Drawer::HUD);
         Scene::renderHUD(screenSize);
+        _mainTitleButtons.renderHUD(screenSize);
     }
 }
 
-MaintitleButton::MaintitleButton(Button * button) : GameObject() {
+MaintitleHoverButton::MaintitleHoverButton(Button * button, const Font & font) : GameObject() {
     _button = button;
-    _text = button -> getText();
+    _font = font;
+    _rebuild = false;
 }
 
-void MaintitleButton::update() {
-    String text = _button -> getText();
+void MaintitleHoverButton::update() {
     bool hover = _button -> hover();
-    if (hover && text[0] != '>') {   
-        _button -> setText(">" + _text);
+    if (hover && !_rebuild) { 
+        Font font = _font;
+        font.setColor(HOVER_COLOR);
+        _button -> setFont(font);
         _button -> rebuild();
-    } else if (!hover && text[0] == '>') {
-        _button -> setText(_text);
+        _rebuild = true;
+    } else if (!hover && _rebuild) {
+        _button -> setFont(_font);
         _button -> rebuild();
+        _rebuild = false;
     }
 }
  

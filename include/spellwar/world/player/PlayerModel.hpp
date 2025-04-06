@@ -12,9 +12,9 @@
 
 #include <wgame/wgame.hpp>
 
-#define ANIMATION_ACCELERATION 1.5f
+#include "../character/Character.hpp"
 
-#define FROST_MODEL "assets/model/player/frost.glb"
+#define ANIMATION_ACCELERATION 1.5f
 
 #define JUMP_START_PROGRESS 0.20f
 #define JUMP_END_PROGRESS 0.65f
@@ -31,19 +31,15 @@ class PlayerModel {
 public:
     PlayerModel();
     float getAnimationProgress() const;
+    void setCharacter(Character * model);
     void setTransform(const Matrix4D & transform);
     void updateCollideHitbox(Player * player);
     void animate(Player * player);
-    void render(Player * player);    
-protected:
-    class FrostModel : public AnimatedModelGLTF {
-    public:
-        FrostModel();
-    };
+    void render(Player * player);
 private:
     void updateTransform(Player * player);
 private:
-    FrostModel _model;
+    Character * _model;
     ModelDrawer _modelDrawer;
     ColorDrawer _hitboxDrawer;
 };

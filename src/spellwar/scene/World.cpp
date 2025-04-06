@@ -10,8 +10,10 @@
 #include <spellwar/scene/World.hpp>
 
 
-World::World(GameCamera * camera, GameLight * light) : Scene() {
-    _active = false;
+World::World(GameCamera * camera, GameLight * light) : Scene() {    _active = false;
+    _characters = {&_flame, &_frost};
+    _characterIndex = 0;
+
     AbstractBiome * biome = new Space(light);
     add(biome);
 
@@ -24,7 +26,7 @@ World::World(GameCamera * camera, GameLight * light) : Scene() {
     );
     add(map);
 
-    _player = new Player(map);
+    _player = new Player(map, _characters[_characterIndex]);
     add(_player);
     
     camera -> setFarPlane(FAR_PLANE);
@@ -51,5 +53,15 @@ void World::update() {
         Scene::update();
     }    
     _player -> updateCamera();
+}
+
+void World::nextCharacter() {
+    _characterIndex = (_characterIndex + 1) % _characters.size();
+    _player -> setCharacter(_characters[_characterIndex]);
+}
+
+void World::previousCharacter() {
+    _characterIndex = (_characters.size() + _characterIndex - 1) % _characters.size();
+    _player -> setCharacter(_characters[_characterIndex]);
 }
 

@@ -31,6 +31,15 @@ void ModelDrawer::draw(ModelGLTF & model, Mode mode) const {
     _shader -> unbind();
 }
 
+void ModelDrawer::draw(ModelGLTF * model, Mode mode) const {
+    _shader -> bind();
+    _shader -> setUniform("activeLight", activeLight);
+    _shader -> setUniform("drawMode", (int) mode);
+    _shader -> setUniform("drawInstanced", false);  
+    model -> draw(*_shader);
+    _shader -> unbind();
+}
+
 void ModelDrawer::drawInstanced(ModelGLTF & model, int id, Mode mode) {
     if (instances.find(id) == instances.end()) {
         return;

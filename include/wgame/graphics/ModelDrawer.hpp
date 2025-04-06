@@ -23,6 +23,7 @@ class ModelDrawer : public Drawer {
 public:
     ModelDrawer();
     void draw(ModelGLTF & model, Mode mode = WORLD) const;
+    void draw(ModelGLTF * model, Mode mode = WORLD) const;
     void drawInstanced(ModelGLTF & model, int id, Mode mode = WORLD);
 public:
     class ModelDrawerShader : public Shader {

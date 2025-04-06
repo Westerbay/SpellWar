@@ -13,7 +13,7 @@
 #include <wgame/wgame.hpp>
 
 #define MAX_ANGLE_CAMERA 70.0f
-#define OFFSET_FROM_PLAYER Vector3D(0.4f, 0.0f, 2.5f) 
+#define OFFSET_FROM_PLAYER Vector3D(0.6f, 0.0f, 2.5f) 
 #define OFFSET_FROM_PLAYER_IG Vector3D(0.3f, 0.7f, -2.5f)
 
 #define CAMERA_KEY_FRAME 0.05f
