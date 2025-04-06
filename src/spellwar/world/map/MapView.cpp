@@ -80,10 +80,10 @@ void MapView::render(Map * map) {
     cullCounterClockwise();     
     
     // for (Platform & plat: map -> _platforms) {
-    //     _hitboxDrawer.setDrawCuboidData(plat.getExtendedHitbox(), ColorRGB(1.0f, 0.0f , 0.0f));
+    //     _hitboxDrawer.setDrawCuboidData(plat.getExtendedHitbox(), ColorRGBA(1.0f, 0.0f, 0.0f, 1.0f));
     //     _hitboxDrawer.draw();
     //     for (Hitbox & hitb: plat.getDecorationHitboxes()) {
-    //         _hitboxDrawer.setDrawCuboidData(hitb, ColorRGB(1.0f, 0.0f , 0.0f));
+    //         _hitboxDrawer.setDrawCuboidData(hitb, ColorRGBA(1.0f, 0.0f, 0.0f, 1.0f));
     //         _hitboxDrawer.draw();
     //     }
     // }

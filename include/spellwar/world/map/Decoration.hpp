@@ -48,7 +48,6 @@ public:
     Stalagmite();
     DecorationInfo getDecorationInfo() const override;
 	Vector3D getCollideSize() const override;
-	Matrix4D getTransform() const override;
 };
 
 class RedTree : public Decoration {
