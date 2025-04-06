@@ -14,6 +14,7 @@
 #include <GLFW/glfw3.h>
 
 #include "../tools/System.hpp"
+#include "../tools/Util.hpp"
 #include "../geometry/Geometry.hpp"
 #include "../opengl/Shader.hpp"
 #include "../opengl/UniformBufferObject.hpp"
@@ -35,7 +36,7 @@ namespace wgame {
 
 class AbstractFrame {
 public:
-	AbstractFrame(const char * title, const Size & size);
+	AbstractFrame(const String & title, Size size = {0, 0});
 	virtual ~AbstractFrame();
 	GLFWwindow * getFrameWindow();
 	bool shouldExit() const;

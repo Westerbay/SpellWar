@@ -14,9 +14,29 @@
 #include <spellwar/core/Game.hpp>
 #include <wgame/wgame.hpp>
  
-int main() {
+int main(int argc, char * argv[]) {
 	srand((unsigned int) time(nullptr));
-	MainFrame * mainFrame = new MainFrame();
+
+	MainFrame * mainFrame;
+	if (argc == 3) {
+		try {
+			unsigned width = std::stoi(argv[1]);
+			unsigned height = std::stoi(argv[2]);
+			mainFrame = new MainFrame({width, height});
+		}
+		catch (const std::invalid_argument &) {
+			std::cerr << "Wrong format, try unsigned sizes." << std::endl;
+			return EXIT_FAILURE;
+		}
+	}
+	else if (argc == 1) {
+		mainFrame = new MainFrame();
+	}
+	else {
+		std::cerr << "No arguments → fullscreen; otherwise, you must provide two positive integers for width and height, respectively." << std::endl;
+		return EXIT_FAILURE;
+	}
+	 
 	Game * game = new Game();
 	GameEngine gameEngine(game, mainFrame);
 	gameEngine.start();
@@ -26,6 +46,6 @@ int main() {
 #ifdef _WIN32
 #include <windows.h>
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
-    return main();
+    return main(1, NULL);
 }
 #endif

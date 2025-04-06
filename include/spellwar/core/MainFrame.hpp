@@ -21,7 +21,7 @@ using namespace wgame;
 
 class MainFrame : public AbstractFrame {
 public: 
-    MainFrame();
+    MainFrame(const Size & size = {0, 0});
     void processEvent(Event event) override;
 private:
     System _system;

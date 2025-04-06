@@ -29,7 +29,7 @@ void AbstractFrame::processEvents() {
 	}
 }
 
-AbstractFrame::AbstractFrame(const char * title, const Size & size) : _running(false) {
+AbstractFrame::AbstractFrame(const String & title, Size size) : _running(false) {
 	if (!glfwInit()) {
 		throw std::runtime_error("Failed to initialize GLFW ! ");
 	}
@@ -39,7 +39,23 @@ AbstractFrame::AbstractFrame(const char * title, const Size & size) : _running(f
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_SAMPLES, 4);
 
-	_frame = glfwCreateWindow(size.width, size.height, title, NULL, NULL);
+	if (size.width && size.height) {
+		_frame = glfwCreateWindow(size.width, size.height, title.c_str(), NULL, NULL);
+	}
+	else {
+		GLFWmonitor * monitor = glfwGetPrimaryMonitor();
+    	const GLFWvidmode * mode = glfwGetVideoMode(monitor);
+		_frame = glfwCreateWindow(
+			mode -> width,
+			mode -> height,
+			title.c_str(),
+			monitor,
+			nullptr
+		);
+		size.width = mode -> width;
+		size.height = mode -> height;
+	}
+	
 	if (_frame == NULL) {
 		throw std::runtime_error("Failed to create GLFW window ! ");
 	}

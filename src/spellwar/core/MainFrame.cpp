@@ -9,8 +9,8 @@
 
 #include <spellwar/core/MainFrame.hpp>
 
-MainFrame::MainFrame() :
-    AbstractFrame(TITLE, DEFAULT_SIZE) {
+MainFrame::MainFrame(const Size & size) :
+    AbstractFrame(TITLE, size) {
 }
 
 void MainFrame::processEvent(Event event) {
