@@ -60,29 +60,13 @@ This folders contain the **custom game engine**, built from scratch. It handles 
 - etc...
 
 ### 📁 `src/spellwar/` and `include/spellwar/`
-This folder holds the **game-specific logic**, such as:
+This folders hold the **game-specific logic**, such as:
 - Character behavior
 - Platform mechanics
 - Game rules and gameplay scripting
 
 ### 📁 `shaders/`
 GLSL shaders used for visual rendering.
-
----
-
-## ✅ MVP 1.0 Features
-
-- Floating platforms
-- Multiple playable characters
-- Third-person movement
-- Platform-jumping mechanic
-
----
-
-## 🔜 TODO — MVP 2.0 Goals
-
-- Add enemies
-- Add combat/attacks for characters
 
 ---
 
