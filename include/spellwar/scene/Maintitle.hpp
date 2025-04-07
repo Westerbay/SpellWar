@@ -16,14 +16,13 @@
 
 #include "World.hpp"
 #include "Scene.hpp"
+#include "MaintitleButton.hpp"
 
 #define FONT_SIZE_TITLE 50.0f
 #define FONT_SIZE_BUTTONS 25.0f
 #define FONT_SIZE_OPTIONS 20.0f
 #define FONT_SIZE_SELECTOR 75.0f
 #define MARGIN 80.0f
-
-#define HOVER_COLOR ColorRGB(0.2f, 0.2f, 1.0f)
 
 
 using namespace wgame;
@@ -34,7 +33,7 @@ public:
         MAIN, OPTIONS
     };
 public:
-    Maintitle(AbstractGame * game, World * world);  
+    Maintitle(AbstractGame * game, World * world, const LightInfo & lightInfo);  
     void setActive(bool active) override;
     void update() override;
     void renderHUD(const Size & screenSize) override;
@@ -57,35 +56,6 @@ private:
     bool _lightDisplay;
     bool _activeNormalMapping;
     bool _activeParallaxMapping;
-};
-
-class MaintitleHoverButton : public GameObject {
-public:
-    MaintitleHoverButton(Button * button);
-    void update() override;
-protected:
-    Button * _button;
-    Font _font;
-    bool _rebuild;
-};
-
-class CharacterSelector : public MaintitleHoverButton {
-public:
-    CharacterSelector(Button * button);
-    void renderHUD(const Size & screenSize) override;
-private:
-    Size _screenSize;
-    Point2D _position;
-};
-
-class OptionButton : public MaintitleHoverButton {
-public:
-    OptionButton(Button * button, Label * label, bool * active);
-    void renderHUD(const Size & screenSize) override;
-private:
-    Label * _label;
-    bool * _active;
-    bool _changed;
 };
     
 

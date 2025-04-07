@@ -33,6 +33,7 @@ struct LightInfo {
 class GameLight {
 public:
     GameLight();
+    LightInfo getInfo() const;
     void setPosition(const Point3D & position);
     void setLightColor(const Vector3D & lightColor);
     void setDisplayLight(bool displayLight);

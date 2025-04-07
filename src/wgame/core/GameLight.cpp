@@ -23,6 +23,10 @@ GameLight::GameLight() {
     _ubo.setBindingPoint(LIGHT_POINT);
 }
 
+LightInfo GameLight::getInfo() const {
+    return _lightInfo;
+}
+
 void GameLight::setPosition(const Point3D & position) {
     _lightInfo.position = Point4D(position, 1.0f);
 }
