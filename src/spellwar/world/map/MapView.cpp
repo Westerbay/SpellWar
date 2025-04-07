@@ -12,16 +12,11 @@
 
 void MapView::initViews(
     Map * map,
-    std::vector<Matrix4D> & stalagmiteTransform,
     std::map<int, std::vector<Matrix4D>> & decorationTransforms
 ) {
     for (const auto & pair : decorationTransforms) {
 		_modelDrawer.configureInstances(pair.second, pair.first);
 	}
-    _modelDrawer.configureInstances(
-        stalagmiteTransform, 
-        map -> _biome -> getStalagmite().getDecorationInfo().id
-    );
     setUpPlatformTextures(map);
 }
 
@@ -73,10 +68,12 @@ void MapView::render(Map * map) {
     	DecorationInfo info = decorations[i] -> getDecorationInfo();
     	_modelDrawer.drawInstanced(*decorations[i], info.id);
     }
-    _modelDrawer.drawInstanced(
-        map -> _biome -> getStalagmite(), 
-        map -> _biome -> getStalagmite().getDecorationInfo().id
-    );
+    for (Platform & platform : map -> _platforms) {
+        Decoration & decoration = map -> _biome -> getStalagmite();
+        platform.renderStalagmite(
+            decoration, decoration.getDecorationInfo().id
+        );
+    }
     cullCounterClockwise();     
     
     // for (Platform & plat: map -> _platforms) {

@@ -24,7 +24,6 @@ class MapView {
 public:
     void initViews(
         Map * map,
-        std::vector<Matrix4D> & stalagmiteTransform,
         std::map<int, std::vector<Matrix4D>> & decorationTransforms
     );
     void setUpPlatformTextures(Map * map);

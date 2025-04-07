@@ -13,7 +13,7 @@
 Map::Map(const Hitbox & hitbox, AbstractBiome * biome) : GameObject(hitbox) {    
     _biome = biome;
     Hitbox collisionHitbox = hitbox;
-    collisionHitbox.size *= 1.5f;
+    collisionHitbox.size *= RESIZE_FACTOR;
     _collision = std::make_shared<CollisionTree>(collisionHitbox);
 }
 
@@ -22,13 +22,13 @@ Hitbox * Map::collide(const Hitbox & hitbox) {
 }
 
 void Map::generatePlatform(
+    GameObject * camera,
     size_t maxNumberOfPlatforms,
     const Vector3D & minSize,
     const Vector3D & maxSize,
     unsigned maxAttempts
 ) {    
     std::vector<Hitbox> _platformHitboxes;
-    std::vector<Matrix4D> stalagmiteTransform;
     std::map<int, std::vector<Matrix4D>> decorationTransforms;
     std::vector<Decoration *> & decorations = _biome -> getDecorations();    
 
@@ -45,9 +45,9 @@ void Map::generatePlatform(
         
         constructPlatform(platform, hitboxPlatform, minSize, maxSize);
         if (!hitboxPlatform.collidesList(_platformHitboxes)) {
-            _platforms.push_back(platform);
+            _platforms.push_back(Platform(platform, camera));
             _platformHitboxes.push_back(platform); 
-            _platforms.back().generateStalagmite(*_collision, stalagmiteTransform, _biome -> getStalagmite());
+            _platforms.back().generateStalagmite(*_collision, _biome -> getStalagmite());
             for (size_t i = 0; i < decorations.size(); i ++) {
             	DecorationInfo info = decorations[i] -> getDecorationInfo();
             	_platforms.back().generateDecoration(*_collision, decorationTransforms[info.id], *decorations[i]);
@@ -55,7 +55,7 @@ void Map::generatePlatform(
             tries = 0;
         }         
     }  
-    _mapView.initViews(this, stalagmiteTransform, decorationTransforms);             
+    _mapView.initViews(this, decorationTransforms);             
 }
 
 void Map::constructPlatform(

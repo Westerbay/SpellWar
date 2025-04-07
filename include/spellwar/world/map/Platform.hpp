@@ -26,12 +26,11 @@ using namespace wgame;
 
 class Platform : public GameObject {
 public:
-    Platform(const Hitbox & hitbox);
+    Platform(const Hitbox & hitbox, GameObject * camera);
     Hitbox getPlayerSpawn() const;
     std::vector<Hitbox> & getDecorationHitboxes();  
     void generateStalagmite(
         CollisionTree & collision,
-        std::vector<Matrix4D> & transforms,
         Decoration & decoration
     );
     void generateDecoration(
@@ -41,10 +40,14 @@ public:
     );
     Hitbox getExtendedHitbox() const;
     bool onPlatform(const Hitbox & object) const;
+    void renderStalagmite(ModelGLTF & model, int id);
+    bool shouldRenderStalagmite();
 private:
+    GameObject * _camera;
     std::vector<Hitbox> _decorationHitboxes;
     float _maxHeightStalagmite;
     Hitbox _playerSpawn;
+    ModelDrawer _modelDrawer;
 };
 
 #endif

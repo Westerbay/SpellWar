@@ -27,8 +27,10 @@ _active(false)
         0.0f, 
         false
     };
-    _playerMotion.spawnPlayer(this);
+}
 
+void Player::spawn() {
+    _playerMotion.spawnPlayer(this);
     _playerInputs.state(this);
     _playerMotion.move(this);
     _playerModel.updateCollideHitbox(this);

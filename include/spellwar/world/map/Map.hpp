@@ -15,6 +15,8 @@
 #include "MapView.hpp"
 #include "AbstractBiome.hpp"
 
+#define RESIZE_FACTOR 1.2f
+
 
 using namespace wgame;
 
@@ -24,6 +26,7 @@ public:
 public:
     Map(const Hitbox & hitbox, AbstractBiome * biome);
     void generatePlatform(
+        GameObject * camera,
         size_t maxNumberOfPlatforms,
         const Vector3D & minSize,
         const Vector3D & maxSize,

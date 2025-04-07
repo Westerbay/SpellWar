@@ -20,16 +20,19 @@ World::World(GameCamera * camera, GameLight * light) : Scene() {
     add(biome);
 
     Hitbox mapHitbox(Point3D(0.0f), MAP_SIZE);
-    Map * map = new Map(mapHitbox, biome);
-    map -> generatePlatform(
-        MAX_NUMBER_OF_PLATFORMS, 
-        MIN_PLATFORM_SIZE, 
-        MAX_PLATFORM_SIZE
-    );
+    Map * map = new Map(mapHitbox, biome);    
     add(map);
 
     _player = new Player(map, _characters[_characterIndex]);
     add(_player);
+
+    map -> generatePlatform(
+        _player -> getCameraObject(),
+        MAX_NUMBER_OF_PLATFORMS, 
+        MIN_PLATFORM_SIZE, 
+        MAX_PLATFORM_SIZE
+    );
+    _player -> spawn();
     
     camera -> setFarPlane(FAR_PLANE);
     camera -> attachGameObject(_player -> getCameraObject());

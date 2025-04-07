@@ -92,7 +92,6 @@ bool PlayerMotion::swapPlatform(Player * player, Platform * platform, const Poin
     Matrix3D pathOrientation = swapAnimation.destinationHitbox.orientation - swapAnimation.startHitbox.orientation;
     Vector3D path = swapAnimation.destinationHitbox.position - swapAnimation.startHitbox.position;
     Hitbox precalculatedHitbox = player -> hitbox;
-    precalculatedHitbox.size.y *= 0.95f;
     for (int i = 0; i < ANIMATION_COLLSION_TEST_STEP; i ++) {
         precalculatedHitbox.position += path * (1.0f / ANIMATION_COLLSION_TEST_STEP);    
         precalculatedHitbox.orientation += pathOrientation * (1.0f / ANIMATION_COLLSION_TEST_STEP);

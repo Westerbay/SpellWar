@@ -9,7 +9,8 @@
 
 #include <spellwar/world/map/Platform.hpp>
 
-Platform::Platform(const Hitbox & hitbox) : GameObject(hitbox) {
+Platform::Platform(const Hitbox & hitbox, GameObject * camera) : GameObject(hitbox) {
+    _camera = camera;
     _playerSpawn = hitbox;
     _playerSpawn.move(hitbox.size.y * 0.5f, AXIS_Y);
     _playerSpawn.size = SPAWN_SIZE;
@@ -23,11 +24,11 @@ Hitbox Platform::getPlayerSpawn() const {
 
 void Platform::generateStalagmite(
     CollisionTree & collision,
-    std::vector<Matrix4D> & transforms,
     Decoration & decoration
 ) {	
 	DecorationInfo info = decoration.getDecorationInfo();	
     std::vector<Hitbox> stalagmiteHitbox;
+    std::vector<Matrix4D> transforms;
     Hitbox hitboxDecoration;
     
     unsigned limit = (unsigned)(hitbox.size.x * hitbox.size.z);
@@ -65,6 +66,7 @@ void Platform::generateStalagmite(
             transforms.push_back(transform); 
         }                
     }
+    _modelDrawer.configureInstances(transforms, info.id);
 }
 
 void Platform::generateDecoration(
@@ -87,7 +89,6 @@ void Platform::generateDecoration(
 			numberOfTries ++;            
 			transform = hitbox.getTransformWithoutScale();
 			float scale = randomFloat(info.minScale, info.maxScale);
-			float rotation = randomFloat(0.0f, 360.0f);
 			Vector3D translate = {
 				(hitbox.size.x * 0.5f - scale * info.size.x) * randomFloat(-1.0f, 1.0f),
 				hitbox.size.y * 0.5f,
@@ -134,4 +135,18 @@ bool Platform::onPlatform(const Hitbox & object) const {
     float delta = (entityHitbox.size.y + hitbox.size.y) * 0.5f;
     entityHitbox.move(-delta, AXIS_Y);
     return hitbox.contains(entityHitbox.position);
+}
+
+void Platform::renderStalagmite(ModelGLTF & model, int id) {
+    if (shouldRenderStalagmite()) {
+        _modelDrawer.drawInstanced(model, id);
+    }    
+}
+
+bool Platform::shouldRenderStalagmite() {
+    Hitbox camera = _camera -> getHitbox();
+    Vector3D & gaze = camera.orientation[2];
+    Point3D & cameraPos = camera.position;
+    Vector3D toPlatform = glm::normalize(hitbox.position - cameraPos);
+    return  glm::dot(gaze, toPlatform) > 0.0f;
 }

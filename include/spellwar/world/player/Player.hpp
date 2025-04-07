@@ -58,8 +58,9 @@ public:
         NONE
     };
 public:
-    Player(Map * map, Character * model);    
-    GameObject * getCameraObject();
+    Player(Map * map, Character * model);   
+    void spawn(); 
+    GameObject * getCameraObject();    
     void setCharacter(Character * model);
     void setActive(bool active);
     void updateCamera();  
