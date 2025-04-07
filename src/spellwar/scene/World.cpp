@@ -66,7 +66,7 @@ void World::nextCharacter() {
 }
 
 void World::previousCharacter() {
-    _characterIndex = (_characters.size() + _characterIndex - 1) % _characters.size();
+    _characterIndex = ((int) _characters.size() + _characterIndex - 1) % _characters.size();
     _player -> setCharacter(_characters[_characterIndex]);
 }
 

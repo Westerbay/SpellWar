@@ -44,7 +44,7 @@ void Label::setFont(const Font & font) {
 
 void Label::rebuild() {
     Font font = _font;
-    int fontSize = (int) font.getSize() * _scale;
+    int fontSize = (int) (font.getSize() * _scale);
     font.setSize((float) fontSize);
     Point3D position(
         (int)(_position.x * _scale), 
