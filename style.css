@@ -1,12 +1,49 @@
-main img {
-    max-width: 50%;
-    display: block;
-    margin: auto;
+main {
+    padding: 1em 0;
 }
 
-.flex {
-    display: flex;
-    align-items: center;
+main img {
+    display: block;
+}
+
+main .slider {
+    position: relative;
+    padding: 0;
+    margin: 0;
+    height: 100%;
+    overflow: hidden;
+    width: 8000px;
+}
+
+main figure {	
+	position: relative;
+	width: 600%;
+    height: 100%;
+	display: flex;
+	transition: all 0.5s;
+	animation: slideShow 18s ease infinite;
+    background-color: black;
+}
+
+main figure img {
+    width: 16.66%;
+    height: 100%;
+}
+
+main section p {
+    margin: 0 2em 1em 2em;
+}
+
+main section .inline p {
+    margin: 0;
+}
+
+main .actionButton {
+    margin: 1em auto auto auto;
+}
+
+main section li {
+    margin: 0.5em 0 0.5em 3em;
 }
 
 main > h2 {
@@ -27,9 +64,76 @@ main > h2::after {
     margin: 0 1em;
 }
 
+@keyframes slideShow {
+	0%   { transform: translateX(0); }
+	10%  { transform: translateX(0); } 
+	20%  { transform: translateX(-16.67%); } 
+    30%  { transform: translateX(-16.67%); } 
+	40% { transform: translateX(-33.33%); }
+    50% { transform: translateX(-33.33%); }
+	60% { transform: translateX(-50%); }
+	70% { transform: translateX(-50%); }
+    80% { transform: translateX(-66.67%); }
+	90% { transform: translateX(-66.67%); }
+    100% { transform: translateX(-83.33%); }
+}
+
 @media (max-width: 600px) {
     main > h2::before,
     main > h2::after {
         width: 5%;
+    }
+}
+
+@media (min-width: 1250px) {
+    main section.content > img {
+        height: 100%;
+        max-width: 60%;
+        margin-left: auto;
+    }
+    main > section.content {
+        display: flex;
+        align-items: center;
+        margin: 4em auto;
+        height: 460px;
+        padding: 0;
+    }
+    main section aside {
+        padding: 2em;
+    }
+    main .slider {
+        max-width: 60%;
+        -webkit-mask-image: linear-gradient(to left, black 90%, transparent 100%);
+        mask-image: linear-gradient(to left, black 90%, transparent 100%);
+    }
+}
+@media (max-width: 1250px) {
+    main img {
+        margin: auto;
+        width: 100%;
+    }
+    main {
+        text-align: center;
+    }
+    main p, main .inline {
+        text-align: left;
+    }
+    main .inline {
+        margin: auto;
+        display: inline-block;
+        vertical-align: top;
+        padding: 15px;
+    }
+    main section aside {
+        padding: 2em 0;
+    }
+    main section {
+        padding: 0;
+    }
+    main .slider {
+        max-width: 100%;
+    }
+    main li {
+        max-width: 250px;
     }
 }
