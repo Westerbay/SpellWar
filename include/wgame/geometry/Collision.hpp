@@ -28,19 +28,20 @@ public:
 
 class CollisionLeaf : public ICollisionStatic {
 public:
-    CollisionLeaf(const Hitbox & hitbox);
+    CollisionLeaf(const Hitbox & hitbox, int maxObjects);
     bool insert(const Hitbox & hitbox) override;
     Hitbox * collidesWith(const Hitbox & hitbox) override;
     bool isFull() const;
     std::vector<Hitbox> & getObjects();
 private:
     Hitbox _hitbox;
+    int _maxObjects;
     std::vector<Hitbox> _objects;
 };
 
 class CollisionTree : public ICollisionStatic {
 public:
-    CollisionTree(const Hitbox & hitbox, int depth = DEFAULT_DEPTH_COLLISION);
+    CollisionTree(const Hitbox & hitbox, int depth = DEFAULT_DEPTH_COLLISION, int maxObjects = DEFAULT_MAX_OBJECT_PER_REGION);
     bool insert(const Hitbox & hitbox) override;
     Hitbox * collidesWith(const Hitbox & hitbox) override;
 private:
@@ -50,6 +51,7 @@ private:
     std::vector<Hitbox> _objects;
     std::vector<std::shared_ptr<ICollisionStatic>> _children;
     int _depth;
+    int _maxObjects;
 };
 
 }

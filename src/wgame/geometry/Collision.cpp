@@ -12,15 +12,16 @@
 
 namespace wgame {
 
-CollisionLeaf::CollisionLeaf(const Hitbox & hitbox) {
+CollisionLeaf::CollisionLeaf(const Hitbox & hitbox, int maxObjects) {
     _hitbox = hitbox;
+    _maxObjects = maxObjects;
 }
 
 bool CollisionLeaf::insert(const Hitbox & hitbox) {
     if (!_hitbox.collidesWith(hitbox)) {
         return false;
     }
-    if (_objects.size() < DEFAULT_MAX_OBJECT_PER_REGION) {
+    if (_objects.size() < _maxObjects) {
         _objects.push_back(hitbox);
         return true;
     }
@@ -28,7 +29,7 @@ bool CollisionLeaf::insert(const Hitbox & hitbox) {
 }
 
 bool CollisionLeaf::isFull() const {
-    return _objects.size() >= DEFAULT_MAX_OBJECT_PER_REGION;
+    return _objects.size() >= _maxObjects;
 }
 
 std::vector<Hitbox> & CollisionLeaf::getObjects() {
@@ -47,8 +48,8 @@ Hitbox * CollisionLeaf::collidesWith(const Hitbox & hitbox) {
     return nullptr;
 }
 
-CollisionTree::CollisionTree(const Hitbox & hitbox, int depth)
-    : _hitbox(hitbox), _depth(depth) {
+CollisionTree::CollisionTree(const Hitbox & hitbox, int depth, int maxObjects)
+    : _hitbox(hitbox), _depth(depth), _maxObjects(maxObjects) {
 }
 
 bool CollisionTree::insert(const Hitbox & hitbox) {
@@ -57,7 +58,7 @@ bool CollisionTree::insert(const Hitbox & hitbox) {
     }
     if (isLeaf()) {
         _objects.push_back(hitbox);
-        if (_objects.size() > DEFAULT_MAX_OBJECT_PER_REGION && _depth > 0) {
+        if (_objects.size() > _maxObjects && _depth > 0) {
             subdivide();
         }
         return true;
@@ -107,7 +108,7 @@ void CollisionTree::subdivide() {
     for (unsigned i = 0; i < 8; i++) {
         hitboxes[i].size *= 0.5f;
         hitboxes[i].move(translate[i] * hitboxes[i].size * 0.5f);
-        _children.push_back(std::make_shared<CollisionLeaf>(hitboxes[i]));
+        _children.push_back(std::make_shared<CollisionLeaf>(hitboxes[i], _maxObjects));
     }
     // Redistribute objects
     for (const Hitbox & obj : _objects) {
