@@ -14,9 +14,10 @@
 namespace wgame {
 
 GLFWwindow * System::_frame = nullptr;
+Size System::_frameSize = {0, 0};
 Point2D System::_mousePosition = Point2D(0.0f);
 Point2D System::_lastMousePosition = Point2D(0.0f);
-float System::_sensibility = DEFAULT_SENSIBILITY;
+float System::_sensibility = DEFAULT_SENSIBILITY * DEFAULT_SENSIBILITY_SCALE;
 bool System::_lastMousePressed[2] = {false, false};
 std::queue<Event> System::_events = std::queue<Event>();
 
@@ -28,9 +29,10 @@ float System::getSensibility() {
     return _sensibility;
 }
 
-void System::record() {
+void System::record(Size frameSize) {
     double mouseX;
     double mouseY;
+    _frameSize = frameSize;
     _lastMousePosition = _mousePosition;
     glfwGetCursorPos(_frame, &mouseX, &mouseY);
     _mousePosition.x = (float) mouseX;
@@ -38,7 +40,6 @@ void System::record() {
 }
 
 void System::resetMousePosition() {
-    record();
     _lastMousePosition = _mousePosition;
 }
 
@@ -51,7 +52,13 @@ Point2D System::getMousePosition() {
 }
 
 Vector2D System::getMouseMovement() {
-    return _lastMousePosition - _mousePosition;
+    Vector2D frameSize = Vector2D(_frameSize.width, _frameSize.height);
+    Vector2D movement = (_lastMousePosition - _mousePosition) / frameSize;
+    return movement;
+}
+
+void System::setSensibility(float sensibility) {
+    _sensibility = sensibility * DEFAULT_SENSIBILITY_SCALE;
 }
 
 bool System::isKeyPressed(Key key) {
@@ -74,10 +81,6 @@ bool System::isMouseReleased(Mouse mouse) {
     }
     _lastMousePressed[mouse] = state == PRESS;
     return false;
-}
-
-void System::setSensibility(float sensibility) {
-    _sensibility = sensibility;
 }
 
 std::queue<Event> & System::getEvents() {

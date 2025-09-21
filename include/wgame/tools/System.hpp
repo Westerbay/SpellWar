@@ -16,7 +16,8 @@
 #include "Inputs.hpp"
 #include "../geometry/Geometry.hpp"
 
-#define DEFAULT_SENSIBILITY 0.2f
+#define DEFAULT_SENSIBILITY 1.0f
+#define DEFAULT_SENSIBILITY_SCALE 300.0f
 
 
 namespace wgame {
@@ -28,7 +29,7 @@ typedef int Event;
 class System {
 public:
     static void initContext(GLFWwindow * frame);
-    static void record();
+    static void record(Size frameSize);
     static double getTime();
     static float getSensibility();
     static Point2D getMousePosition();
@@ -43,6 +44,7 @@ public:
     static void resetMousePosition();
 private:
     static GLFWwindow * _frame;
+    static Size _frameSize;
     static Point2D _mousePosition;
     static Vector2D _lastMousePosition;
     static float _sensibility;

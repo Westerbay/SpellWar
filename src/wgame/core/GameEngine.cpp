@@ -30,7 +30,7 @@ GameEngine::~GameEngine() {
 
 void GameEngine::start() {
     using namespace std::chrono;
-
+    
     _game -> initWorld(_world);
     _frame -> initWorld(_world);
 
@@ -40,13 +40,15 @@ void GameEngine::start() {
     _game -> initLight(_light);
     _frame -> initLight(_light);
 
-    _game -> init();   
+    _frame -> pollEvents();
+    System::record(_frame -> getSize());    
+    _game -> init();        
     while (!_frame -> shouldExit() && _game -> isRunning()) {        
         steady_clock::time_point updateStart = steady_clock::now();
         
         _frame -> processEvents();
         _frame -> pollEvents();
-        System::record();             
+        System::record(_frame -> getSize());             
         
         _game -> update();
         _camera -> update();

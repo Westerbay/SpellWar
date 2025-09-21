@@ -38,6 +38,7 @@ class AbstractFrame {
 public:
 	AbstractFrame(const String & title, Size size = {0, 0});
 	virtual ~AbstractFrame();
+	Size getSize() const;
 	GLFWwindow * getFrameWindow();
 	bool shouldExit() const;
 	void pollEvents() const;

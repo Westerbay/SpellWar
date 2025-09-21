@@ -16,6 +16,10 @@ namespace wgame {
 
 Size AbstractFrame::_frameSize = {0, 0};
 
+Size AbstractFrame::getSize() const {
+	return _frameSize;
+}
+
 void AbstractFrame::frameResize(GLFWwindow * window, int width, int height) {
 	glViewport(0, 0, width, height);
 	_frameSize = {(unsigned) width, (unsigned) height};
@@ -71,6 +75,7 @@ AbstractFrame::AbstractFrame(const String & title, Size size) : _running(false) 
 	_camera = nullptr;
 	_light = nullptr;
 	System::initContext(_frame);
+	System::record(_frameSize);  
 	glfwSwapInterval(0);
 	initOpenGLState();
 }
