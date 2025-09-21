@@ -14,40 +14,42 @@
 
 #include <memory>
 
-#define DEFAULT_DEPTH_COLLISION 2
+#define DEFAULT_DEPTH_COLLISION 100
+#define DEFAULT_MAX_OBJECT_PER_REGION 50
 
 namespace wgame {
 
-class ICollision {
+class ICollisionStatic {
 public:
-    virtual ~ICollision() = default;
+    virtual ~ICollisionStatic() = default;
     virtual bool insert(const Hitbox & hitbox) = 0;
     virtual Hitbox * collidesWith(const Hitbox & hitbox) = 0;
 };
 
-class CollisionLeaf : public ICollision {
+class CollisionLeaf : public ICollisionStatic {
 public:
     CollisionLeaf(const Hitbox & hitbox);
     bool insert(const Hitbox & hitbox) override;
     Hitbox * collidesWith(const Hitbox & hitbox) override;
+    bool isFull() const;
+    std::vector<Hitbox> & getObjects();
 private:
     Hitbox _hitbox;
     std::vector<Hitbox> _objects;
 };
 
-class CollisionTree : public ICollision {
+class CollisionTree : public ICollisionStatic {
 public:
-    CollisionTree(
-        const Hitbox & hitbox,        
-        int depth = DEFAULT_DEPTH_COLLISION
-    );
+    CollisionTree(const Hitbox & hitbox, int depth = DEFAULT_DEPTH_COLLISION);
     bool insert(const Hitbox & hitbox) override;
     Hitbox * collidesWith(const Hitbox & hitbox) override;
 private:
-    void constructTree(int depth);
-private:
-    Hitbox _hitbox;    
-    std::shared_ptr<ICollision> _children[8];
+    void subdivide();
+    bool isLeaf() const;
+    Hitbox _hitbox;
+    std::vector<Hitbox> _objects;
+    std::vector<std::shared_ptr<ICollisionStatic>> _children;
+    int _depth;
 };
 
 }

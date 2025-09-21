@@ -20,8 +20,19 @@ bool CollisionLeaf::insert(const Hitbox & hitbox) {
     if (!_hitbox.collidesWith(hitbox)) {
         return false;
     }
-    _objects.push_back(hitbox);
-    return true;
+    if (_objects.size() < DEFAULT_MAX_OBJECT_PER_REGION) {
+        _objects.push_back(hitbox);
+        return true;
+    }
+    return false;
+}
+
+bool CollisionLeaf::isFull() const {
+    return _objects.size() >= DEFAULT_MAX_OBJECT_PER_REGION;
+}
+
+std::vector<Hitbox> & CollisionLeaf::getObjects() {
+    return _objects;
 }
 
 Hitbox * CollisionLeaf::collidesWith(const Hitbox & hitbox) {
@@ -36,38 +47,52 @@ Hitbox * CollisionLeaf::collidesWith(const Hitbox & hitbox) {
     return nullptr;
 }
 
-CollisionTree::CollisionTree(
-    const Hitbox & hitbox,        
-    int depth
-) : _hitbox(hitbox) {
-    constructTree(depth);
+CollisionTree::CollisionTree(const Hitbox & hitbox, int depth)
+    : _hitbox(hitbox), _depth(depth) {
 }
 
 bool CollisionTree::insert(const Hitbox & hitbox) {
     if (!_hitbox.collidesWith(hitbox)) {
         return false;
     }
-    bool inserted = false;
-    for (auto & child: _children) {
-        inserted |= child -> insert(hitbox);
+    if (isLeaf()) {
+        _objects.push_back(hitbox);
+        if (_objects.size() > DEFAULT_MAX_OBJECT_PER_REGION && _depth > 0) {
+            subdivide();
+        }
+        return true;
+    } else {
+        bool inserted = false;
+        for (auto & child : _children) {
+            inserted |= child->insert(hitbox);
+        }
+        return inserted;
     }
-    return inserted;
 }
 
 Hitbox * CollisionTree::collidesWith(const Hitbox & hitbox) {
     if (!_hitbox.collidesWith(hitbox)) {
         return nullptr;
     }
-    for (const auto & child : _children) {
-        Hitbox * collidedHitbox = child -> collidesWith(hitbox);
-        if (collidedHitbox) {
-            return collidedHitbox;
+    if (isLeaf()) {
+        for (Hitbox & object : _objects) {
+            if (hitbox.collidesWith(object)) {
+                return &object;
+            }
         }
+        return nullptr;
+    } else {
+        for (const auto & child : _children) {
+            Hitbox * collidedHitbox = child->collidesWith(hitbox);
+            if (collidedHitbox) {
+                return collidedHitbox;
+            }
+        }
+        return nullptr;
     }
-    return nullptr;
 }
 
-void CollisionTree::constructTree(int depth) {
+void CollisionTree::subdivide() {
     static Vector3D translate[] = {
         {1.0f, 1.0f, 1.0f},
         {-1.0f, 1.0f, 1.0f},
@@ -78,20 +103,24 @@ void CollisionTree::constructTree(int depth) {
         {1.0f, -1.0f, -1.0f},
         {-1.0f, -1.0f, -1.0f},
     };
-
     std::vector<Hitbox> hitboxes(8, _hitbox);
-    for (unsigned i = 0; i < 8; i ++) {
+    for (unsigned i = 0; i < 8; i++) {
         hitboxes[i].size *= 0.5f;
-        hitboxes[i].move(translate[i] * hitboxes[i].size * 0.5f);        
-        if (depth > 1) {  
-            std::shared_ptr<CollisionTree> node = std::make_shared<CollisionTree>(hitboxes[i], depth - 1);
-            _children[i] = std::static_pointer_cast<ICollision>(node);
-        }
-        else {
-            std::shared_ptr<CollisionLeaf> leaf = std::make_shared<CollisionLeaf>(hitboxes[i]);
-            _children[i] = std::static_pointer_cast<ICollision>(leaf);
-        }        
+        hitboxes[i].move(translate[i] * hitboxes[i].size * 0.5f);
+        _children.push_back(std::make_shared<CollisionLeaf>(hitboxes[i]));
     }
+    // Redistribute objects
+    for (const Hitbox & obj : _objects) {
+        for (auto & child : _children) {
+            child->insert(obj);
+        }
+    }
+    _objects.clear();
+    _depth--;
+}
+
+bool CollisionTree::isLeaf() const {
+    return _children.empty();
 }
 
 }
