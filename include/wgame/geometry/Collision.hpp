@@ -15,7 +15,7 @@
 #include <memory>
 
 #define DEFAULT_DEPTH_COLLISION 100
-#define DEFAULT_MAX_OBJECT_PER_REGION 50
+#define DEFAULT_MAX_OBJECT_PER_REGION 100
 
 namespace wgame {
 
